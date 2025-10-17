@@ -6,20 +6,26 @@
 
 ## Game Summary
 
-Summary here
+    Summary here
 
 ## Installation Instructions
 
-Instructions here
+    Instructions here
 
 ## Demo
 
-Sequence of screenshots/GIF Here
+    Sequence of screenshots/GIF Here
 
 ## Contacts
 
-Michael Janeway
+- Ali Riayde Jawad
+- Derek Duong
+- Michael Janeway
+  - [itch.io](https://happyfacemike.itch.io/)
+  - [GitHub](https://github.com/michaeljaneway)
+  - [LinkedIn](https://www.linkedin.com/in/michael-janeway/)
+- Ryan Nguyen
 
 ## License
 
-This project uses the [MIT](https://mit-license.org/) license.
+    This project uses the [MIT](https://mit-license.org/) license.
