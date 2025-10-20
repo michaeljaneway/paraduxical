@@ -2,20 +2,23 @@ from enum import Enum
 
 
 class Direction(Enum):
-    NE = 1
+    NoDirection = -1
+    """ No direction """
+
+    NE = 0
     """ North East """
 
-    NW = 2
-    """ North West """
-
-    SE = 3
-    """ South East """
-
-    SW = 4
-    """ South West """
-
-    E = 5
+    E = 1
     """ East """
 
-    W = 6
+    SE = 2
+    """ South East """
+
+    SW = 3
+    """ South West """
+
+    W = 4
     """ West """
+
+    NW = 5
+    """ North West """

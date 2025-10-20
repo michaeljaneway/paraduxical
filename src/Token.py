@@ -1,6 +1,3 @@
-from Coordinate import Coordinate
-
-
 class Token:
     def __init__(self) -> None:
         self.color: str = ""

@@ -3,7 +3,7 @@ from Move import Move
 
 
 class Player:
-    def __init__(self) -> None:
+    def __init__(self, ) -> None:
         self.name: str = ""
         self.color: str = ""
         self.tokens: list[Token] = []

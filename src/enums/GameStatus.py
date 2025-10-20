@@ -2,6 +2,6 @@ from enum import Enum
 
 
 class GameStatus(Enum):
-    NOT_STARTED = 1
-    IN_PROGRESS = 2
-    FINISHED = 3
+    NOT_STARTED = 0
+    IN_PROGRESS = 1
+    FINISHED = 2

@@ -2,5 +2,5 @@ from enum import Enum
 
 
 class MoveType(Enum):
-    SWAP = 1
-    SHIFT = 2
+    SWAP = 0
+    SHIFT = 1
