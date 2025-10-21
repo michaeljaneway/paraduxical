@@ -346,6 +346,7 @@ if __name__ == "__main__":
 
         winner = board.getWinner()
         if winner != TokenType.MT:
+            print(board)
             print(f"{winner.name} has won the game!!!")
             break
 
