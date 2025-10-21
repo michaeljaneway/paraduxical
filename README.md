@@ -19,6 +19,8 @@
 ## Contacts
 
 - Ali Riayde Jawad
+	- [GitHub](https://github.com/ariaydejawad)
+	- [GitLab](https://gitlab.socs.uoguelph.ca/ajawad)
 - Derek Duong
 - Michael Janeway
   - [itch.io](https://happyfacemike.itch.io/)
