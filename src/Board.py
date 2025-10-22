@@ -11,12 +11,31 @@ class Board:
         self.grid: list[list[TokenType]] = [
             [TokenType.P1, TokenType.P2, TokenType.P1, TokenType.P2],
             [TokenType.P2, TokenType.MT, TokenType.MT, TokenType.MT, TokenType.P1],
-            [TokenType.P1, TokenType.MT, TokenType.MT,
-                TokenType.MT, TokenType.MT, TokenType.P2],
-            [TokenType.P2, TokenType.MT, TokenType.MT, TokenType.MT,
-                TokenType.MT, TokenType.MT, TokenType.P1],
-            [TokenType.P1, TokenType.MT, TokenType.MT,
-                TokenType.MT, TokenType.MT, TokenType.P2],
+            [
+                TokenType.P1,
+                TokenType.MT,
+                TokenType.MT,
+                TokenType.MT,
+                TokenType.MT,
+                TokenType.P2,
+            ],
+            [
+                TokenType.P2,
+                TokenType.MT,
+                TokenType.MT,
+                TokenType.MT,
+                TokenType.MT,
+                TokenType.MT,
+                TokenType.P1,
+            ],
+            [
+                TokenType.P1,
+                TokenType.MT,
+                TokenType.MT,
+                TokenType.MT,
+                TokenType.MT,
+                TokenType.P2,
+            ],
             [TokenType.P2, TokenType.MT, TokenType.MT, TokenType.MT, TokenType.P1],
             [TokenType.P1, TokenType.P2, TokenType.P1, TokenType.P2],
         ]
@@ -92,7 +111,12 @@ class Board:
         return Position(x, y)
 
     def getTokenAtPosition(self, pos: Position) -> TokenType:
-        if pos.x < 0 or pos.y < 0 or pos.y >= len(self.grid) or pos.x >= len(self.grid[pos.y]):
+        if (
+            pos.x < 0
+            or pos.y < 0
+            or pos.y >= len(self.grid)
+            or pos.x >= len(self.grid[pos.y])
+        ):
             return TokenType.INV
         return self.grid[pos.y][pos.x]
 
@@ -102,18 +126,18 @@ class Board:
         # North
         if pos.y <= 3:
             adjacent_positions[Direction.NE] = Position(pos.x, pos.y - 1)
-            adjacent_positions[Direction.NW] = Position(pos.x - 1, pos.y-1)
+            adjacent_positions[Direction.NW] = Position(pos.x - 1, pos.y - 1)
         else:
             adjacent_positions[Direction.NE] = Position(pos.x + 1, pos.y - 1)
-            adjacent_positions[Direction.NW] = Position(pos.x, pos.y-1)
+            adjacent_positions[Direction.NW] = Position(pos.x, pos.y - 1)
 
         # South
         if pos.y < 3:
-            adjacent_positions[Direction.SE] = Position(pos.x + 1, pos.y+1)
-            adjacent_positions[Direction.SW] = Position(pos.x, pos.y+1)
+            adjacent_positions[Direction.SE] = Position(pos.x + 1, pos.y + 1)
+            adjacent_positions[Direction.SW] = Position(pos.x, pos.y + 1)
         else:
-            adjacent_positions[Direction.SE] = Position(pos.x, pos.y+1)
-            adjacent_positions[Direction.SW] = Position(pos.x - 1, pos.y+1)
+            adjacent_positions[Direction.SE] = Position(pos.x, pos.y + 1)
+            adjacent_positions[Direction.SW] = Position(pos.x - 1, pos.y + 1)
 
         # East / West
         adjacent_positions[Direction.E] = Position(pos.x + 1, pos.y)
@@ -144,7 +168,11 @@ class Board:
 
         # Tokens must be not empty and belong to different players
         p_token_types = [TokenType.P1, TokenType.P2]
-        if not (t1_ttype in p_token_types and t2_ttype in p_token_types and t1_ttype != t2_ttype):
+        if not (
+            t1_ttype in p_token_types
+            and t2_ttype in p_token_types
+            and t1_ttype != t2_ttype
+        ):
             print("Invalid token types")
             return False
 
@@ -163,10 +191,16 @@ class Board:
             return True
 
         # Ensure no pieces are in the way for the SHIFT move (unless it is the other piece involved in the move)
-        if not (t1_adjacent_tokens[move.direction] == TokenType.MT or t1_adjacent_pos[move.direction] == t2):
+        if not (
+            t1_adjacent_tokens[move.direction] == TokenType.MT
+            or t1_adjacent_pos[move.direction] == t2
+        ):
             print("Token one is blocked")
             return False
-        if not (t2_adjacent_tokens[move.direction] == TokenType.MT or t2_adjacent_pos[move.direction] == t1):
+        if not (
+            t2_adjacent_tokens[move.direction] == TokenType.MT
+            or t2_adjacent_pos[move.direction] == t1
+        ):
             return False
 
         # It is now guaranteed that the SHIFT move is valid
@@ -180,14 +214,13 @@ class Board:
             case MoveType.SWAP:
                 temp_token = self.getTokenAtPosition(move.token1)
                 self.grid[move.token1.y][move.token1.x] = self.getTokenAtPosition(
-                    move.token2)
+                    move.token2
+                )
                 self.grid[move.token2.y][move.token2.x] = temp_token
 
             case MoveType.SHIFT:
-                t1_new_pos = self.getAdjacentPositions(move.token1)[
-                    move.direction]
-                t2_new_pos = self.getAdjacentPositions(move.token2)[
-                    move.direction]
+                t1_new_pos = self.getAdjacentPositions(move.token1)[move.direction]
+                t2_new_pos = self.getAdjacentPositions(move.token2)[move.direction]
 
                 t1_token_type = self.getTokenAtPosition(move.token1)
                 t2_token_type = self.getTokenAtPosition(move.token2)
@@ -236,7 +269,6 @@ class Board:
             (Position(1, 6), Direction.NE),
             (Position(2, 6), Direction.NE),
             (Position(3, 6), Direction.NE),
-
             # East starting points
             (Position(0, 0), Direction.E),
             (Position(0, 1), Direction.E),
@@ -245,7 +277,6 @@ class Board:
             (Position(0, 4), Direction.E),
             (Position(0, 5), Direction.E),
             (Position(0, 6), Direction.E),
-
             # South East starting points
             (Position(0, 3), Direction.SE),
             (Position(0, 2), Direction.SE),
@@ -261,97 +292,3 @@ class Board:
             if result != TokenType.MT:
                 return result
         return TokenType.MT
-
-
-def getCoordinate() -> tuple[str, str]:
-    pos_input = input().strip()
-    return (pos_input[0], pos_input[1])
-
-
-def getDirection() -> Direction:
-    while True:
-        print("Please enter the shift direction by entering the abbreviation (case-insensitive): ")
-        print("NE - North-East")
-        print("E - East")
-        print("SE - South-East")
-        print("SW - South-West")
-        print("W - West")
-        print("NW - North-West")
-
-        dir_input = input().strip().lower()
-
-        match dir_input:
-            case "ne":
-                return Direction.NE
-            case "e":
-                return Direction.E
-            case "se":
-                return Direction.SE
-            case "sw":
-                return Direction.SW
-            case "w":
-                return Direction.W
-            case "nw":
-                return Direction.NW
-            case _:
-                continue
-
-
-def getPlayerMove(board: Board) -> Move:
-    move_type: MoveType
-    pos1: Position
-    pos2: Position
-    move_dir: Direction = Direction.NoDirection
-
-    # Select move type
-    while True:
-        move_type_str = input(
-            "Please enter the type of move you'd like to make\n1 for SWAP\n2 for SHIFT\n"
-        ).strip()
-
-        match int(move_type_str):
-            case 1:
-                move_type = MoveType.SWAP
-                break
-            case 2:
-                move_type = MoveType.SHIFT
-                break
-            case _:
-                print("Please enter a valid selection")
-
-    print("Please enter the first token's position (e.g. 'J7')")
-    pos1 = board.coordToPosition(getCoordinate())
-
-    print("Please enter the second token's position (e.g. 'K6')")
-    pos2 = board.coordToPosition(getCoordinate())
-
-    if move_type == MoveType.SHIFT:
-        move_dir = getDirection()
-
-    return Move(move_type, pos1, pos2, move_dir)
-
-
-if __name__ == "__main__":
-    board = Board(BoardLayout.DIAG)
-
-    while True:
-        print(board)
-        move = getPlayerMove(board)
-
-        if not board.isValidMove(move):
-            print("Invalid move, please try again")
-            continue
-
-        board.executeMove(move)
-
-        winner = board.getWinner()
-        if winner != TokenType.MT:
-            print(board)
-            print(f"{winner.name} has won the game!!!")
-            break
-
-    print("Exiting....")
-
-    # print(f" {adj[Direction.NW].value} {adj[Direction.NE].value} ")
-    # print(f"{adj[Direction.W].value} x {adj[Direction.E].value}")
-    # print(f" {adj[Direction.SW].value} {adj[Direction.SE].value}")

@@ -2,23 +2,25 @@ from enum import Enum
 
 
 class Direction(Enum):
+    """Enum representing all valid directions leading from a tile on a Paradux board"""
+
     NoDirection = -1
-    """ No direction """
+    """No direction"""
 
     NE = 0
-    """ North East """
+    """North East"""
 
     E = 1
-    """ East """
+    """East"""
 
     SE = 2
-    """ South East """
+    """South East"""
 
     SW = 3
-    """ South West """
+    """South West"""
 
     W = 4
-    """ West """
+    """West"""
 
     NW = 5
-    """ North West """
+    """North West"""
