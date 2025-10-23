@@ -49,7 +49,7 @@ class Board:
                 self.grid[4][2] = TokenType.P2
 
     def __str__(self) -> str:
-        spacing = 2
+        spacing = 3
 
         type_dict = {
             TokenType.MT: "-",

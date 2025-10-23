@@ -1,7 +1,5 @@
-# from enums.BoardLayout import BoardLayout
+import os
 from enums.Direction import Direction
-
-# from enums.TokenType import TokenType
 from enums.MoveType import MoveType
 from Position import Position
 from Move import Move
@@ -9,6 +7,13 @@ from Board import Board
 
 
 class GameView:
+    def clear(self):
+        """
+        Clears the terminal screen by running cls (on Windows) or clear (on macOS/Linux).\n
+        Source - https://github.com/asweigart/clear
+        """
+        os.system("cls" if os.name == "nt" else "clear")
+
     def getCoordinate(self) -> tuple[str, str]:
         pos_input = input().strip()
         return (pos_input[0], pos_input[1])
