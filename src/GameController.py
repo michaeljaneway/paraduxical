@@ -30,6 +30,3 @@ class GameController:
         print("Exiting....")
 
 
-if __name__ == "__main__":
-    gc = GameController()
-    gc.mainLoop()
