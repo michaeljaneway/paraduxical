@@ -10,7 +10,16 @@
 
 ## Installation Instructions
 
-    Instructions here
+### Requirements
+
+- Python version 3.9 or higher.
+- No required external libraries
+
+### Running the Game
+
+To run the game, open a terminal in this folder, **/paraduxical/**, and run the following:
+
+    python src
 
 ## Demo
 
@@ -19,8 +28,8 @@
 ## Contacts
 
 - Ali Riayde Jawad
-	- [GitHub](https://github.com/ariaydejawad)
-	- [GitLab](https://gitlab.socs.uoguelph.ca/ajawad)
+ 	- [GitHub](https://github.com/ariaydejawad)
+ 	- [GitLab](https://gitlab.socs.uoguelph.ca/ajawad)
 - Derek Duong
 - Michael Janeway
   - [itch.io](https://happyfacemike.itch.io/)
