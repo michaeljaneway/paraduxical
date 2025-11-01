@@ -7,6 +7,8 @@ from Move import Move
 
 
 class Board:
+    """Represents a hexagonal game board"""
+
     def __init__(self, layout: BoardLayout) -> None:
         self.grid: list[list[TokenType]] = [
             [TokenType.P1, TokenType.P2, TokenType.P1, TokenType.P2],
@@ -51,12 +53,6 @@ class Board:
     def __str__(self) -> str:
         spacing = 3
 
-        type_dict = {
-            TokenType.MT: "-",
-            TokenType.P1: "o",
-            TokenType.P2: "x",
-        }
-
         row_count = len(self.grid)
         max_row_len = len(max(self.grid, key=len))
         column_count = max_row_len * 2 - 1
@@ -79,7 +75,7 @@ class Board:
 
             # Iterate over tokens and
             for j in self.grid[i]:
-                board_str += f"{type_dict[j]}" + " " * (spacing * 2 - 1)
+                board_str += f"{j.value}" + " " * (spacing * 2 - 1)
             board_str += "\n" * spacing
 
         return board_str
