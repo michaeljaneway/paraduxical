@@ -215,8 +215,10 @@ class Board:
                 self.grid[move.token2.y][move.token2.x] = temp_token
 
             case MoveType.SHIFT:
-                t1_new_pos = self.getAdjacentPositions(move.token1)[move.direction]
-                t2_new_pos = self.getAdjacentPositions(move.token2)[move.direction]
+                t1_new_pos = self.getAdjacentPositions(move.token1)[
+                    move.direction]
+                t2_new_pos = self.getAdjacentPositions(move.token2)[
+                    move.direction]
 
                 t1_token_type = self.getTokenAtPosition(move.token1)
                 t2_token_type = self.getTokenAtPosition(move.token2)
@@ -265,6 +267,7 @@ class Board:
             (Position(1, 6), Direction.NE),
             (Position(2, 6), Direction.NE),
             (Position(3, 6), Direction.NE),
+
             # East starting points
             (Position(0, 0), Direction.E),
             (Position(0, 1), Direction.E),
@@ -273,6 +276,7 @@ class Board:
             (Position(0, 4), Direction.E),
             (Position(0, 5), Direction.E),
             (Position(0, 6), Direction.E),
+
             # South East starting points
             (Position(0, 3), Direction.SE),
             (Position(0, 2), Direction.SE),
