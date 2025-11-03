@@ -51,7 +51,7 @@ class Board:
                 self.grid[4][2] = TokenType.P2
 
     def __str__(self) -> str:
-        spacing = 3
+        spacing = 1
 
         row_count = len(self.grid)
         max_row_len = len(max(self.grid, key=len))

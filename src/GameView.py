@@ -1,9 +1,13 @@
 import os
+import re
+from typing import Any
 from enums.Direction import Direction
 from enums.MoveType import MoveType
 from Position import Position
 from Move import Move
 from Board import Board
+from options.Option import Option
+from Session import Session
 
 
 class GameView:
@@ -13,6 +17,51 @@ class GameView:
         Source - https://github.com/asweigart/clear
         """
         os.system("cls" if os.name == "nt" else "clear")
+
+    def update(self, options: list[Option], session: Session) -> None:
+        # Clear the terminal at the start of each view update
+        self.clear()
+        
+        visible_options = [option for option in options if option.is_visible()]
+
+        # Display the game if one is active
+        self.displaySession(session)
+
+        # Display options
+        print("Select an option by entering its corresponding number")
+        for i, op in enumerate(visible_options):
+            print(i + 1, op.desc)
+
+        # Get user input and ensure that it's valid
+        option_sel = input().strip()
+        option_re = f"^[{'|'.join(str(x) for x in list(range(1, len(visible_options)+1)))}]$"
+
+        if re.match(option_re, option_sel):
+            selected_option = visible_options[int(option_sel) - 1]
+            print(f"You selected {selected_option.desc}")
+
+            option_fields = self.getOptionFields(selected_option.fields)
+            selected_option.execute(option_fields)
+
+    def getOptionFields(self, fields: list[tuple[str, str]]) -> list[Any]:
+        results: list[Any] = []
+
+        for field in fields:
+            while True:
+                print(field[0])
+                field_input = input().strip()
+
+                if re.match(field[1], field_input):
+                    results.append(field_input)
+                    break
+                else:
+                    print("Entry is incorrect, please re-enter...")
+
+        return results
+
+    def displaySession(self, session: Session) -> None:
+        if session.game:
+            print(session.game)
 
     def getCoordinate(self) -> tuple[str, str]:
         pos_input = input().strip()

@@ -1,34 +1,19 @@
-from enums.BoardLayout import BoardLayout
-from enums.TokenType import TokenType
-from Board import Board
 from GameView import GameView
-from options.Option import ExitGameOption
+from Session import Session
+from options.Option import Option
+from options.ExitProgramOption import ExitProgramOption
+from options.StartGameOption import StartGameOption
 
 
 class GameController:
     def __init__(self) -> None:
+        self.session = Session()
         self.gameView = GameView()
-        self.menu_options = [ExitGameOption()]
+        self.options: list[Option] = [
+            StartGameOption(self.session),
+            ExitProgramOption(self.session)
+        ]
 
     def mainLoop(self) -> None:
-        board = Board(BoardLayout.DIAG)
-
         while True:
-            print(board)
-            move = self.gameView.getPlayerMove(board)
-
-            if not board.isValidMove(move):
-                print("Invalid move, please try again")
-                continue
-
-            board.executeMove(move)
-
-            winner = board.getWinner()
-            if winner != TokenType.MT:
-                print(board)
-                print(f"{winner.name} has won the game!!!")
-                break
-
-        print("Exiting....")
-
-
+            self.gameView.update(self.options, self.session)

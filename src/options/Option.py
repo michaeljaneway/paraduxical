@@ -1,23 +1,23 @@
 from abc import ABC, abstractmethod
-import sys
+from typing import Any
+from Session import Session
 
-
-# Option todo:
-# accept additional values into execute
 
 class Option(ABC):
-    def __init__(self) -> None:
-        self.description = "Base Option Description"
-        self.additional_fields = []
-    
+    def __init__(self, session: Session) -> None:
+        self.desc: str = ""
+        self.fields: list[tuple[str, str]] = []
+        self.session = session
+
     @abstractmethod
-    def execute(self):
+    def is_visible(self) -> bool:
+        pass
+
+    @abstractmethod
+    def execute(self, results: list[Any]) -> None:
         pass
 
 
-class ExitGameOption(Option):
-    def __init__(self) -> None:
-        self.description = "Exit Game"
-    
-    def execute(self):
-        sys.exit(0)
+
+
+
