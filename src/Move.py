@@ -7,8 +7,7 @@ class Move:
     """A single board move"""
 
     def __init__(
-        self, moveType: MoveType, pos1: Position, pos2: Position, direction: Direction
-    ) -> None:
+            self, moveType: MoveType, pos1: Position, pos2: Position, direction: Direction = Direction.NoDirection) -> None:
         self.moveType: MoveType = moveType
         self.token1 = pos1
         self.token2 = pos2

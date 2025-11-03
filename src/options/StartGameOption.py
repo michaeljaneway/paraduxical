@@ -1,4 +1,4 @@
-from options.Option import Option
+from options.Option import Option, OptionField
 from Board import Board
 from Session import Session
 from enums.BoardLayout import BoardLayout
@@ -11,7 +11,8 @@ class StartGameOption(Option):
 
         self.desc = "Start New Game"
         self.fields = [
-            ("h for Horizontal Layout, d for Diagonal Layout", r"^[h|d]$")
+            OptionField(
+                "Enter 'h' for Horizontal Layout, 'd' for Diagonal Layout", r"^[h|d]$")
         ]
 
     def is_visible(self) -> bool:
