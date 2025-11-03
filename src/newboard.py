@@ -1,11 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Generic, TypeVar
-
 from enums.TokenType import TokenType
 
-
-T = TypeVar('T')
 
 
 class Direction(Enum):
@@ -67,23 +63,33 @@ class Cube:
         return results
 
 
-class Board(Generic[T]):
-    """ 
+class Board:
+    """
     Represents a hexagonal game board with a given radius
     Uses the Cube hexagonal coordinate system: https://www.redblobgames.com/grids/hexagons
     """
 
     def __init__(self, radius: int = 4) -> None:
         self.radius: int = radius
-        self.board_map: Dict[Cube, T | None] =  {val: None for val in Cube.spiral(Cube(0,0,0), radius)}
+        self.board_map: dict[Cube, TokenType] =  {val: TokenType.INV for val in Cube.spiral(Cube(0,0,0), radius)}
         
-    def index_to_cube(self, x: int, y: int ) -> Cube:
-        pass
+    def index_to_cube(self, x: int, y: int):
+        x = (x//2) - (self.radius - 1)
+        y = y - (self.radius - 1)
+        
+        print(x, y)
 
 
 class Game():
     pass
 
 if __name__ == '__main__':
-    b = Board[TokenType](1)
+    b = Board(3)
+    print(b.board_map)
+    
+    x = (ord('F'.lower()) - 97) // 2
+    y = int(3) - 1
+    
+    b.index_to_cube(x, y)
+    
 
