@@ -13,8 +13,10 @@ class SwapMoveOption(Option):
 
         self.desc = "Swap Pieces"
         self.fields = [
-            OptionField("Enter the first piece you would like to swap", r"^[a-z]\d$"),
-            OptionField("Enter the second piece you would like to swap", r"^[a-z]\d$")
+            OptionField(
+                "Enter the first piece you would like to swap", r"^[a-z]\d$"),
+            OptionField(
+                "Enter the second piece you would like to swap", r"^[a-z]\d$")
         ]
 
     def is_visible(self) -> bool:
@@ -23,9 +25,9 @@ class SwapMoveOption(Option):
     def execute(self, results: list[Any]) -> None:
         if self.session.game == None:
             raise Exception("No game in progress")
-        
+
         p1 = self.session.game.coordToPosition((results[0][0], results[0][1]))
         p2 = self.session.game.coordToPosition((results[1][0], results[1][1]))
-        
+
         swap_move = Move(MoveType.SWAP, p1, p2)
         self.session.game.executeMove(swap_move)

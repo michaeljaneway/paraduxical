@@ -12,16 +12,17 @@ class GameView:
     def update(self, options: list[Option]) -> None:
         # Clear the terminal & display the game if one is active
         self.clearTerminal()
+        self.printHeader("Paradux", 70)
         self.displaySession()
-        
+
         self.promptOption(options)
 
     def promptOption(self, options: list[Option]) -> bool:
         # Display options
         visible_options = [option for option in options if option.is_visible()]
-        print("Select an option by entering its corresponding number")
+        print("Select an option by entering its corresponding number\n".center(70))
         for i, op in enumerate(visible_options):
-            print(i + 1, op.desc)
+            print(f"{i + 1}. {op.desc}".center(70))
 
         # Get user input and ensure that it's valid
         option_input = input().strip().lower()
@@ -61,8 +62,21 @@ class GameView:
         return results
 
     def displaySession(self) -> None:
-        if self.session.game:
-            print(self.session.game)
+        if not self.session.game:
+            return
+        print(self.multilineCenter(str(self.session.game), 70))
+
+    def printHeader(self, text: str, width: int):
+        print("╔" + "═" * (width - 2) + "╗")
+        print("║" + text.center(width - 2) + "║")
+        print("╚" + "═" * (width - 2) + "╝")
+
+    def multilineCenter(self, text: str, width: int):
+        lines = text.split('\n')
+        max_str_len = len(max(lines, key=len))
+        space_count = width // 2 - max_str_len // 2
+        centered_lines = [" " * space_count + line for line in lines]
+        return '\n'.join(centered_lines)
 
     @staticmethod
     def clearTerminal():
