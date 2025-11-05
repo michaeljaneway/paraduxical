@@ -4,7 +4,7 @@ from Coordinate import Coordinate
 from TokenLine import TokenLine
 
 
-class HexBoard:
+class Board:
     """
     Represents a hexagonal game board with a given radius
     Uses the Cube hexagonal coordinate system: https://www.redblobgames.com/grids/hexagons
@@ -12,9 +12,7 @@ class HexBoard:
 
     def __init__(self, radius: int = 3) -> None:
         self._radius: int = radius
-        self._board_map: dict[Coordinate, TokenType] = {
-            coord: TokenType.INV for coord in Coordinate.spiral(Coordinate(0, 0, 0), radius)
-        }
+        self._board_map: dict[Coordinate, TokenType] = {coord: TokenType.INV for coord in Coordinate.spiral(Coordinate(0, 0, 0), radius)}
 
     def __str__(self) -> str:
         row_strings: list[str] = []
@@ -22,7 +20,7 @@ class HexBoard:
         # Convert rows to strings
         rows = self.get_2d_coord_list()
         for row in rows:
-            row_str = " ".join([str(self.get_token(x).value) for x in row])
+            row_str = " ".join([str(self[coord].value) for coord in row])
             row_strings.append(row_str)
 
         # Center each row string
@@ -32,33 +30,30 @@ class HexBoard:
 
         return "\n".join(row_strings)
 
+    def __getitem__(self, key: Coordinate) -> TokenType:
+        """Returns the token type of the given coordinate"""
+        if not key in self._board_map:
+            return TokenType.INV
+        return self._board_map[key]
+
+    def __setitem__(self, key: Coordinate, value: TokenType) -> None:
+        """Sets the tile at the given coordinate to the given token type"""
+        if not key in self._board_map:
+            raise Exception(f"No valid token exists at {key}")
+        self._board_map[key] = value
+
     def load_from_list(self, token_list: list[TokenType]) -> None:
         """Allow loading the board from an array of token types. Loads as Left->Right, Top->Bottom"""
-
         coords_1d = self.get_1d_coord_list()
 
         if len(coords_1d) != len(token_list):
-            raise Exception(
-                f"Incorrect size of token list ({len(token_list)}), should be {len(coords_1d)}"
-            )
+            raise Exception(f"Incorrect size of token list ({len(token_list)}), should be {len(coords_1d)}")
 
         for i, coord in enumerate(coords_1d):
-            self._board_map[coord] = token_list[i]
-
-    def get_token(self, coord: Coordinate) -> TokenType:
-        """Returns the token type of the given coordinate"""
-        if not coord in self._board_map:
-            return TokenType.INV
-        return self._board_map[coord]
-
-    def set_token(self, coord: Coordinate, token: TokenType) -> None:
-        """Sets the tile at the given coordinate to the given token type"""
-        if not coord in self._board_map:
-            raise Exception(f"No valid token exists at {coord}")
-        self._board_map[coord] = token
+            self[coord] = token_list[i]
 
     def get_1d_coord_list(self) -> list[Coordinate]:
-        """Returns a 1D array containing """
+        """Returns a 1D array containing the spaces in the board from Left->Right, Top->Bottom"""
         coord_list: list[Coordinate] = []
         for q in range(-self._radius, self._radius + 1):
             for r in range(-self._radius, self._radius + 1):
@@ -68,6 +63,7 @@ class HexBoard:
         return coord_list
 
     def get_2d_coord_list(self) -> list[list[Coordinate]]:
+        """Returns a 2D array containing spaces Left->Right as rows, Top->Bottom"""
         coord_list: list[list[Coordinate]] = []
         for q in range(-self._radius, self._radius + 1):
             coord_list.append([])
@@ -79,22 +75,18 @@ class HexBoard:
 
     def get_dir_edge(self, coord: Coordinate, dir: Direction) -> Coordinate:
         """Returns the coordinate at the edge of the board when moving in a given direction from the given coordinate"""
-
-        while self.get_token(coord.neighbor(dir)) != TokenType.INV:
+        while self[coord.neighbor(dir)] != TokenType.INV:
             coord = coord.neighbor(dir)
         return coord
 
-    def get_dir_lines(
-        self, coord: Coordinate, dir: Direction, min_line_len: int
-    ) -> list[TokenLine]:
+    def get_dir_lines(self, coord: Coordinate, dir: Direction, min_line_len: int) -> list[TokenLine]:
         """From a given coord, scan in a given direction for lines with length >= line_len"""
-
         valid_lines: list[TokenLine] = []
-        active_line = TokenLine(self.get_token(coord), [coord])
+        active_line = TokenLine(self[coord], [coord])
 
         while True:
             coord = active_line.coords[-1].neighbor(dir)
-            token_type = self.get_token(coord)
+            token_type = self[coord]
 
             # If token is the same, just con
             if token_type == active_line.type:
@@ -119,7 +111,6 @@ class HexBoard:
 
     def get_edge_coords(self, dir: Direction) -> list[Coordinate]:
         """Get all coordinates along a given edge of the hexagonal board"""
-
         scan_map: dict[Direction, tuple[Direction, Direction]] = {
             Direction.NE: (Direction.W, Direction.SE),
             Direction.E: (Direction.NW, Direction.SW),
@@ -146,7 +137,6 @@ class HexBoard:
 
     def get_token_lines(self, min_line_len: int) -> list[TokenLine]:
         """Returns all lines on the board that are >= the given length"""
-
         lines: list[TokenLine] = []
 
         # Check along Southwest to Northeast
