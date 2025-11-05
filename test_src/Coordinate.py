@@ -62,3 +62,7 @@ class Coordinate:
         for k in range(1, radius + 1):
             results += self.ring(k)
         return results
+
+    def distance(self, other: 'Coordinate') -> int:
+        vec = self - other
+        return (abs(vec.q) + abs(vec.r) + abs(vec.s)) // 2

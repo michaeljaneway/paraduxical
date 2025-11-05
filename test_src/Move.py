@@ -15,6 +15,6 @@ class Move:
     ) -> None:
 
         self.move_type: MoveType = moveType
-        self.token1 = c1
-        self.token2 = c2
-        self.direction = direction
+        self.c1: Coordinate = c1
+        self.c2: Coordinate = c2
+        self.direction: Direction = direction
