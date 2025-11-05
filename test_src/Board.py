@@ -13,7 +13,7 @@ class HexBoard:
     def __init__(self, radius: int = 3) -> None:
         self._radius: int = radius
         self._board_map: dict[Coordinate, TokenType] = {
-            val: TokenType.INV for val in Coordinate.spiral(Coordinate(0, 0, 0), radius)
+            coord: TokenType.INV for coord in Coordinate.spiral(Coordinate(0, 0, 0), radius)
         }
 
     def __str__(self) -> str:
@@ -39,22 +39,26 @@ class HexBoard:
 
         if len(coords_1d) != len(token_list):
             raise Exception(
-                f"Incorrect size of token list ({len(token_list)}), should be {len(coords_1d)}")
+                f"Incorrect size of token list ({len(token_list)}), should be {len(coords_1d)}"
+            )
 
         for i, coord in enumerate(coords_1d):
             self._board_map[coord] = token_list[i]
 
     def get_token(self, coord: Coordinate) -> TokenType:
+        """Returns the token type of the given coordinate"""
         if not coord in self._board_map:
             return TokenType.INV
         return self._board_map[coord]
 
     def set_token(self, coord: Coordinate, token: TokenType) -> None:
+        """Sets the tile at the given coordinate to the given token type"""
         if not coord in self._board_map:
             raise Exception(f"No valid token exists at {coord}")
         self._board_map[coord] = token
 
     def get_1d_coord_list(self) -> list[Coordinate]:
+        """Returns a 1D array containing """
         coord_list: list[Coordinate] = []
         for q in range(-self._radius, self._radius + 1):
             for r in range(-self._radius, self._radius + 1):
@@ -80,7 +84,9 @@ class HexBoard:
             coord = coord.neighbor(dir)
         return coord
 
-    def get_dir_lines(self, coord: Coordinate, dir: Direction, min_line_len: int) -> list[TokenLine]:
+    def get_dir_lines(
+        self, coord: Coordinate, dir: Direction, min_line_len: int
+    ) -> list[TokenLine]:
         """From a given coord, scan in a given direction for lines with length >= line_len"""
 
         valid_lines: list[TokenLine] = []
@@ -96,7 +102,10 @@ class HexBoard:
                 continue
 
             # If line has ended and is >= line_len, add it to the list of valid lines
-            if len(active_line.coords) >= min_line_len and active_line.type in [TokenType.P1, TokenType.P2]:
+            if len(active_line.coords) >= min_line_len and active_line.type in [
+                TokenType.P1,
+                TokenType.P2,
+            ]:
                 valid_lines.append(active_line)
 
             if token_type == TokenType.INV:
@@ -126,7 +135,7 @@ class HexBoard:
         dir0_coord = edge_center
         dir1_coord = edge_center
 
-        for _ in range(self._radius-1):
+        for _ in range(self._radius - 1):
             dir0_coord = dir0_coord.neighbor(scan_map[dir][0])
             dir1_coord = dir1_coord.neighbor(scan_map[dir][1])
 

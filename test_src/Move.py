@@ -7,12 +7,12 @@ class Move:
     """A single board move"""
 
     def __init__(
-            self,
-            moveType: MoveType,
-            c1: Coordinate,
-            c2: Coordinate,
-            direction: Direction = Direction.NoDirection
-        ) -> None:
+        self,
+        moveType: MoveType,
+        c1: Coordinate,
+        c2: Coordinate,
+        direction: Direction = Direction.NoDirection,
+    ) -> None:
 
         self.move_type: MoveType = moveType
         self.token1 = c1

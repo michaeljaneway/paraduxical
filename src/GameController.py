@@ -17,7 +17,7 @@ class GameController:
             SwapMoveOption(self.session),
             ShiftMoveOption(self.session),
             ExitGameOption(self.session),
-            ExitProgramOption(self.session)
+            ExitProgramOption(self.session),
         ]
 
     def mainLoop(self) -> None:
