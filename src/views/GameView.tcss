@@ -1,0 +1,16 @@
+Screen {
+    background: #31694E;
+}
+
+Footer, Header {
+    background: #658C58;
+}
+
+.row {
+    align: center middle;
+}
+
+.board_cell {
+    text-align: center;
+    margin: 1;
+}
