@@ -1,294 +1,157 @@
-from enums.BoardLayout import BoardLayout
-from enums.Direction import Direction
 from enums.TokenType import TokenType
-from enums.MoveType import MoveType
-from Position import Position
-from Move import Move
+from enums.Direction import Direction
+from Coordinate import Coordinate
+from TokenLine import TokenLine
 
 
 class Board:
-    """Represents a hexagonal game board"""
+    """
+    Represents a hexagonal game board with a given radius
+    Uses the Cube hexagonal coordinate system: https://www.redblobgames.com/grids/hexagons
+    """
 
-    def __init__(self, layout: BoardLayout) -> None:
-        self.grid: list[list[TokenType]] = [
-            [TokenType.P1, TokenType.P2, TokenType.P1, TokenType.P2],
-            [TokenType.P2, TokenType.MT, TokenType.MT, TokenType.MT, TokenType.P1],
-            [
-                TokenType.P1,
-                TokenType.MT,
-                TokenType.MT,
-                TokenType.MT,
-                TokenType.MT,
-                TokenType.P2,
-            ],
-            [
-                TokenType.P2,
-                TokenType.MT,
-                TokenType.MT,
-                TokenType.MT,
-                TokenType.MT,
-                TokenType.MT,
-                TokenType.P1,
-            ],
-            [
-                TokenType.P1,
-                TokenType.MT,
-                TokenType.MT,
-                TokenType.MT,
-                TokenType.MT,
-                TokenType.P2,
-            ],
-            [TokenType.P2, TokenType.MT, TokenType.MT, TokenType.MT, TokenType.P1],
-            [TokenType.P1, TokenType.P2, TokenType.P1, TokenType.P2],
-        ]
-
-        match layout:
-            case BoardLayout.HORZ:
-                self.grid[3][2] = TokenType.P1
-                self.grid[3][4] = TokenType.P2
-            case BoardLayout.DIAG:
-                self.grid[2][3] = TokenType.P1
-                self.grid[4][2] = TokenType.P2
+    def __init__(self, radius: int = 3) -> None:
+        self._radius: int = radius
+        self._board_map: dict[Coordinate, TokenType] = {coord: TokenType.INV for coord in Coordinate.spiral(Coordinate(0, 0, 0), radius)}
 
     def __str__(self) -> str:
-        spacing = 1
+        row_strings: list[str] = []
 
-        row_count = len(self.grid)
-        max_row_len = len(max(self.grid, key=len))
-        column_count = max_row_len * 2 - 1
+        # Convert rows to strings
+        rows = self.get_2d_coord_list()
+        for row in rows:
+            row_str = " ".join([str(self[coord].value) for coord in row])
+            row_strings.append(row_str)
 
-        # Add corner space & spacing until the first column
-        board_str = " " + " " * spacing
+        # Center each row string
+        max_str_len = len(max(row_strings, key=len))
+        for i in range(len(row_strings)):
+            row_strings[i] = row_strings[i].center(max_str_len)
 
-        # Add column headers
-        for i in range(column_count):
-            board_str += chr(65 + i) + " " * (spacing - 1)
-        board_str += "\n\n" if spacing > 1 else "\n"
+        return "\n".join(row_strings)
 
-        # Add rows
-        for i in range(row_count):
-            # Row number
-            board_str += f"{i+1}" + " " * spacing
-
-            # Spacing before first token
-            board_str += " " * spacing * (max_row_len - len(self.grid[i]))
-
-            # Iterate over tokens and
-            for j in self.grid[i]:
-                board_str += f"{j.value}" + " " * (spacing * 2 - 1)
-            board_str += "\n" * spacing
-
-        return board_str
-
-    def coordToPosition(self, coord: tuple[str, str]) -> Position:
-        # Determine the Y position
-        y: int = int(coord[1]) - 1
-
-        # Determine the X position
-        x = ord(coord[0].lower()) - 97
-        x -= abs(len(self.grid) // 2 - y)
-
-        if x % 2 != 0:
-            raise Exception(
-                f"The column '{coord[0]}' is not a valid column for row '{coord[1]}'"
-            )
-
-        x //= 2
-
-        if x < 0:
-            raise Exception(
-                f"The column '{coord[0]}' preceeds the first valid column for row '{coord[1]}'"
-            )
-        elif x > len(self.grid[y]) - 1:
-            raise Exception(
-                f"The column '{coord[0]}' is past the last valid column for row '{coord[1]}'"
-            )
-
-        return Position(x, y)
-
-    def getTokenAtPosition(self, pos: Position) -> TokenType:
-        if (
-            pos.x < 0
-            or pos.y < 0
-            or pos.y >= len(self.grid)
-            or pos.x >= len(self.grid[pos.y])
-        ):
+    def __getitem__(self, key: Coordinate) -> TokenType:
+        """Returns the token type of the given coordinate"""
+        if not key in self._board_map:
             return TokenType.INV
-        return self.grid[pos.y][pos.x]
+        return self._board_map[key]
 
-    def getAdjacentPositions(self, pos: Position) -> dict[Direction, Position]:
-        adjacent_positions: dict[Direction, Position] = {}
+    def __setitem__(self, key: Coordinate, value: TokenType) -> None:
+        """Sets the tile at the given coordinate to the given token type"""
+        if not key in self._board_map:
+            raise Exception(f"No valid token exists at {key}")
+        self._board_map[key] = value
 
-        # North
-        if pos.y <= 3:
-            adjacent_positions[Direction.NE] = Position(pos.x, pos.y - 1)
-            adjacent_positions[Direction.NW] = Position(pos.x - 1, pos.y - 1)
-        else:
-            adjacent_positions[Direction.NE] = Position(pos.x + 1, pos.y - 1)
-            adjacent_positions[Direction.NW] = Position(pos.x, pos.y - 1)
+    def load_from_list(self, token_list: list[TokenType]) -> None:
+        """Allow loading the board from an array of token types. Loads as Left->Right, Top->Bottom"""
+        coords_1d = self.get_1d_coord_list()
 
-        # South
-        if pos.y < 3:
-            adjacent_positions[Direction.SE] = Position(pos.x + 1, pos.y + 1)
-            adjacent_positions[Direction.SW] = Position(pos.x, pos.y + 1)
-        else:
-            adjacent_positions[Direction.SE] = Position(pos.x, pos.y + 1)
-            adjacent_positions[Direction.SW] = Position(pos.x - 1, pos.y + 1)
+        if len(coords_1d) != len(token_list):
+            raise Exception(f"Incorrect size of token list ({len(token_list)}), should be {len(coords_1d)}")
 
-        # East / West
-        adjacent_positions[Direction.E] = Position(pos.x + 1, pos.y)
-        adjacent_positions[Direction.W] = Position(pos.x - 1, pos.y)
+        for i, coord in enumerate(coords_1d):
+            self[coord] = token_list[i]
 
-        return adjacent_positions
+    def get_1d_coord_list(self) -> list[Coordinate]:
+        """Returns a 1D array containing the spaces in the board from Left->Right, Top->Bottom"""
+        coord_list: list[Coordinate] = []
+        for q in range(-self._radius, self._radius + 1):
+            for r in range(-self._radius, self._radius + 1):
+                for s in range(-self._radius, self._radius + 1):
+                    if q + r + s == 0:
+                        coord_list.append(Coordinate(q, r, s))
+        return coord_list
 
-    def getAdjacentTokens(self, pos: Position) -> dict[Direction, TokenType]:
-        adjacent_tokens: dict[Direction, TokenType] = {}
-        adjacent_positions = self.getAdjacentPositions(pos)
+    def get_2d_coord_list(self) -> list[list[Coordinate]]:
+        """Returns a 2D array containing spaces Left->Right as rows, Top->Bottom"""
+        coord_list: list[list[Coordinate]] = []
+        for q in range(-self._radius, self._radius + 1):
+            coord_list.append([])
+            for r in range(-self._radius, self._radius + 1):
+                for s in range(-self._radius, self._radius + 1):
+                    if q + r + s == 0:
+                        coord_list[-1].append(Coordinate(q, r, s))
+        return coord_list
 
-        for i in adjacent_positions:
-            adjacent_tokens[i] = self.getTokenAtPosition(adjacent_positions[i])
+    def get_dir_edge(self, coord: Coordinate, dir: Direction) -> Coordinate:
+        """Returns the coordinate at the edge of the board when moving in a given direction from the given coordinate"""
+        while self[coord.neighbor(dir)] != TokenType.INV:
+            coord = coord.neighbor(dir)
+        return coord
 
-        return adjacent_tokens
-
-    def isValidMove(self, move: Move) -> bool:
-        # Get token metadata
-        t1 = move.token1
-        t1_ttype = self.getTokenAtPosition(t1)
-        t1_adjacent_pos = self.getAdjacentPositions(t1)
-        t1_adjacent_tokens = self.getAdjacentTokens(t1)
-
-        t2 = move.token2
-        t2_ttype = self.getTokenAtPosition(t2)
-        t2_adjacent_pos = self.getAdjacentPositions(t2)
-        t2_adjacent_tokens = self.getAdjacentTokens(t2)
-
-        # Tokens must be not empty and belong to different players
-        p_token_types = [TokenType.P1, TokenType.P2]
-        if not (
-            t1_ttype in p_token_types
-            and t2_ttype in p_token_types
-            and t1_ttype != t2_ttype
-        ):
-            print("Invalid token types")
-            return False
-
-        # Tokens most be adjacent
-        are_tokens_adjacent = False
-        for direction in t1_adjacent_pos:
-            if t2 == t1_adjacent_pos[direction]:
-                are_tokens_adjacent = True
-                break
-        if not are_tokens_adjacent:
-            print("Tokens are not adjacent")
-            return False
-
-        # If the move type is SWAP, we now know this is a valid move
-        if move.moveType == MoveType.SWAP:
-            return True
-
-        # Ensure no pieces are in the way for the SHIFT move (unless it is the other piece involved in the move)
-        if not (
-            t1_adjacent_tokens[move.direction] == TokenType.MT
-            or t1_adjacent_pos[move.direction] == t2
-        ):
-            print("Token one is blocked")
-            return False
-        if not (
-            t2_adjacent_tokens[move.direction] == TokenType.MT
-            or t2_adjacent_pos[move.direction] == t1
-        ):
-            return False
-
-        # It is now guaranteed that the SHIFT move is valid
-        return True
-
-    def executeMove(self, move: Move) -> None:
-        if not self.isValidMove(move):
-            raise Exception("The given move is invalid")
-
-        match move.moveType:
-            case MoveType.SWAP:
-                temp_token = self.getTokenAtPosition(move.token1)
-                self.grid[move.token1.y][move.token1.x] = self.getTokenAtPosition(
-                    move.token2
-                )
-                self.grid[move.token2.y][move.token2.x] = temp_token
-
-            case MoveType.SHIFT:
-                t1_new_pos = self.getAdjacentPositions(move.token1)[
-                    move.direction]
-                t2_new_pos = self.getAdjacentPositions(move.token2)[
-                    move.direction]
-
-                t1_token_type = self.getTokenAtPosition(move.token1)
-                t2_token_type = self.getTokenAtPosition(move.token2)
-
-                self.grid[move.token1.y][move.token1.x] = TokenType.MT
-                self.grid[move.token2.y][move.token2.x] = TokenType.MT
-
-                self.grid[t1_new_pos.y][t1_new_pos.x] = t1_token_type
-                self.grid[t2_new_pos.y][t2_new_pos.x] = t2_token_type
-
-    def checkDirection(self, pos: Position, dir: Direction) -> TokenType:
-        current_ttype: TokenType = self.getTokenAtPosition(pos)
-        current_count: int = 1
+    def get_dir_lines(self, coord: Coordinate, dir: Direction, min_line_len: int) -> list[TokenLine]:
+        """From a given coord, scan in a given direction for lines with length >= line_len"""
+        valid_lines: list[TokenLine] = []
+        active_line = TokenLine(self[coord], [coord])
 
         while True:
-            adjacent_pos = self.getAdjacentPositions(pos)
-            new_pos = adjacent_pos[dir]
-            new_ttype = self.getTokenAtPosition(new_pos)
+            coord = active_line.coords[-1].neighbor(dir)
+            token_type = self[coord]
 
-            if new_ttype == TokenType.INV:
-                # Handle reaching the edge of the board
+            # If token is the same, just con
+            if token_type == active_line.type:
+                active_line.coords.append(coord)
+                continue
+
+            # If line has ended and is >= line_len, add it to the list of valid lines
+            if len(active_line.coords) >= min_line_len and active_line.type in [
+                TokenType.P1,
+                TokenType.P2,
+            ]:
+                valid_lines.append(active_line)
+
+            if token_type == TokenType.INV:
+                # Break upon reaching the edge of the board
                 break
-            elif new_ttype == current_ttype:
-                # Handle same token type as last cycle
-                current_count += 1
             else:
-                # Handle different token type than the one last cycle
-                current_ttype = new_ttype
-                current_count = 1
+                # Create new line
+                active_line = TokenLine(token_type, [coord])
 
-            # Return winning player if someone has won
-            if current_count >= 4 and current_ttype in [TokenType.P1, TokenType.P2]:
-                return current_ttype
+        return valid_lines
 
-            pos = new_pos
+    def get_edge_coords(self, dir: Direction) -> list[Coordinate]:
+        """Get all coordinates along a given edge of the hexagonal board"""
+        scan_map: dict[Direction, tuple[Direction, Direction]] = {
+            Direction.NE: (Direction.W, Direction.SE),
+            Direction.E: (Direction.NW, Direction.SW),
+            Direction.SE: (Direction.NE, Direction.W),
+            Direction.SW: (Direction.E, Direction.NW),
+            Direction.W: (Direction.SE, Direction.NE),
+            Direction.NW: (Direction.SW, Direction.E),
+        }
 
-        return TokenType.MT
+        edge_center = self.get_dir_edge(Coordinate(0, 0, 0), dir)
+        edge_coords: list[Coordinate] = [edge_center]
 
-    def getWinner(self) -> TokenType:
-        starting_positions = [
-            # North east starting points
-            (Position(0, 3), Direction.NE),
-            (Position(0, 4), Direction.NE),
-            (Position(0, 5), Direction.NE),
-            (Position(0, 6), Direction.NE),
-            (Position(1, 6), Direction.NE),
-            (Position(2, 6), Direction.NE),
-            (Position(3, 6), Direction.NE),
+        dir0_coord = edge_center
+        dir1_coord = edge_center
 
-            # East starting points
-            (Position(0, 0), Direction.E),
-            (Position(0, 1), Direction.E),
-            (Position(0, 2), Direction.E),
-            (Position(0, 3), Direction.E),
-            (Position(0, 4), Direction.E),
-            (Position(0, 5), Direction.E),
-            (Position(0, 6), Direction.E),
+        for _ in range(self._radius - 1):
+            dir0_coord = dir0_coord.neighbor(scan_map[dir][0])
+            dir1_coord = dir1_coord.neighbor(scan_map[dir][1])
 
-            # South East starting points
-            (Position(0, 3), Direction.SE),
-            (Position(0, 2), Direction.SE),
-            (Position(0, 1), Direction.SE),
-            (Position(0, 0), Direction.SE),
-            (Position(1, 0), Direction.SE),
-            (Position(2, 0), Direction.SE),
-            (Position(3, 0), Direction.SE),
-        ]
+            edge_coords.append(dir0_coord)
+            edge_coords.append(dir1_coord)
 
-        for start in starting_positions:
-            result = self.checkDirection(start[0], start[1])
-            if result != TokenType.MT:
-                return result
-        return TokenType.MT
+        return edge_coords
+
+    def get_token_lines(self, min_line_len: int) -> list[TokenLine]:
+        """Returns all lines on the board that are >= the given length"""
+        lines: list[TokenLine] = []
+
+        # Check along Southwest to Northeast
+        sw_coords = self.get_edge_coords(Direction.SW)
+        for coord in sw_coords:
+            lines.extend(self.get_dir_lines(coord, Direction.NE, min_line_len))
+
+        # Check along West to East
+        w_coords = self.get_edge_coords(Direction.W)
+        for coord in w_coords:
+            lines.extend(self.get_dir_lines(coord, Direction.E, min_line_len))
+
+        # Check along Northwest to Southeast
+        nw_coords = self.get_edge_coords(Direction.NW)
+        for coord in nw_coords:
+            lines.extend(self.get_dir_lines(coord, Direction.SE, min_line_len))
+
+        return lines

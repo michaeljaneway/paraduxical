@@ -6,9 +6,9 @@ class GameStatus(Enum):
 
     NOT_STARTED = 0
     """The game has not begun"""
-    
+
     IN_PROGRESS = 1
     """The game is in progress"""
-    
+
     FINISHED = 2
     """The game is over"""
