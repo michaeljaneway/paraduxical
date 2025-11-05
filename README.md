@@ -11,16 +11,34 @@
 ## Installation Instructions
 
 ### Setup
+
 #### Creating Virtual Env
-> 	python3 -m venv .venv
+
+    python3 -m venv .venv
+
 #### Activating Virtual Venv
+
 - Windows
-> ./.venv/Scripts/activate.bat
-- Mac/linux
-> source venv/bin/activae
+
+        .venv/Scripts/activate.bat
+
+- Mac/Linux
+
+        source venv/bin/activate
+
+#### Deactivating Virtual Venv
+
+- Windows
+
+        .venv/Scripts/deactivate.bat
+
+- Mac/Linux
+
+        source venv/bin/deactivate
 
 #### Installing Dependencies
-> pip install -r requirements.txt
+
+    pip install -r requirements.txt
 
 ### Requirements
 
@@ -40,8 +58,8 @@ To run the game, open a terminal in this folder, **/paraduxical/**, and run the 
 ## Contacts
 
 - Ali Riayde Jawad
- 	- [GitHub](https://github.com/ariaydejawad)
- 	- [GitLab](https://gitlab.socs.uoguelph.ca/ajawad)
+  - [GitHub](https://github.com/ariaydejawad)
+  - [GitLab](https://gitlab.socs.uoguelph.ca/ajawad)
 - Derek Duong
 - Michael Janeway
   - [itch.io](https://happyfacemike.itch.io/)
