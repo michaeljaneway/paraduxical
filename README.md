@@ -12,12 +12,13 @@
 
 ### Setup
 #### Creating Virtual Env
-> 	python3 -m venv
+> 	python3 -m venv .venv
 #### Activating Virtual Venv
 - Windows
 > .\venv\Scripts\activate.bat
 - Mac/linux
 > source venv/bin/activae
+
 #### Installing Dependencies
 > pip install -r requirements.txt
 
