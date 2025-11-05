@@ -10,6 +10,17 @@
 
 ## Installation Instructions
 
+### Setup
+#### Creating Virtual Env
+> 	python3 -m venv
+#### Activating Virtual Venv
+- Windows
+> .\venv\Scripts\activate.bat
+- Mac/linux
+> source venv/bin/activae
+#### Installing Dependencies
+> pip install -r requirements.txt
+
 ### Requirements
 
 - Python version 3.9 or higher.
