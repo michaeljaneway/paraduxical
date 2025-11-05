@@ -15,7 +15,7 @@
 > 	python3 -m venv .venv
 #### Activating Virtual Venv
 - Windows
-> .\venv\Scripts\activate.bat
+> ./.venv/Scripts/activate.bat
 - Mac/linux
 > source venv/bin/activae
 
