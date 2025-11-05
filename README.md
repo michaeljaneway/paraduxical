@@ -2,7 +2,18 @@
 
 ## Table of Contents
 
-    Links Here
+Links Here:
+	- [Game Summary](#game-summary)
+	- [Installation Instructions](#installation-instructions)
+		- [Setup](#setup)
+			- [Creating Virtual Env](#creating-virtual-env)
+			- [Activating Virtual Env](#activating-virtual-env)
+			- [Installing Dependencies](#installing-dependencies)
+		- [Requirements](#requirements)
+		- [Running the Game](#running-the-game)
+	- [Demo](#demo)
+	- [Contacts](#contacts)
+	- [License](#license)
 
 ## Game Summary
 
