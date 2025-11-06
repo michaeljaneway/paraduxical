@@ -2,7 +2,17 @@
 
 ## Table of Contents
 
-    Links Here
+  - [Game Summary](#game-summary)
+  - [Installation Instructions](#installation-instructions)
+    - [Setup](#setup)
+	  - [Creating Virtual Environment](#creating-virtual-environment)
+	  - [Activating Virtual Environment](#activating-virtual-environment)
+	  - [Installing Dependencies](#installing-dependencies)
+	- [Requirements](#requirements)
+	- [Running the Game](#running-the-game)
+  - [Demo](#demo)
+  - [Contacts](#contacts)
+  - [License](#license)
 
 ## Game Summary
 
@@ -11,13 +21,9 @@
 ## Installation Instructions
 
 ### Setup
-
-#### Creating Virtual Env
-
-    python3 -m venv .venv
-
-#### Activating Virtual Venv
-
+#### Creating Virtual Environment
+> 	python3 -m venv .venv
+#### Activating Virtual Environment
 - Windows
 
         .venv/Scripts/activate.bat
