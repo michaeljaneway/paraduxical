@@ -1,6 +1,6 @@
 from textual import on
 from textual.app import ComposeResult
-from textual.containers import Container
+from textual.containers import Container, VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Label, ListItem, ListView, Markdown
 from textual.widgets import Header, Footer
@@ -15,6 +15,43 @@ RULES_MD = """
 ## Objective
 
 Be the first player to line up FOUR of your tokens in a row along the horizontal or vertical axes.
+
+g
+g
+g
+g
+
+g
+g
+g
+g
+g
+g
+
+g
+ggg
+
+g
+g
+g
+g
+
+g
+
+g
+
+g
+
+g
+g
+
+g
+
+g
+
+g
+
+g
 """
 
 
@@ -24,7 +61,7 @@ class RulesScreen(Screen[None]):
     def compose(self) -> ComposeResult:
         yield Header()
 
-        with Container(classes="container middle"):
+        with VerticalScroll(classes="container middle"):
             yield Markdown(RULES_MD)
 
         yield Footer()
