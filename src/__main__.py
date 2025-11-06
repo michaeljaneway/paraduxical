@@ -1,5 +1,4 @@
-
-from views.GameView import ParaduxApp
+from view.ParaduxApp import ParaduxApp
 
 if __name__ == "__main__":
     app = ParaduxApp()

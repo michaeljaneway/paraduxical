@@ -1,0 +1,48 @@
+# General
+
+Screen {
+    background: #31694E;
+}
+
+Footer, Header {
+    background: #658C58;
+}
+
+# Markdown
+
+Markdown {
+  margin: 0;
+  content-align: center middle;
+}
+
+MarkdownH1 {
+  margin-bottom: 1;
+  padding: 1;
+  text-style: bold;
+}
+
+# Main Menu
+
+MainMenuScreen ListItem {
+  align-horizontal: center;
+  padding: 1;
+}
+
+MainMenuScreen ListView {
+   height: auto;
+}
+
+# Game
+
+.row {
+    align: center middle;
+}
+
+.board_cell {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    max-width: 6;
+    height: 2;
+    border: hidden;
+}

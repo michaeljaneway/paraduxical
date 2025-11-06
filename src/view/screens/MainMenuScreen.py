@@ -1,0 +1,50 @@
+from textual import on
+from textual.app import ComposeResult
+from textual.containers import Container
+from textual.screen import Screen
+from textual.widgets import Label, ListItem, ListView, Markdown
+from textual.widgets import Header, Footer
+
+# import screens
+
+WELCOME_MD = """
+# Welcome to Paraduxical!
+
+Paraduxical is an implementation of the board game Paradux by Team 2 in CIS*3260 @ UOG
+
+**Note: You can exit the game at any time by pressing Q**
+
+Using either Arrow Keys with the *Enter* key or your mouse, please select an option from the list below
+"""
+
+
+class MainMenuScreen(Screen[None]):
+    def compose(self) -> ComposeResult:
+        yield Header()
+
+        with Container(classes="container middle"):
+            yield Markdown(WELCOME_MD)
+
+            with ListView():
+                yield ListItem(Label("🔍 View Rules 🔍", markup=True), id="viewrules")
+                yield ListItem(Label("🎮 Start New Game 🎮"), id="startnewgame")
+                yield ListItem(Label("📂 Load Save Game 📂"), id="loadgame")
+                yield ListItem(Label("❌ Exit Game ❌"), id="exitgame")
+
+        yield Footer()
+
+    @on(ListView.Selected, item="#startnewgame")
+    def action_start_new_game(self) -> None:
+        pass
+
+    @on(ListView.Selected, item="#viewrules")
+    def action_view_rules(self) -> None:
+        pass
+
+    @on(ListView.Selected, item="#loadgame")
+    def action_load_save_game(self) -> None:
+        pass
+    
+    @on(ListView.Selected, item="#exitgame")
+    def action_exit_game(self) -> None:
+        self.app.exit()

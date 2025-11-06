@@ -2,18 +2,18 @@
 
 ## Table of Contents
 
-  - [Game Summary](#game-summary)
-  - [Installation Instructions](#installation-instructions)
-    - [Setup](#setup)
-      - [Creating Virtual Environment](#creating-virtual-environment)
-      - [Activating Virtual Environment](#activating-virtual-environment)
-      - [Deactivating Virtual Environment](#deactivating-virtual-environment)
-      - [Installing Dependencies](#installing-dependencies)
-	- [Requirements](#requirements)
-	- [Running the Game](#running-the-game)
-  - [Demo](#demo)
-  - [Contacts](#contacts)
-  - [License](#license)
+- [Game Summary](#game-summary)
+- [Installation Instructions](#installation-instructions)
+  - [Setup](#setup)
+    - [Creating Virtual Environment](#creating-virtual-environment)
+    - [Activating Virtual Environment](#activating-virtual-environment)
+    - [Deactivating Virtual Environment](#deactivating-virtual-environment)
+    - [Installing Dependencies](#installing-dependencies)
+  - [Requirements](#requirements)
+  - [Running the Game](#running-the-game)
+- [Demo](#demo)
+- [Contacts](#contacts)
+- [License](#license)
 
 ## Game Summary
 
@@ -25,7 +25,7 @@
 
 Python uses virtual environments to manage Python project libraries and frameworks, such as those that come from outside the Python standard library.
 Our project/game uses the open-source **textual** terminal user interface (TUI) framework to build its UI.
-As such, **textual** is a dependency that is required by our project to function correctly. 
+As such, **textual** is a dependency that is required by our project to function correctly.
 Since our project uses dependencies, we must abide by Python's rules for managing dependencies.
 
 **textual** is a Python project with its own set of dependencies, and so these dependencies must be installed for our project to function.
@@ -34,8 +34,9 @@ Python is smart in that it is able to find and install all of a project's **indi
 Thus, virtual environments and **requirements.txt** files are necessary to allow our Python projects to function correctly.
 
 The rest of the setup section of this document will describe how to:
-  - Create, activate, and deactivate Python virtual environments
-  - Install all the project dependencies within a Python virtual environment
+
+- Create, activate, and deactivate Python virtual environments
+- Install all the project dependencies within a Python virtual environment
 
 #### Creating Virtual Environment
 
@@ -48,6 +49,7 @@ This new virtual environment will contain all of our project's dependencies, and
 #### Activating Virtual Environment
 
 From the project's root directory, run the following commands:
+
 - Windows: `.venv/Scripts/activate.bat`
 - Apple Macintosh or GNU/Linux: `source .venv/bin/activate`
 
@@ -58,11 +60,12 @@ The same concept applies to deactivating the virtual environments, which are des
 #### Deactivating Virtual Environment
 
 From the project's root directory, run the following commands:
+
 - Windows: `.venv/Scripts/deactivate.bat`
 - Apple Macintosh or GNU/Linux: `deactivate`
 
-Note: you actually do not need to run the `deactivate` command from the root directory of the project on Macintosh or GNU/Linux because the `deactivate` command is path-agonstic. 
-We can execute this command anywhere from within the virtual environment, and there will be no need to provide a path argument to it. 
+Note: you actually do not need to run the `deactivate` command from the root directory of the project on Macintosh or GNU/Linux because the `deactivate` command is path-agonstic.
+We can execute this command anywhere from within the virtual environment, and there will be no need to provide a path argument to it.
 However, Windows still requires you to execute the virtual environment deactivation program from a specific directory, so you must be at the project root to correctly execute the Windows command.
 
 #### Installing Dependencies
@@ -71,11 +74,12 @@ From the project root, run the following command to install all the dependencies
 
 `pip install -r requirements.txt`
 
-**Notes:** 
-  - The **requirements.txt** file is a simply formatted text file that Python uses to find and install all the dependencies of a project, and even allows the developer to specify the precise versions of the dependencies to install.
-  - This command installs all the dependencies of the game only in the virtual environment you are in now. 
-    - You will not have access to the same dependencies installed now if you create and use another virtual environment. 
-    - Python manages virtual environments by isolating them from one another, which means no installed packages from one virtual environment can be shared with another.
+**Notes:**
+
+- The **requirements.txt** file is a simply formatted text file that Python uses to find and install all the dependencies of a project, and even allows the developer to specify the precise versions of the dependencies to install.
+- This command installs all the dependencies of the game only in the virtual environment you are in now.
+  - You will not have access to the same dependencies installed now if you create and use another virtual environment.
+  - Python manages virtual environments by isolating them from one another, which means no installed packages from one virtual environment can be shared with another.
 
 ### Requirements
 

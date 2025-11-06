@@ -1,18 +1,29 @@
-from textual.app import App
+from textual.widget import Widget
 from textual.widgets import Header, Footer, Button
-from textual.containers import Horizontal, Vertical
+from textual.containers import HorizontalGroup, VerticalGroup
 
 from Game import Game
 from enums.BoardLayout import BoardLayout
 from enums.TokenType import TokenType
 
 
-class ParaduxApp(App[None]):
+class BoardWidget(Widget):
     BINDINGS = [
         ("q", "quit_app", "Quit"),
     ]
 
-    CSS_PATH = "GameView.tcss"
+    def __init__(
+        self,
+        *children: Widget,
+        name: str | None = None,
+        id: str | None = None,
+        classes: str | None = None,
+        disabled: bool = False,
+        markup: bool = True
+    ) -> None:
+        super().__init__(*children, name=name, id=id, classes=classes, disabled=disabled, markup=markup)
+        
+        pass
 
     def compose(self):
         new_game = Game(BoardLayout.HORZ)
@@ -20,26 +31,19 @@ class ParaduxApp(App[None]):
 
         token_color: dict[TokenType, str] = {
             TokenType.MT: "gray",
-            TokenType.P1: "#FF0000",
-            TokenType.P2: "#0000FF",
+            TokenType.P1: "black",
+            TokenType.P2: "white",
         }
 
         yield Header()
-        with Vertical():
+        with VerticalGroup():
             for row in board_2d:
-                with Horizontal(classes="row"):
+                with HorizontalGroup(classes="row"):
                     for cell in row:
-                        c_butt = Button(f"{new_game.board[cell].value}", classes="board_cell")
+                        c_butt = Button("", classes="board_cell")
                         c_butt.styles.background = token_color[new_game.board[cell]]
                         c_butt.styles.text_align = "center"
+
                         yield c_butt
         yield Footer()
 
-    def action_quit_app(self) -> None:
-        """An action to quit the app."""
-        self.exit()
-
-
-if __name__ == "__main__":
-    app = ParaduxApp()
-    app.run()
