@@ -28,8 +28,8 @@ class NewGameScreen(Screen[BoardLayout]):
         with VerticalScroll():
             yield Markdown(rules_content)
             with ListView():
-                yield ListItem(Label("\\/ Diagonal Layout \\/"), id="diag")
-                yield ListItem(Label("-- Horizontal Layout --"), id="horz")
+                yield ListItem(Label("/ Diagonal Layout /"), id="diag")
+                yield ListItem(Label("— Horizontal Layout —"), id="horz")
 
         yield Footer()
 
@@ -45,4 +45,5 @@ class NewGameScreen(Screen[BoardLayout]):
         self.app.switch_screen(screens.MainMenuScreen(self._controller))
 
     def create_game(self, board_type: BoardLayout) -> None:
-        pass
+        self._controller.create_game(board_type)
+        self.app.switch_screen(screens.GameScreen(self._controller))

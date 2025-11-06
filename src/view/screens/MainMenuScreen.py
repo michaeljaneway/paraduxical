@@ -26,13 +26,25 @@ class MainMenuScreen(Screen[None]):
             yield Markdown(rules_content)
 
             with ListView():
-                yield ListItem(Label("🎮 Start New Game 🎮"), id="startnewgame")
-                yield ListItem(Label("📂 Load Save Game 📂"), id="loadgame")
-                yield ListItem(Label("🔍 View Rules 🔍"), id="viewrules")
-                yield ListItem(Label("❌ Exit Game ❌"), id="exitgame")
+                if self._controller.is_game_active():
+                    yield ListItem(Label("Resume Active Game"), id="resumegame")
+                    yield ListItem(Label("Delete Active Game"), id="deletegame")
+                yield ListItem(Label("Start New Game"), id="startnewgame")
+                yield ListItem(Label("Load Save Game"), id="loadgame")
+                yield ListItem(Label("View Rules"), id="viewrules")
+                yield ListItem(Label("Exit Game"), id="exitgame")
 
         yield Footer()
 
+    @on(ListView.Selected, item="#resumegame")
+    def action_resume_game(self) -> None:
+        self.app.switch_screen(screens.GameScreen(self._controller))
+        
+    @on(ListView.Selected, item="#deletegame")
+    def action_delete_game(self) -> None:
+        self._controller.clear_game()
+        self.app.switch_screen(screens.MainMenuScreen(self._controller))
+        
     @on(ListView.Selected, item="#startnewgame")
     def action_start_new_game(self) -> None:
         self.app.switch_screen(screens.NewGameScreen(self._controller))

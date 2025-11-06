@@ -1,3 +1,4 @@
+import copy
 from attr import dataclass
 from enums.TokenType import TokenType
 from enums.Direction import Direction
@@ -80,6 +81,9 @@ class Board:
                         coord_list[-1].append(Tile(i_coord, self._board_map[i_coord]))
         return coord_list
 
+    def get_board_dict(self) -> dict[Coordinate, TokenType]:
+        return copy.copy(self._board_map)
+
     def get_dir_edge(self, coord: Coordinate, dir: Direction) -> Coordinate:
         """Returns the coordinate at the edge of the board when moving in a given direction from the given coordinate"""
         while self[coord.neighbor(dir)] != TokenType.INV:
@@ -90,6 +94,8 @@ class Board:
         """From a given coord, scan in a given direction for lines with length >= line_len"""
         valid_lines: list[TokenLine] = []
         active_line = TokenLine(self[coord], [coord])
+        
+        print(dir.name, coord)
 
         while True:
             coord = active_line.coords[-1].neighbor(dir)
@@ -133,7 +139,7 @@ class Board:
         dir0_coord = edge_center
         dir1_coord = edge_center
 
-        for _ in range(self._radius - 1):
+        for _ in range(self._radius):
             dir0_coord = dir0_coord.neighbor(scan_map[dir][0])
             dir1_coord = dir1_coord.neighbor(scan_map[dir][1])
 
@@ -162,3 +168,14 @@ class Board:
             lines.extend(self.get_dir_lines(coord, Direction.SE, min_line_len))
 
         return lines
+
+
+if __name__ == "__main__":
+    b = Board(1)
+    b.load_from_list([
+              TokenType.P1, TokenType.P2,
+        TokenType.P1, TokenType.P2, TokenType.P1,
+              TokenType.P1, TokenType.P2,
+    ])
+    print(b)
+    print(b.get_token_lines(2))

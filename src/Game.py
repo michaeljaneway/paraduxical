@@ -82,9 +82,8 @@ class Game:
                 self.board[t2_new_coord] = t2_token_type
 
         self.move_history.append(move)
+        self.current_player = TokenType.P1 if self.current_player == TokenType.P2 else TokenType.P2
 
     def get_winning_lines(self) -> list[TokenLine]:
         """Returns all lines which meet the requirements to win"""
         return self.board.get_token_lines(4)
-
-    
