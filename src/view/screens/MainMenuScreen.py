@@ -1,6 +1,6 @@
 from textual import on
 from textual.app import ComposeResult
-from textual.containers import Container
+from textual.containers import VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Label, ListItem, ListView, Markdown
 from textual.widgets import Header, Footer
@@ -22,13 +22,13 @@ class MainMenuScreen(Screen[None]):
     def compose(self) -> ComposeResult:
         yield Header()
 
-        with Container(classes="container middle"):
+        with VerticalScroll(classes="container middle"):
             yield Markdown(WELCOME_MD)
 
             with ListView():
                 yield ListItem(Label("🎮 Start New Game 🎮"), id="startnewgame")
                 yield ListItem(Label("📂 Load Save Game 📂"), id="loadgame")
-                yield ListItem(Label("🔍 View Rules 🔍", markup=True), id="viewrules")
+                yield ListItem(Label("🔍 View Rules 🔍"), id="viewrules")
                 yield ListItem(Label("❌ Exit Game ❌"), id="exitgame")
 
         yield Footer()
@@ -36,7 +36,7 @@ class MainMenuScreen(Screen[None]):
 
     @on(ListView.Selected, item="#startnewgame")
     def action_start_new_game(self) -> None:
-        pass
+        self.app.switch_screen(screens.NewGameScreen())
 
     @on(ListView.Selected, item="#loadgame")
     def action_load_save_game(self) -> None:

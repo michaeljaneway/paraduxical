@@ -23,12 +23,12 @@ MarkdownH1 {
 
 # Main Menu
 
-MainMenuScreen ListItem {
+ListItem {
   align-horizontal: center;
   padding: 1;
 }
 
-MainMenuScreen ListView {
+ListView {
    height: auto;
 }
 
