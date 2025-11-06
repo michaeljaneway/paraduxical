@@ -55,7 +55,6 @@ class GameScreen(Screen[None]):
         self.selected_cells: list[CellButton] = []
 
     def compose(self) -> ComposeResult:
-        # Board
         yield Header()
 
         self.header_markdown: Markdown = Markdown()
@@ -106,7 +105,7 @@ class GameScreen(Screen[None]):
 
     def play_move(self) -> None:
         if not self.move_type:
-            raise Exception("No movement type selected")
+            return
 
         b0 = self.selected_cells[0]
         b1 = self.selected_cells[1]
@@ -120,4 +119,5 @@ class GameScreen(Screen[None]):
             self.app.switch_screen(screens.GameScreen(self._controller))
 
     def action_back(self) -> None:
+        """Returns to the Main Menu screen"""
         self.app.switch_screen(screens.MainMenuScreen(self._controller))
