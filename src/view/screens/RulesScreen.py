@@ -16,11 +16,12 @@ class RulesScreen(Screen[None]):
         yield Header()
 
         # Load rules from markdown file
-        rules_path = Path("assets/rules.md")
-        rules_content = rules_path.read_text()
+        rules_path = Path("./assets/rules.md")
+        rules_content = rules_path.read_text("utf-8")
 
         with VerticalScroll(classes="container middle"):
             yield Markdown(rules_content)
+            
 
         yield Footer()
 
