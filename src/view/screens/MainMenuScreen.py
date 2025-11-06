@@ -5,7 +5,7 @@ from textual.screen import Screen
 from textual.widgets import Label, ListItem, ListView, Markdown
 from textual.widgets import Header, Footer
 
-# import screens
+from view import screens
 
 WELCOME_MD = """
 # Welcome to Paraduxical!
@@ -33,18 +33,18 @@ class MainMenuScreen(Screen[None]):
 
         yield Footer()
 
-    @on(ListView.Selected, item="#startnewgame")
-    def action_start_new_game(self) -> None:
-        pass
-
     @on(ListView.Selected, item="#viewrules")
     def action_view_rules(self) -> None:
+        self.app.switch_screen(screens.RulesScreen())
+
+    @on(ListView.Selected, item="#startnewgame")
+    def action_start_new_game(self) -> None:
         pass
 
     @on(ListView.Selected, item="#loadgame")
     def action_load_save_game(self) -> None:
         pass
-    
+
     @on(ListView.Selected, item="#exitgame")
     def action_exit_game(self) -> None:
         self.app.exit()
