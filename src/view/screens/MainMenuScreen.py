@@ -9,8 +9,8 @@ from textual.widgets import Header, Footer
 from view import screens
 from GameController import GameController
 
+
 class MainMenuScreen(Screen[None]):
-    
     def __init__(self, controller: GameController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller

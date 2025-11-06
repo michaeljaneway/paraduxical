@@ -1,7 +1,14 @@
+from attr import dataclass
 from enums.TokenType import TokenType
 from enums.Direction import Direction
 from Coordinate import Coordinate
 from TokenLine import TokenLine
+
+
+@dataclass
+class Tile:
+    coord: Coordinate
+    token: TokenType
 
 
 class Board:
@@ -20,7 +27,7 @@ class Board:
         # Convert rows to strings
         rows = self.get_2d_coord_list()
         for row in rows:
-            row_str = " ".join([str(self[coord].value) for coord in row])
+            row_str = " ".join([str(self[tile.coord].value) for tile in row])
             row_strings.append(row_str)
 
         # Center each row string
@@ -49,28 +56,28 @@ class Board:
         if len(coords_1d) != len(token_list):
             raise Exception(f"Incorrect size of token list ({len(token_list)}), should be {len(coords_1d)}")
 
-        for i, coord in enumerate(coords_1d):
-            self[coord] = token_list[i]
+        for i, tile in enumerate(coords_1d):
+            self[tile.coord] = token_list[i]
 
-    def get_1d_coord_list(self) -> list[Coordinate]:
+    def get_1d_coord_list(self) -> list[Tile]:
         """Returns a 1D array containing the spaces in the board from Left->Right, Top->Bottom"""
-        coord_list: list[Coordinate] = []
-        for q in range(-self._radius, self._radius + 1):
-            for r in range(-self._radius, self._radius + 1):
-                for s in range(-self._radius, self._radius + 1):
-                    if q + r + s == 0:
-                        coord_list.append(Coordinate(q, r, s))
-        return coord_list
+        coord_list_1d: list[Tile] = []
+        coord_list_2d = self.get_2d_coord_list()
 
-    def get_2d_coord_list(self) -> list[list[Coordinate]]:
+        for row in coord_list_2d:
+            coord_list_1d.extend(row)
+        return coord_list_1d
+
+    def get_2d_coord_list(self) -> list[list[Tile]]:
         """Returns a 2D array containing spaces Left->Right as rows, Top->Bottom"""
-        coord_list: list[list[Coordinate]] = []
+        coord_list: list[list[Tile]] = []
         for q in range(-self._radius, self._radius + 1):
             coord_list.append([])
             for r in range(-self._radius, self._radius + 1):
                 for s in range(-self._radius, self._radius + 1):
                     if q + r + s == 0:
-                        coord_list[-1].append(Coordinate(q, r, s))
+                        i_coord = Coordinate(q, r, s)
+                        coord_list[-1].append(Tile(i_coord, self._board_map[i_coord]))
         return coord_list
 
     def get_dir_edge(self, coord: Coordinate, dir: Direction) -> Coordinate:

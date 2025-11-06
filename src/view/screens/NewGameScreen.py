@@ -10,6 +10,7 @@ from GameController import GameController
 from enums.BoardLayout import BoardLayout
 from view import screens
 
+
 class NewGameScreen(Screen[BoardLayout]):
     BINDINGS = [("escape", "back", "Back to Main Menu")]
 
@@ -23,7 +24,7 @@ class NewGameScreen(Screen[BoardLayout]):
         # Load rules from markdown file
         rules_path = Path("./assets/newgame.md")
         rules_content = rules_path.read_text("utf-8")
-        
+
         with VerticalScroll():
             yield Markdown(rules_content)
             with ListView():

@@ -1,9 +1,9 @@
 from pathlib import Path
 from textual import on
 from textual.app import ComposeResult
-from textual.containers import Container, VerticalScroll
+from textual.containers import VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Label, ListItem, ListView, Markdown
+from textual.widgets import Markdown
 from textual.widgets import Header, Footer, Button
 
 from GameController import GameController
@@ -12,7 +12,7 @@ from view import screens
 
 class RulesScreen(Screen[None]):
     BINDINGS = [("escape", "back", "Back to Main Menu")]
-    
+
     def __init__(self, controller: GameController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller

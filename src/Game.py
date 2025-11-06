@@ -87,7 +87,4 @@ class Game:
         """Returns all lines which meet the requirements to win"""
         return self.board.get_token_lines(4)
 
-
-if __name__ == "__main__":
-    g = Game(BoardLayout.DIAG)
-    print(g.board)
+    
