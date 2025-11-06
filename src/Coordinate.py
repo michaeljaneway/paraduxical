@@ -33,6 +33,9 @@ class Coordinate:
             return Coordinate(self.q * other.q, self.r * other.r, self.s * other.s)
         return Coordinate(self.q * other, self.r * other, self.s * other)
 
+    def __str__(self) -> str:
+        return f"(q: {self.q}, r: {self.r}, s: {self.s})"
+
     def neighbor(self, direction: Direction) -> "Coordinate":
         return self + Coordinate(*direction_map[direction])
 
