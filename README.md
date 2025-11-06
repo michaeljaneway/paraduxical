@@ -2,7 +2,6 @@
 
 ## Table of Contents
 
-Links Here:
   - [Game Summary](#game-summary)
   - [Installation Instructions](#installation-instructions)
     - [Setup](#setup)
