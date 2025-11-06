@@ -1,3 +1,4 @@
+from pathlib import Path
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import VerticalScroll
@@ -8,17 +9,6 @@ from textual.widgets import Header, Footer
 from view import screens
 from GameController import GameController
 
-WELCOME_MD = """
-# Welcome to Paraduxical!
-
-Paraduxical is an implementation of the board game Paradux by Team 2 in CIS*3260 @ UOG
-
-**Note: You can exit the game at any time by pressing Q**
-
-Using either Arrow Keys with the *Enter* key or your mouse, please select an option from the list below
-"""
-
-
 class MainMenuScreen(Screen[None]):
     
     def __init__(self, controller: GameController, **kwargs) -> None:
@@ -28,8 +18,12 @@ class MainMenuScreen(Screen[None]):
     def compose(self) -> ComposeResult:
         yield Header()
 
+        # Load rules from markdown file
+        rules_path = Path("./assets/mainmenu.md")
+        rules_content = rules_path.read_text("utf-8")
+
         with VerticalScroll(classes="container middle"):
-            yield Markdown(WELCOME_MD)
+            yield Markdown(rules_content)
 
             with ListView():
                 yield ListItem(Label("🎮 Start New Game 🎮"), id="startnewgame")
