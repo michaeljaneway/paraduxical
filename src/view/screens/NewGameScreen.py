@@ -1,3 +1,4 @@
+from pathlib import Path
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import VerticalScroll
@@ -8,21 +9,18 @@ from textual.widgets import Header, Footer
 from enums.BoardLayout import BoardLayout
 from view import screens
 
-NEW_GAME_MD = """
-# Starting a New Game
-
-
-"""
-
-
 class NewGameScreen(Screen[BoardLayout]):
     BINDINGS = [("escape", "back", "Back to Main Menu")]
 
     def compose(self) -> ComposeResult:
         yield Header()
+
+        # Load rules from markdown file
+        rules_path = Path("./assets/newgame.md")
+        rules_content = rules_path.read_text("utf-8")
         
         with VerticalScroll():
-            yield Markdown(NEW_GAME_MD)
+            yield Markdown(rules_content)
             with ListView():
                 yield ListItem(Label("\\/ Diagonal Layout \\/"), id="diag")
                 yield ListItem(Label("-- Horizontal Layout --"), id="horz")
