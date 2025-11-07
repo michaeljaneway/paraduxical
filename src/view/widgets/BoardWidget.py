@@ -80,8 +80,10 @@ class BoardWidget(Widget):
 
     """Set Header"""
 
-    def set_header_text(self, text: str) -> None:
+    def set_header_md(self, text: str) -> None:
+        """Updates the instructional markdown header"""
         self.header_markdown.update(text)
+        
 
     """Moving"""
 
@@ -94,6 +96,7 @@ class BoardWidget(Widget):
         self.move_type = move_type
         self.move_type_group.display = False
         self.activate_player_cells()
+        self.set_header_md("# Select the first piece you would like to move")
 
     def update_state(self) -> None:
         """Update the options displayed to the user based on the current state of the selected cells"""
@@ -108,6 +111,8 @@ class BoardWidget(Widget):
                 self.selected_cells[0].deselect()
                 self.selected_cells = []
                 self.notify("The selected piece has no valid adjacent tokens, please select another", severity="warning")
+            else:
+                self.set_header_md("# Select a second piece adjacent to the first")
 
         # If the token is the selected to be selected
         elif len(self.selected_cells) == 2:
@@ -115,6 +120,7 @@ class BoardWidget(Widget):
                 self.post_move()
             else:
                 self.deactivate_all_cells()
+                self.set_header_md("# Select a direction to move the two pieces in:")
                 self.generate_direction_options()
 
     def generate_direction_options(self) -> None:
