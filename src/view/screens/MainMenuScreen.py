@@ -11,6 +11,8 @@ from view import screens
 
 
 class MainMenuScreen(Screen[None]):
+    """Main menu for Paraduxical, allows user to navigate between all available program options"""
+
     AUTO_FOCUS = "#menu_list"
 
     def __init__(self, controller: GameController, **kwargs) -> None:

@@ -10,13 +10,10 @@ from Move import Move
 from TokenLine import TokenLine
 
 
-class GameSave:
-    def __init__(self, layout: BoardLayout, moves: list[Move]) -> None:
-        self.layout: BoardLayout = layout
-        self.moves: list[Move] = moves
-
-
 class Game:
+    """The Paradux game model, handles all game logic"""
+
+    # Diagonal and Horizontal game board layouts hardcoded as 1D array
     layout_map = {
         BoardLayout.HORZ: [
             TokenType(x) for x in [1, 2, 1, 2, 2, 0, 0, 0, 1, 1, 0, 0, 0, 0, 2, 2, 0, 1, 0, 2, 0, 1, 1, 0, 0, 0, 0, 2, 2, 0, 0, 0, 1, 1, 2, 1, 2]
@@ -34,19 +31,40 @@ class Game:
         self.current_player = TokenType.P1
         self.move_history: list[Move] = []
 
-    def valid_shift_directions(self, c1: Coordinate, c2: Coordinate) -> list[Direction]:
-        valid_dir: list[Direction] = []
+    """Movement"""
 
-        for dir in [Direction.NE, Direction.E, Direction.SE, Direction.SW, Direction.W, Direction.NW]:
-            c1_valid = self.board[c1.neighbor(dir)] == TokenType.MT or c1.neighbor(dir) == c2
-            c2_valid = self.board[c2.neighbor(dir)] == TokenType.MT or c2.neighbor(dir) == c1
-            if c1_valid and c2_valid:
-                valid_dir.append(dir)
+    def play_move(self, move: Move) -> None:
+        """Plays the given move"""
 
-        return valid_dir
+        # Confirm move is valid
+        try:
+            self.validate_move(move)
+        except Exception as e:
+            raise e
+
+        # Execute move
+        match move.move_type:
+            case MoveType.SWAP:
+                c1_token = self.board[move.c1]
+                self.board[move.c1] = self.board[move.c2]
+                self.board[move.c2] = c1_token
+
+            case MoveType.SHIFT:
+                t1_new_coord = move.c1.neighbor(move.direction)
+                t2_new_coord = move.c2.neighbor(move.direction)
+                t1_token_type = self.board[move.c1]
+                t2_token_type = self.board[move.c2]
+
+                self.board[move.c1] = TokenType.MT
+                self.board[move.c2] = TokenType.MT
+                self.board[t1_new_coord] = t1_token_type
+                self.board[t2_new_coord] = t2_token_type
+
+        self.move_history.append(move)
+        self.current_player = TokenType.P1 if self.current_player == TokenType.P2 else TokenType.P2
 
     def validate_move(self, move: Move) -> None:
-        """Raises an exception with a descriptive message for any issue that invalidates the given move"""
+        """Raises an exception with a descriptive message for any issue invalidating the given move"""
 
         # Coordinates must be adjacent
         if not (move.c1.distance(move.c2) == 1):
@@ -75,44 +93,34 @@ class Game:
         if not move.direction in self.valid_shift_directions(move.c1, move.c2):
             raise Exception("Tokens are blocked from shifting")
 
-    def play_move(self, move: Move) -> None:
-        # Confirm move is valid
-        try:
-            self.validate_move(move)
-        except Exception as e:
-            raise e
+    def valid_shift_directions(self, c1: Coordinate, c2: Coordinate) -> list[Direction]:
+        """Returns a list of valid directions for a shift move given two coordinates on the game board"""
+        valid_dir: list[Direction] = []
 
-        # Execute move
-        match move.move_type:
-            case MoveType.SWAP:
-                c1_token = self.board[move.c1]
-                self.board[move.c1] = self.board[move.c2]
-                self.board[move.c2] = c1_token
+        for dir in [Direction.NE, Direction.E, Direction.SE, Direction.SW, Direction.W, Direction.NW]:
+            c1_valid = self.board[c1.neighbor(dir)] == TokenType.MT or c1.neighbor(dir) == c2
+            c2_valid = self.board[c2.neighbor(dir)] == TokenType.MT or c2.neighbor(dir) == c1
+            if c1_valid and c2_valid:
+                valid_dir.append(dir)
 
-            case MoveType.SHIFT:
-                t1_new_coord = move.c1.neighbor(move.direction)
-                t2_new_coord = move.c2.neighbor(move.direction)
-                t1_token_type = self.board[move.c1]
-                t2_token_type = self.board[move.c2]
+        return valid_dir
 
-                self.board[move.c1] = TokenType.MT
-                self.board[move.c2] = TokenType.MT
-                self.board[t1_new_coord] = t1_token_type
-                self.board[t2_new_coord] = t2_token_type
-
-        self.move_history.append(move)
-        self.current_player = TokenType.P1 if self.current_player == TokenType.P2 else TokenType.P2
+    """Game State"""
 
     def get_winning_lines(self) -> list[TokenLine]:
         """Returns all lines which meet the requirements to win"""
         return self.board.get_token_lines(4)
 
+    """Saving & Loading"""
+
     def save_to_file(self, filename):
-        with open(filename, 'wb') as f:
+        """Saves the game as a pickle file with the given filename"""
+        with open(filename, "wb") as f:
             pickle.dump(self, f)
 
     @classmethod
     def load_from_file(cls, filename):
-        with open(filename, 'rb') as f:
+        """Returns a Game object loaded from the given pickle file"""
+        with open(filename, "rb") as f:
             loaded_game = pickle.load(f)
         return loaded_game

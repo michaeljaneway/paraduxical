@@ -1,21 +1,22 @@
 from textual import on
 from textual.app import ComposeResult
-from textual.widgets import Label, ListItem, ListView, Markdown
-from textual.widget import Widget
 from textual.containers import HorizontalGroup, VerticalGroup
 from textual.message import Message
+from textual.widget import Widget
+from textual.widgets import Label, ListItem, ListView, Markdown
 
-from enums.TokenType import TokenType
+from Coordinate import Coordinate
 from enums.Direction import Direction
 from enums.MoveType import MoveType
-
-from Move import Move
+from enums.TokenType import TokenType
 from GameController import GameController
-from Coordinate import Coordinate
+from Move import Move
 from view.widgets.CellButton import CellButton
 
 
 class BoardWidget(Widget):
+    """A widget for displaying the Game Board and accepting movement input"""
+
     class MoveMade(Message):
         def __init__(self, move: Move) -> None:
             self.move: Move = move
@@ -36,6 +37,8 @@ class BoardWidget(Widget):
         self.selected_cells: list[CellButton] = []
         self.cell_buttons: dict[Coordinate, CellButton] = {}
 
+        self.header_markdown: Markdown = Markdown("")
+
         self.direction_group: ListView = ListView()
         self.direction_group.styles.margin = (1, 1)
         self.direction_group.display = False
@@ -48,9 +51,7 @@ class BoardWidget(Widget):
         self.board_group.styles.margin = (1, 1)
 
     def compose(self) -> ComposeResult:
-
         # Instructional Header
-        self.header_markdown: Markdown = Markdown("")
         yield self.header_markdown
 
         # Cell Generation
@@ -77,16 +78,21 @@ class BoardWidget(Widget):
         # Direction Options List Selection
         yield self.direction_group
 
+    """Set Header"""
+
+    def set_header_text(self, text: str) -> None:
+        self.header_markdown.update(text)
+
     """Moving"""
 
     def start_move(self) -> None:
+        """Begin the process of prompting the user for input"""
         self.move_type_group.display = True
 
     def set_move_type(self, move_type: MoveType) -> None:
         """Instructs the board to begin accepting input for a move, which will be returned async through a posted MoveMade Message"""
         self.move_type = move_type
         self.move_type_group.display = False
-        # self.header_markdown.set
         self.activate_player_cells()
 
     def update_state(self) -> None:
@@ -138,11 +144,6 @@ class BoardWidget(Widget):
         b1 = self.selected_cells[1]
         move = Move(self.move_type, b0.coord, b1.coord, self.move_direction)
         self.post_message(self.MoveMade(move))
-
-    """Set Header"""
-
-    def set_header_text(self, text: str) -> None:
-        pass
 
     """Cell Activation/Deactivation"""
 
@@ -197,12 +198,16 @@ class BoardWidget(Widget):
 
 
 class MoveTypeListItem(ListItem):
+    """A ListItem which contains a MoveType"""
+
     def __init__(self, *children, move_type: MoveType, **kwargs) -> None:
         super().__init__(*children, **kwargs)
         self.move_type: MoveType = move_type
 
 
 class DirectionListItem(ListItem):
+    """A ListItem which contains a Direction"""
+
     def __init__(self, *children, direction: Direction, **kwargs) -> None:
         super().__init__(*children, **kwargs)
         self.direction: Direction = direction

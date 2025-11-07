@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class MoveType(Enum):
-    """Enum representing the possible movement types that can be made"""
+    """Movement types that can be made in Paradux"""
 
     SWAP = 0
     """Swaps two adjacent tokens of opposite color"""

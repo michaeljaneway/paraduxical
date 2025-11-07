@@ -1,13 +1,17 @@
 import copy
+
 from attr import dataclass
-from enums.TokenType import TokenType
-from enums.Direction import Direction
+
 from Coordinate import Coordinate
+from enums.Direction import Direction
+from enums.TokenType import TokenType
 from TokenLine import TokenLine
 
 
 @dataclass
 class Tile:
+    """A coordinate with an associated token type"""
+
     coord: Coordinate
     token: TokenType
 
@@ -82,6 +86,7 @@ class Board:
         return coord_list
 
     def get_board_dict(self) -> dict[Coordinate, TokenType]:
+        """Returns a dict mapping coordinates to their corresponding token types on the board"""
         return copy.copy(self._board_map)
 
     def get_dir_edge(self, coord: Coordinate, dir: Direction) -> Coordinate:
@@ -94,7 +99,7 @@ class Board:
         """From a given coord, scan in a given direction for lines with length >= line_len"""
         valid_lines: list[TokenLine] = []
         active_line = TokenLine(self[coord], [coord])
-        
+
         print(dir.name, coord)
 
         while True:
@@ -168,14 +173,3 @@ class Board:
             lines.extend(self.get_dir_lines(coord, Direction.SE, min_line_len))
 
         return lines
-
-
-if __name__ == "__main__":
-    b = Board(1)
-    b.load_from_list([
-              TokenType.P1, TokenType.P2,
-        TokenType.P1, TokenType.P2, TokenType.P1,
-              TokenType.P1, TokenType.P2,
-    ])
-    print(b)
-    print(b.get_token_lines(2))

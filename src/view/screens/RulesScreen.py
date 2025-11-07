@@ -1,16 +1,18 @@
 from pathlib import Path
+
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Markdown, ListView, ListItem, Label
-from textual.widgets import Header, Footer, Button
+from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
 from GameController import GameController
 from view import screens
 
 
 class RulesScreen(Screen[None]):
+    """Displays Paradux rules to the user"""
+    
     BINDINGS = [("escape", "back", "Back to Main Menu")]
 
     def __init__(self, controller: GameController, **kwargs) -> None:

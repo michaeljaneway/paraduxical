@@ -10,6 +10,8 @@ from view.widgets.CellButton import CellButton
 
 
 class GameScreen(Screen[None]):
+    """Displays the active game to the user"""
+    
     BINDINGS = [
         ("escape", "back", "Back to Main Menu"),
         ("s", "save", "Save Game"),

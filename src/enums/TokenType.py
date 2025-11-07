@@ -2,10 +2,12 @@ from enum import Enum
 
 
 class TokenType(Enum):
-    """Enum representing the token type of a position on the game board"""
+    """Token type of any space on the game board"""
 
     INV = -1
-    """Invalid (Used for positions beyond the boundary of the board)"""
+    """Invalid 
+    
+    Used for coordinates beyond the boundary of the board"""
 
     MT = 0
     """Empty Space"""

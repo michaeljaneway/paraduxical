@@ -9,17 +9,21 @@ from view import screens
 
 
 class SaveScreen(Screen[None]):
+    """Allows the user to save the active game"""
+
     BINDINGS = [("escape", "back", "Back to Game")]
 
     def __init__(self, controller: GameController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller
+        self.existing_saves = self._controller.get_save_games()
 
     def compose(self) -> ComposeResult:
         yield Header()
 
         with VerticalScroll(classes="container middle"):
             yield Markdown(f"# Saving game")
+            yield Markdown(f"Enter the desired savefile name in the input box below. Press *Enter* when complete")
 
             yield Input(placeholder="Savefile Name", restrict=r"^[\w\-. ]+$")
 
@@ -32,7 +36,13 @@ class SaveScreen(Screen[None]):
 
     @on(Input.Submitted)
     def on_save_name_submitted(self, event: Input.Submitted) -> None:
-        self._controller.save_game(event.value)
+        """Ensure the save doesn't already exist, then save the active game"""
+        save_name = event.value
+        if save_name in self.existing_saves:
+            self.notify(f"The savefile '{save_name}' already exists, please delete it or enter another name", severity="error")
+            return
+
+        self._controller.save_game(save_name)
         self.app.switch_screen(screens.GameScreen(self._controller))
 
     @on(ListView.Selected, item="#cancel")

@@ -1,8 +1,10 @@
-from enums.TokenType import TokenType
 from Coordinate import Coordinate
+from enums.TokenType import TokenType
 
 
 class TokenLine:
+    """A single line of hex coordinates with an associated token type"""
+
     def __init__(self, type: TokenType, coords: list[Coordinate]) -> None:
         self.token_type: TokenType = type
         self.coords: list[Coordinate] = coords

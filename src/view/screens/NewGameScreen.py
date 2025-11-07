@@ -1,17 +1,19 @@
 from pathlib import Path
+
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Label, ListItem, ListView, Markdown, Button
-from textual.widgets import Header, Footer
+from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
-from GameController import GameController
 from enums.BoardLayout import BoardLayout
+from GameController import GameController
 from view import screens
 
 
 class NewGameScreen(Screen[BoardLayout]):
+    """Allows the user to select the initial board layout before beginning a new game"""
+
     AUTO_FOCUS = "#menu_list"
     BINDINGS = [("escape", "back", "Back to Main Menu")]
 

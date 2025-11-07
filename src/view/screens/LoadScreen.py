@@ -2,13 +2,15 @@ from textual import on
 from textual.app import ComposeResult
 from textual.containers import VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Footer, Header, Input, Label, ListItem, ListView, Markdown
+from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
 from GameController import GameController
 from view import screens
 
 
 class LoadScreen(Screen[None]):
+    """Allows the user to load a saved game"""
+    
     BINDINGS = [("escape", "back", "Back to Main Menu")]
 
     def __init__(self, controller: GameController, **kwargs) -> None:

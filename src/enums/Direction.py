@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class Direction(Enum):
-    """Enum representing all valid directions leading from a tile on a Paradux board"""
+    """Valid directions leading from a tile on a Paradux board"""
 
     NoDirection = -1
     """No direction"""

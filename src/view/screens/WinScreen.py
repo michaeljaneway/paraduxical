@@ -1,19 +1,18 @@
-from pathlib import Path
-from unicodedata import digit
 from textual import on
 from textual.app import ComposeResult
-from textual.containers import VerticalScroll, Container
+from textual.containers import Container, VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Label, ListItem, ListView, Markdown, Button
-from textual.widgets import Header, Footer, Digits
+from textual.widgets import Digits, Footer, Header, Label, ListItem, ListView, Markdown
 
-from GameController import GameController
 from enums.BoardLayout import BoardLayout
-from view.widgets.BoardWidget import BoardWidget
+from GameController import GameController
 from view import screens
+from view.widgets.BoardWidget import BoardWidget
 
 
 class WinScreen(Screen[BoardLayout]):
+    """Shows the winner of the active game"""
+    
     AUTO_FOCUS = "#menu_list"
 
     def __init__(self, controller: GameController, **kwargs) -> None:
