@@ -25,6 +25,11 @@ class GameController:
             raise Exception("No game is active")
         self._game.play_move(move)
 
+    def get_valid_shift_directions(self, c1: Coordinate, c2: Coordinate):
+        if not self._game:
+            raise Exception("No game is active")
+        return self._game.valid_shift_directions(c1, c2)
+
     def get_board_array(self) -> list[list[Tile]]:
         if not self._game:
             raise Exception("No game is active")

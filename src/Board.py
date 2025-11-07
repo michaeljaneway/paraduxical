@@ -72,10 +72,10 @@ class Board:
     def get_2d_coord_list(self) -> list[list[Tile]]:
         """Returns a 2D array containing spaces Left->Right as rows, Top->Bottom"""
         coord_list: list[list[Tile]] = []
-        for q in range(-self._radius, self._radius + 1):
+        for r in range(-self._radius, self._radius + 1):
             coord_list.append([])
-            for r in range(-self._radius, self._radius + 1):
-                for s in range(-self._radius, self._radius + 1):
+            for s in range(self._radius, -self._radius - 1, -1):
+                for q in range(-self._radius, self._radius + 1):
                     if q + r + s == 0:
                         i_coord = Coordinate(q, r, s)
                         coord_list[-1].append(Tile(i_coord, self._board_map[i_coord]))

@@ -4,6 +4,8 @@ from enums.TokenType import TokenType
 from Move import Move
 from TokenLine import TokenLine
 from enums.MoveType import MoveType
+from Coordinate import Coordinate
+from enums.Direction import Direction
 
 
 class Game:
@@ -23,6 +25,17 @@ class Game:
 
         self.current_player = TokenType.P1
         self.move_history: list[Move] = []
+
+    def valid_shift_directions(self, c1: Coordinate, c2: Coordinate) -> list[Direction]:
+        valid_dir: list[Direction] = []
+
+        for dir in [Direction.NE, Direction.E, Direction.SE, Direction.SW, Direction.W, Direction.NW]:
+            c1_valid = self.board[c1.neighbor(dir)] == TokenType.MT or c1.neighbor(dir) == c2
+            c2_valid = self.board[c2.neighbor(dir)] == TokenType.MT or c2.neighbor(dir) == c1
+            if c1_valid and c2_valid:
+                valid_dir.append(dir)
+
+        return valid_dir
 
     def validate_move(self, move: Move) -> None:
         """Raises an exception with a descriptive message for any issue that invalidates the given move"""
@@ -51,10 +64,8 @@ class Game:
             return
 
         # Ensure no pieces are in the way for the SHIFT move, unless it is the other piece involved in the move
-        if not (self.board[move.c1.neighbor(move.direction)] == TokenType.MT or move.c1.neighbor(move.direction) == move.c2):
-            raise Exception("Tokens 1 is blocked from shifting")
-        if not (self.board[move.c2.neighbor(move.direction)] == TokenType.MT or move.c2.neighbor(move.direction) == move.c1):
-            raise Exception("Tokens 2 is blocked from shifting")
+        if not move.direction in self.valid_shift_directions(move.c1, move.c2):
+            raise Exception("Tokens are blocked from shifting")
 
     def play_move(self, move: Move) -> None:
         # Confirm move is valid

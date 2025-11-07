@@ -16,8 +16,14 @@ Markdown {
 }
 
 MarkdownH1 {
-  margin-bottom: 1;
-  padding: 1;
+  margin: 1 0;
+  padding: 0;
+  text-style: bold;
+}
+
+MarkdownH2 {
+  margin-bottom: 0;
+  padding: 0;
   text-style: bold;
 }
 
@@ -30,6 +36,7 @@ ListItem {
 
 ListView {
    height: auto;
+   margin: 1;
 }
 
 # Game

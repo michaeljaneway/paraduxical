@@ -3,7 +3,7 @@ from textual import on
 from textual.app import ComposeResult
 from textual.containers import VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Markdown
+from textual.widgets import Markdown, ListView, ListItem, Label
 from textual.widgets import Header, Footer, Button
 
 from GameController import GameController
@@ -26,10 +26,11 @@ class RulesScreen(Screen[None]):
 
         with VerticalScroll(classes="container middle"):
             yield Markdown(rules_content)
-            yield Button("Back to Main Menu", id="back")
+            with ListView():
+                yield ListItem(Label("Back to Main Menu"), id="back")
 
         yield Footer()
 
-    @on(Button.Pressed, "#back")
+    @on(ListView.Selected, item="#back")
     def action_back(self) -> None:
         self.app.switch_screen(screens.MainMenuScreen(self._controller))

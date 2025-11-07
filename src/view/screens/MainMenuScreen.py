@@ -11,6 +11,8 @@ from GameController import GameController
 
 
 class MainMenuScreen(Screen[None]):
+    AUTO_FOCUS="#menu_list"
+    
     def __init__(self, controller: GameController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller
@@ -25,10 +27,10 @@ class MainMenuScreen(Screen[None]):
         with VerticalScroll(classes="container middle"):
             yield Markdown(rules_content)
 
-            with ListView():
+            with ListView(id="menu_list"):
                 if self._controller.is_game_active():
                     yield ListItem(Label("Resume Active Game"), id="resumegame")
-                    yield ListItem(Label("Delete Active Game"), id="deletegame")
+                    yield ListItem(Label("Clear Active Game"), id="deletegame")
                 yield ListItem(Label("Start New Game"), id="startnewgame")
                 yield ListItem(Label("Load Save Game"), id="loadgame")
                 yield ListItem(Label("View Rules"), id="viewrules")

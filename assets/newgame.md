@@ -1,30 +1,13 @@
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                                                                             │
-│                      S T A R T   N E W   G A M E                            │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+# START NEW GAME
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ CHOOSE YOUR BOARD LAYOUT                                                    │
-│                                                                             │
-│  Select how tokens will be arranged at the start of the game:               │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+## CHOOSE YOUR BOARD LAYOUT
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ [\/] DIAGONAL LAYOUT                                                        │
-│                                                                             │
-│  Tokens alternate around the perimeter in diagonal bands.                   │
-│  Center tokens form a diagonal line.                                        │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+Select how tokens will be arranged at the start of the game:
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ [--] HORIZONTAL LAYOUT                                                      │
-│                                                                             │
-│  Tokens alternate around the perimeter in horizontal bands.                 │
-│  Center tokens form a horizontal line.                                      │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+- [/] **DIAGONAL LAYOUT**
+
+  Center tokens form a diagonal line.
+
+- [—] **HORIZONTAL LAYOUT**
+
+  Center tokens form a horizontal line.

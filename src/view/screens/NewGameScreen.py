@@ -12,6 +12,7 @@ from view import screens
 
 
 class NewGameScreen(Screen[BoardLayout]):
+    AUTO_FOCUS = "#menu_list"
     BINDINGS = [("escape", "back", "Back to Main Menu")]
 
     def __init__(self, controller: GameController, **kwargs) -> None:
@@ -27,7 +28,7 @@ class NewGameScreen(Screen[BoardLayout]):
 
         with VerticalScroll():
             yield Markdown(rules_content)
-            with ListView():
+            with ListView(id="menu_list"):
                 yield ListItem(Label("/ Diagonal Layout /"), id="diag")
                 yield ListItem(Label("— Horizontal Layout —"), id="horz")
 

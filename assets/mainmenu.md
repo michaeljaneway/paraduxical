@@ -1,29 +1,15 @@
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                                                                             │
-│                 W E L C O M E   T O   P A R A D U X I C A L                 │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+# WELCOME TO PARADUXICAL
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                                                                             │
-│  Paraduxical is an implementation of the board game Paradux                 │
-│  by Team 2 in CIS*3260 @ UOG                                                │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+Paraduxical is an implementation of the board game Paradux, made by Team 2 in CIS*3260 @ UOG
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ NAVIGATION                                                                  │
-│                                                                             │
-│  • Use Arrow Keys and Enter to select menu options                          │
-│  • Or click with your mouse                                                 │
-│  • Press Q at any time to quit the game                                     │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+## PROGRAM NAVIGATION
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                                                                             │
-│  Please select an option from the menu below:                               │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+- **Mouse**
+  - *Click* with your mouse (if supported by your terminal)
+- **Keyboard**
+  - *Tab* - Navigate between menus
+  - *Arrow Keys* - Navigate menu items
+  - *Enter* - Enter menu option
+- Press **Q** at any time to quit the game
+
+Please select an option from the menu below:

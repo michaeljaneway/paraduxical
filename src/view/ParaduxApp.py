@@ -22,8 +22,3 @@ class ParaduxApp(App[None]):
     def action_quit_app(self) -> None:
         """An action to quit the app."""
         self.exit()
-
-
-if __name__ == "__main__":
-    app = ParaduxApp()
-    app.run()
