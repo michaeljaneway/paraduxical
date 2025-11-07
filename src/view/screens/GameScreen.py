@@ -33,14 +33,24 @@ class GameScreen(Screen[None]):
         yield self.header_markdown
 
         # Board
+        self._board_widget.start_move()
         yield self._board_widget
+
         yield Footer()
 
-    @on(BoardWidget.MoveMade)
-    def on_move_made(self, event: BoardWidget.MoveMade) -> None:
-        self._controller.play_move(event.move)
-        self.app.switch_screen(screens.GameScreen(self._controller))
+    """Actions"""
 
     def action_back(self) -> None:
         """Returns to the Main Menu screen"""
         self.app.switch_screen(screens.MainMenuScreen(self._controller))
+
+    """Callbacks"""
+
+    @on(BoardWidget.MoveMade)
+    def on_move_made(self, event: BoardWidget.MoveMade) -> None:
+        self._controller.play_move(event.move)
+
+        if len(self._controller.get_winning_lines()) > 0:
+            self.app.switch_screen(screens.WinScreen(self._controller))
+        else:
+            self.app.switch_screen(screens.GameScreen(self._controller))

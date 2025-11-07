@@ -1,19 +1,13 @@
 from textual import on
 from textual.app import ComposeResult
-from textual.containers import VerticalScroll
-from textual.screen import Screen
 from textual.widgets import Label, ListItem, ListView, Markdown
 from textual.widget import Widget
-from textual.widgets import Header, Footer, Button
 from textual.containers import HorizontalGroup, VerticalGroup
 from textual.message import Message
 
-from Game import Game
-from enums.BoardLayout import BoardLayout
 from enums.TokenType import TokenType
 from enums.Direction import Direction
 from enums.MoveType import MoveType
-
 
 from Move import Move
 from GameController import GameController
@@ -47,16 +41,26 @@ class BoardWidget(Widget):
 
         self.board_2d = self._controller.get_board_array()
         self.board_dict = self._controller.get_board_dict()
+        self.winners = self._controller.get_winning_lines()
 
         self.move_type: MoveType | None = None
         self.move_direction: Direction = Direction.NoDirection
         self.selected_cells: list[CellButton] = []
         self.cell_buttons: dict[Coordinate, CellButton] = {}
 
-    def compose(self) -> ComposeResult:
+        self.direction_group: ListView = ListView()
+        self.direction_group.styles.margin = (1, 1)
+        self.direction_group.display = False
+
+        self.move_type_group: ListView = ListView()
+        self.move_type_group.styles.margin = (1, 1)
+        self.move_type_group.display = False
+
         self.board_group: VerticalGroup = VerticalGroup()
         self.board_group.styles.margin = (1, 1)
-        
+
+    def compose(self) -> ComposeResult:
+
         # Instructional Header
         self.header_markdown: Markdown = Markdown("")
         yield self.header_markdown
@@ -71,22 +75,26 @@ class BoardWidget(Widget):
                         yield cell_button
         self.deactivate_all_cells()
 
+        # Show winners selected if there are winning lines
+        if len(self.winners) > 0:
+            for win_line in self.winners:
+                for coord in win_line.coords:
+                    self.cell_buttons[coord].select()
+
         # Movement Type List Selection
-        self.move_type_group: ListView = ListView()
-        self.move_type_group.styles.margin = (1, 1)
         with self.move_type_group:
             yield MoveTypeListItem(Label("Swap Tokens"), move_type=MoveType.SWAP)
             yield MoveTypeListItem(Label("Shift Tokens"), move_type=MoveType.SHIFT)
 
         # Direction Options List Selection
-        self.direction_group: ListView = ListView()
-        self.direction_group.styles.margin = (1, 1)
-        self.direction_group.display = False
         yield self.direction_group
 
     """Moving"""
 
-    def begin_move(self, move_type: MoveType) -> None:
+    def start_move(self) -> None:
+        self.move_type_group.display = True
+
+    def set_move_type(self, move_type: MoveType) -> None:
         """Instructs the board to begin accepting input for a move, which will be returned async through a posted MoveMade Message"""
         self.move_type = move_type
         self.move_type_group.display = False
@@ -184,7 +192,7 @@ class BoardWidget(Widget):
     @on(ListView.Selected)
     def on_list_item_sel(self, event: ListView.Selected) -> None:
         if isinstance(event.item, MoveTypeListItem):
-            self.begin_move(event.item.move_type)
+            self.set_move_type(event.item.move_type)
         elif isinstance(event.item, DirectionListItem):
             self.move_direction = event.item.direction
             self.post_move()

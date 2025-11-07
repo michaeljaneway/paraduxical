@@ -8,6 +8,20 @@ Footer, Header {
     background: #658C58;
 }
 
+Digits {
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+Container {
+  margin: 0;
+  padding: 0;
+  align: center middle;
+  height: auto;
+}
+
 # Markdown
 
 Markdown {
@@ -19,11 +33,13 @@ MarkdownH1 {
   margin: 1 0;
   padding: 0;
   text-style: bold;
+  color: white;
 }
 
 MarkdownH2 {
   margin-bottom: 0;
   padding: 0;
+  color: white;
   text-style: bold;
 }
 

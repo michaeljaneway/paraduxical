@@ -102,12 +102,12 @@ class Board:
             token_type = self[coord]
 
             # If token is the same, just con
-            if token_type == active_line.type:
+            if token_type == active_line.token_type:
                 active_line.coords.append(coord)
                 continue
 
             # If line has ended and is >= line_len, add it to the list of valid lines
-            if len(active_line.coords) >= min_line_len and active_line.type in [
+            if len(active_line.coords) >= min_line_len and active_line.token_type in [
                 TokenType.P1,
                 TokenType.P2,
             ]:
