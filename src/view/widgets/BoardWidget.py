@@ -15,18 +15,6 @@ from Coordinate import Coordinate
 from view.widgets.CellButton import CellButton
 
 
-class MoveTypeListItem(ListItem):
-    def __init__(self, *children, move_type: MoveType, **kwargs) -> None:
-        super().__init__(*children, **kwargs)
-        self.move_type: MoveType = move_type
-
-
-class DirectionListItem(ListItem):
-    def __init__(self, *children, direction: Direction, **kwargs) -> None:
-        super().__init__(*children, **kwargs)
-        self.direction: Direction = direction
-
-
 class BoardWidget(Widget):
     class MoveMade(Message):
         def __init__(self, move: Move) -> None:
@@ -206,3 +194,15 @@ class BoardWidget(Widget):
         cell.select()
         self.selected_cells.append(cell)
         self.update_state()
+
+
+class MoveTypeListItem(ListItem):
+    def __init__(self, *children, move_type: MoveType, **kwargs) -> None:
+        super().__init__(*children, **kwargs)
+        self.move_type: MoveType = move_type
+
+
+class DirectionListItem(ListItem):
+    def __init__(self, *children, direction: Direction, **kwargs) -> None:
+        super().__init__(*children, **kwargs)
+        self.direction: Direction = direction

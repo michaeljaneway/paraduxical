@@ -1,21 +1,19 @@
 from textual import on
 from textual.app import ComposeResult
-from textual.containers import VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Label, ListItem, ListView, Markdown
-from textual.widget import Widget
-from textual.widgets import Header, Footer, Button
-from textual.containers import HorizontalGroup, VerticalGroup
-from textual.message import Message
+from textual.widgets import Footer, Header, Markdown
 
-from view.widgets.CellButton import CellButton
-from view.widgets.BoardWidget import BoardWidget
-from view import screens
 from GameController import GameController
+from view import screens
+from view.widgets.BoardWidget import BoardWidget
+from view.widgets.CellButton import CellButton
 
 
 class GameScreen(Screen[None]):
-    BINDINGS = [("escape", "back", "Back to Main Menu")]
+    BINDINGS = [
+        ("escape", "back", "Back to Main Menu"),
+        ("s", "save", "Save Game"),
+    ]
 
     def __init__(self, controller: GameController, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -43,6 +41,10 @@ class GameScreen(Screen[None]):
     def action_back(self) -> None:
         """Returns to the Main Menu screen"""
         self.app.switch_screen(screens.MainMenuScreen(self._controller))
+
+    def action_save(self) -> None:
+        """Brings the player to the save game screen"""
+        self.app.switch_screen(screens.SaveScreen(self._controller))
 
     """Callbacks"""
 

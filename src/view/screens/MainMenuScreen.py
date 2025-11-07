@@ -1,18 +1,18 @@
 from pathlib import Path
+
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Label, ListItem, ListView, Markdown
-from textual.widgets import Header, Footer
+from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
-from view import screens
 from GameController import GameController
+from view import screens
 
 
 class MainMenuScreen(Screen[None]):
-    AUTO_FOCUS="#menu_list"
-    
+    AUTO_FOCUS = "#menu_list"
+
     def __init__(self, controller: GameController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller
@@ -38,27 +38,29 @@ class MainMenuScreen(Screen[None]):
 
         yield Footer()
 
+    """Callbacks"""
+
     @on(ListView.Selected, item="#resumegame")
-    def action_resume_game(self) -> None:
+    def on_resume_game(self) -> None:
         self.app.switch_screen(screens.GameScreen(self._controller))
-        
+
     @on(ListView.Selected, item="#deletegame")
-    def action_delete_game(self) -> None:
+    def on_delete_game(self) -> None:
         self._controller.clear_game()
         self.app.switch_screen(screens.MainMenuScreen(self._controller))
-        
+
     @on(ListView.Selected, item="#startnewgame")
-    def action_start_new_game(self) -> None:
+    def on_start_new_game(self) -> None:
         self.app.switch_screen(screens.NewGameScreen(self._controller))
 
     @on(ListView.Selected, item="#loadgame")
-    def action_load_save_game(self) -> None:
-        pass
+    def on_load_save_game(self) -> None:
+        self.app.switch_screen(screens.LoadScreen(self._controller))
 
     @on(ListView.Selected, item="#viewrules")
-    def action_view_rules(self) -> None:
+    def on_view_rules(self) -> None:
         self.app.switch_screen(screens.RulesScreen(self._controller))
 
     @on(ListView.Selected, item="#exitgame")
-    def action_exit_game(self) -> None:
+    def on_exit_game(self) -> None:
         self.app.exit()

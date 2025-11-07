@@ -1,27 +1,35 @@
+import pickle
+
 from Board import Board
+from Coordinate import Coordinate
 from enums.BoardLayout import BoardLayout
+from enums.Direction import Direction
+from enums.MoveType import MoveType
 from enums.TokenType import TokenType
 from Move import Move
 from TokenLine import TokenLine
-from enums.MoveType import MoveType
-from Coordinate import Coordinate
-from enums.Direction import Direction
+
+
+class GameSave:
+    def __init__(self, layout: BoardLayout, moves: list[Move]) -> None:
+        self.layout: BoardLayout = layout
+        self.moves: list[Move] = moves
 
 
 class Game:
-    def __init__(self, layout: BoardLayout) -> None:
-        layout_map = {
-            BoardLayout.HORZ: [
-                TokenType(x) for x in [1, 2, 1, 2, 2, 0, 0, 0, 1, 1, 0, 0, 0, 0, 2, 2, 0, 1, 0, 2, 0, 1, 1, 0, 0, 0, 0, 2, 2, 0, 0, 0, 1, 1, 2, 1, 2]
-            ],
-            BoardLayout.DIAG: [
-                TokenType(x) for x in [1, 2, 1, 2, 2, 0, 0, 0, 1, 1, 0, 0, 1, 0, 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 2, 0, 0, 2, 2, 0, 0, 0, 1, 1, 2, 1, 2]
-            ],
-        }
+    layout_map = {
+        BoardLayout.HORZ: [
+            TokenType(x) for x in [1, 2, 1, 2, 2, 0, 0, 0, 1, 1, 0, 0, 0, 0, 2, 2, 0, 1, 0, 2, 0, 1, 1, 0, 0, 0, 0, 2, 2, 0, 0, 0, 1, 1, 2, 1, 2]
+        ],
+        BoardLayout.DIAG: [
+            TokenType(x) for x in [1, 2, 1, 2, 2, 0, 0, 0, 1, 1, 0, 0, 1, 0, 2, 2, 0, 0, 0, 0, 0, 1, 1, 0, 2, 0, 0, 2, 2, 0, 0, 0, 1, 1, 2, 1, 2]
+        ],
+    }
 
+    def __init__(self, layout: BoardLayout) -> None:
         self.layout = layout
         self.board = Board(radius=3)
-        self.board.load_from_list(layout_map[self.layout])
+        self.board.load_from_list(self.layout_map[self.layout])
 
         self.current_player = TokenType.P1
         self.move_history: list[Move] = []
@@ -98,3 +106,13 @@ class Game:
     def get_winning_lines(self) -> list[TokenLine]:
         """Returns all lines which meet the requirements to win"""
         return self.board.get_token_lines(4)
+
+    def save_to_file(self, filename):
+        with open(filename, 'wb') as f:
+            pickle.dump(self, f)
+
+    @classmethod
+    def load_from_file(cls, filename):
+        with open(filename, 'rb') as f:
+            loaded_game = pickle.load(f)
+        return loaded_game
