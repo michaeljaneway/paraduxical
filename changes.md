@@ -2,16 +2,29 @@
 
 ## General changes
 
-- The original class diagram did not specify any classes/functions for inputs/outputs.
+- The original class diagram did not specify any classes/functions for inputs/outputs, so we added specific classes to handle the input and output needs of the game application.
 - We used the `textual` Python terminal user interface (TUI) framework to implement the game's UI.
+  - The original design made no mention of which framework to use to implement the game application, therefore we decided to use the `textual` terminal user interface (TUI) framework for building the game itself.
+  - The `textual` TUI framework is an actively maintained free and open-source (FOSS) project for building TUI applications, and explicitly supports the Model-View-Controller (MVC) architecture, which are the reasons for our adoption of it in this implementation.
+- Since `textual` is the framework powering our game implementation, we added a `ParaduxApp` class to serve as the entrypoint for the `textual` TUI framework to run our implementation.
+  - Note: frameworks, contrary to libraries, run the user's code rather than the user calling functions from the framework itself.
+    - This feature/design of frameworks is why an explicit entrypoint for our game application: `ParaduxApp`, is necessary to allow the framework to find and run our game application implementation.
 
-## Model-View-Controller (MVC) fixes
+## MVC fixes
 
-The original design included class diagrams and lists that made no mention of the View in the MVC architecture/design pattern (see the class list and diagram on the original document from pages 8 to 12, inclusive). We solved this problem in our implementation by making changes to the original design to support the View component of the MVC design pattern. We were especially troubled by the missing game user interface (UI) view, which would have created tight coupling with all of the game's classes in implementation.
+Pages from the original design that are cited and relevant to all the content described in this section are: pages 8 to 12, inclusive. These pages from the original design document include all the class diagrams and lists relevant to this section. Any discussion in this section that refers to the original design document refers to these specific pages from the original design.
 
-The precise fixes for the "View" part of MVC with their rationale are described here:
-  - S
+The original design included class diagrams and lists that made no mention of the View in the MVC architecture/design pattern. We solved this problem in our implementation by making changes to the original design to support the View component of the MVC design pattern. We were especially troubled by the missing game user interface (UI) view, which would have created tight coupling with all of the game's classes in implementation.
 
+Before the views below are described, all the views implemented are "dumb views" because they do not do anything beyond just displaying the user interface and allowing the user to interact with it. They do not interact with the game's model, and are controlled by the game's controllers.
+
+The precise fixes for the "View" part of MVC in the original design document with their rationale are described here:
+  - Added `GameScreen` class to represent the main game view to comply with the MVC architecture.
+    - The `GameScreen` holds and displays user interface elements for the game like the buttons for shifting and swapping tokens, and allows the user to interact with them too.
+  - Added `MainMenuScreen` class to represent the game's main menu view to comply with the MVC architecture.
+    - The game's main menu includes buttons for starting a new game, and loading an existing game, for example.
+  - Added `NewGameScreen` class to represent the view for the "New Game" component to: (1) allow the player to choose between diagonal and horizontal setups for the game board, and (2) make the original design more MVC-compliant.
+  - Added `RulesScreen` class to represent the "Rules" component to: (1) allow the user to view the rules of the game from the main menu of the game, and (2) make the original design more MVC-compliant.
 
 ## Class changes made during implementation
 
