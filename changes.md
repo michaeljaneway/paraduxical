@@ -7,11 +7,19 @@
 
 ## Model-View-Controller (MVC) fixes
 
-The original design included class diagrams and lists that made no mention of the View in the MVC architecture/design pattern (see the class list and diagram on the original document from pages 8 to 12, inclusive). We solved this problem in our implementation by making changes to the original design to support the View component of the MVC design pattern. We were especially troubled by the missing game user interface (UI) view, which would have created tight coupling with all of the game's classes in implementation.
+Pages from the original design that are cited and relevant to all the content described in this section are: pages 8 to 12, inclusive. These pages from the original design document include all the class diagrams and lists relevant to this section. Any discussion in this section that refers to the original design document refers to these specific pages from the original design.
 
-The precise fixes for the "View" part of MVC with their rationale are described here:
-  - S
+The original design included class diagrams and lists that made no mention of the View in the MVC architecture/design pattern. We solved this problem in our implementation by making changes to the original design to support the View component of the MVC design pattern. We were especially troubled by the missing game user interface (UI) view, which would have created tight coupling with all of the game's classes in implementation.
 
+Before the views below are described, all the views implemented are "dumb views" because they do not do anything beyond just displaying the user interface and allowing the user to interact with it. They do not interact with the game's model, and are controlled by the game's controllers.
+
+The precise fixes for the "View" part of MVC in the original design document with their rationale are described here:
+  - Added `GameScreen` class to represent the main game view to comply with the MVC architecture.
+    - The `GameScreen` holds and displays user interface elements for the game like the buttons for shifting and swapping tokens, and allows the user to interact with them too.
+  - Added `MainMenuScreen` class to represent the game's main menu view to comply with the MVC architecture.
+    - The game's main menu includes buttons for starting a new game, and loading an existing game, for example.
+  - Added `NewGameScreen` class to represent the view for the "New Game" component to: (1) allow the player to choose between diagonal and horizontal setups for the game board, and (2) make the original design more MVC-compliant.
+  - Added `RulesScreen` class to represent the "Rules" component to: (1) allow the user to view the rules of the game from the main menu of the game, and (2) make the original design more MVC-compliant.
 
 ## Class changes made during implementation
 
