@@ -2,10 +2,15 @@
 
 ## General changes
 
-- The original class diagram did not specify any classes/functions for inputs/outputs.
+- The original class diagram did not specify any classes/functions for inputs/outputs, so we added specific classes to handle the input and output needs of the game application.
 - We used the `textual` Python terminal user interface (TUI) framework to implement the game's UI.
+  - The original design made no mention of which framework to use to implement the game application, therefore we decided to use the `textual` terminal user interface (TUI) framework for building the game itself.
+  - The `textual` TUI framework is an actively maintained free and open-source (FOSS) project for building TUI applications, and explicitly supports the Model-View-Controller (MVC) architecture, which are the reasons for our adoption of it in this implementation.
+- Since `textual` is the framework powering our game implementation, we added a `ParaduxApp` class to serve as the entrypoint for the `textual` TUI framework to run our implementation.
+  - Note: frameworks, contrary to libraries, run the user's code rather than the user calling functions from the framework itself.
+    - This feature/design of frameworks is why an explicit entrypoint for our game application: `ParaduxApp`, is necessary to allow the framework to find and run our game application implementation.
 
-## Model-View-Controller (MVC) fixes
+## MVC fixes
 
 Pages from the original design that are cited and relevant to all the content described in this section are: pages 8 to 12, inclusive. These pages from the original design document include all the class diagrams and lists relevant to this section. Any discussion in this section that refers to the original design document refers to these specific pages from the original design.
 
