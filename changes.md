@@ -97,7 +97,7 @@ The `Player` class (from pages 8 and 10-11, inclusive) changes are described her
       - Everything in the `Player` class from the original design was already provided by the `Token` and `Move` classes through their class members, and there was no clear justification for the existence of the `Player` class in the original design.
 
 The `Coordinate` class (from pages 8 and 12) changes are described here:
-  - Adapted the original `Coordinate` class from a 2D coordinate system to a 3D coordinate system to work with our cube coordinate system design for token positioning.
+  - Adapted the original `Coordinate` class to use the game's current 3D cube hexagonal grid coordinate system rather than the previously difficult-to-implement 2D grid coordinate system.
   - Used the `Direction` class enumerator in the `Coordinate` class to allow `Coordinate` to consume direction information about tokens on the board, which is important towards understanding where tokens can go on the board during shifting and swapping.
   - Did not implement the "Pulls the load files" behavior of the constructor in the original `Coordinate` class because it does not make sense and is unclear.
   - Removed `equals()` and `isAdjacent()` methods from the original `Coordinate` class because we did not need them for move validation that happens in the `Game` class later.
