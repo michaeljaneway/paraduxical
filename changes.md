@@ -33,13 +33,19 @@ The precise fixes for the "View" part of MVC in the original design document wit
   - Added `SaveScreen` view to allocate a distinct view for saving a game to a file to comply with the MVC architecture because the original design made no mention of the "View" in the MVC architecture.
   - Added `WinScreen` view to give a singular view for displaying the winning player to comply with the MVC architecture as the original design did not make use of the "View" in the MVC architecture.
 
+Notes about controllers in the original design:
+  - For the "Controller" aspect of the MVC pattern, we implemented a `GameController` class to serve as the primary and sole controller of the game.
+  - We reviewed the class diagrams and class list in the original design document (from pages 8-12, inclusive), and found that there were no clear controllers for the design.
+  - In-fact, many of the classes, like `Game` and `Move` (see pages 9-10, inclusive, of the original design document) are serving as both models and controllers, which made implementing the design correctly with the MVC pattern impossible.
+  - Our `GameController` serves as a clear barrier between the model and view classes of the game's implementation, and is, essentially, a middleman between the view classes and the model classes.
+
 ## Class changes made during implementation
 
 The changes made to the individual classes in this section are not directly related to MVC fixes, but they were made nonetheless because the original class diagrams and lists did not include important class members necessary to complete the classes. Further, completing the game's implementation without completing the important classes that have missing members in the original design would have made the correct implementation of the original design impossible.
 
 This section is split into distinct lists for each of the core class from the original design, and they will describe the changes made and the rationale for making them where applicable.
 
-The `Board` class changes (from and rationale behind them are here:
+The `Board` class (from pages 8 and 11 of the original design document) changes and rationale behind them are here:
   - Moved `isValidMove()` method from original `Board` class to `Game` class to move gameplay responsibilities from the `Board` class to the `Game` class.
     - Also, we renamed the `isValidMove()` method to `validateMove()`, but this is not a significant change, so it is only briefly mentioned here.
   - Added `load_from_list()` method to the `Board` class to allow the game board to be constructed just by providing a list that contains the token types.
@@ -54,12 +60,15 @@ The `Board` class changes (from and rationale behind them are here:
   - Added `get_dir_edge()`, `get_dir_lines()`, `get_edge_coords()`, and `get_token_lines()` methods in the `Board` class to implement missing functionality for the original `Board` class to be useful in our implementation.
     - The original `Board` class did not make mention of how it would: (1) receive and handle directions from the user's input, and (2) manage the edges of the board and lines of tokens provided to it from other classes, so these methods were added and implemented.
 
-The `Game` class changes and rationale behind them are here:
-- Removed `players` instance variable list because using a list data structure for managing only 2 players at any time is redundant and unnecessary, and expanded the `TokenType` enumerator to track which tokens belong to which player instead.
-  - Since there are only 2 players, our `TokenType` enumerator only tracks tokens for 2 players playing the same game.
-- Modified `currentTurnIndex` instance variable to use the `move_history` list instance variable instead, which makes it so that we can use the length of the `move_history` list to get the current index of the game session.
-  - We needed a data structure to hold the player move history of the game, which is critical for saving game states and allowing players to load a saved game from prior sessions.
-  - However, we could use the same data structure to find the current index of the game by simply measuring the length of the list, which makes it more appropriate for tracking the current move of the game than the old `players` instance variable.
-- Added a `layout_map` set to the `Game` class to allow it to provide a default set of values for setting the board at the start of a game, which decouples the `Game` and `Board` classes from one another.
-  - The older design had the `Board` responsible for initially setting up the game board, but it meant that the `Board` class was knowledgeable of the game's implementation, and thus gave the `Board` class access to information it should not have had access to.
-- Replaced
+The `Game` class (from pages 8-9, inclusive, of the original design document) changes and rationale behind them are here:
+  - Removed `players` instance variable list because using a list data structure for managing only 2 players at any time is redundant and unnecessary, and expanded the `TokenType` enumerator to track which tokens belong to which player instead.
+    - Since there are only 2 players, our `TokenType` enumerator only tracks tokens for 2 players playing the same game.
+  - Modified `currentTurnIndex` instance variable to use the `move_history` list instance variable instead, which makes it so that we can use the length of the `move_history` list to get the current index of the game session.
+    - We needed a data structure to hold the player move history of the game, which is critical for saving game states and allowing players to load a saved game from prior sessions.
+    - However, we could use the same data structure to find the current index of the game by simply measuring the length of the list, which makes it more appropriate for tracking the current move of the game than the old `players` instance variable.
+  - Added a `layout_map` set to the `Game` class to allow it to provide a default set of values for setting the board at the start of a game, which decouples the `Game` and `Board` classes from one another.
+    - The older design had the `Board` responsible for initially setting up the game board, but it meant that the `Board` class was knowledgeable of the game's implementation, and thus gave the `Board` class access to information it should not have had access to.
+  - Moved `StartGame()` from `Game` class, which is a class inside the "Model" of the MVC architecture, to the `GameController` class, which is a class for a "Controller" in the MVC pattern.
+    - The old design incorrectly put the responsibility of creating a new game within the `Game` class, which is a class that is a part of the model of the game application.
+      - This bad design decision made it so that the non-existent views had to directly talk to the `Game` model class to simply start a new game, thus violating the rules of the MVC design pattern.
+      - To fix this bad decision, we used a `GameController` to provide various controller-appropriate responsibilities, such as to: (1) create a new game, and (2) clear a current game, and it serves as an application processing interface (API) provider that the newly implemented views described in the [MVC fixes](#mvc-fixes) section can talk to in order to update the model through its provided methods.
