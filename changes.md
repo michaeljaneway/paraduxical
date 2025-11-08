@@ -90,3 +90,11 @@ The `Token` class (from pages 8 and 11 of the original design document) changes 
     - The `TokenType` enumerator provides all the information necessary for a token's basic elements to be understood by the `TokenLine` and `Board` classes.
     - The previous design also did not provide any correct ways to group and encapsulate lines of winning tokens on a grid, so we implemented the `TokenLine` class to provide this functionality.
       - We need this functionality to be able to determine winners of the game during a game session.
+
+The `Player` class (from pages 8 and 10-11, inclusive) changes are described here:
+  - Removed `Player` class to reduce redundancy and improve implementation correctness.
+    - During implementation, the `Player` class proved redundant and incorrect because it did not provide any useful functionality for the full implementation of the game.
+      - Everything in the `Player` class from the original design was already provided by the `Token` and `Move` classes through their class members, and there was no clear justification for the existence of the `Player` class in the original design.
+
+<!--The `Coordinate` class (from pages 8 and 12) changes are described here:
+  - S-->
