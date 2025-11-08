@@ -25,6 +25,10 @@ The precise fixes for the "View" part of MVC in the original design document wit
     - The game's main menu includes buttons for starting a new game, and loading an existing game, for example.
   - Added `NewGameScreen` class to represent the view for the "New Game" component to: (1) allow the player to choose between diagonal and horizontal setups for the game board, and (2) make the original design more MVC-compliant.
   - Added `RulesScreen` class to represent the "Rules" component to: (1) allow the user to view the rules of the game from the main menu of the game, and (2) make the original design more MVC-compliant.
+  - Added `BoardWidget` class to serve as a reusable and portable UI element, which is used by the `GameView` to display the board with different tokens at instances of winning and losing.
+    - The original design did not make mention of UI widgets that can be reused by different parts of the views, which makes reusing UI elements across distinct views much harder. So, it was necessary to implement widgets to add reusability to our implementation of the game.
+  - Added `CellButton` class to provide a reusable and interactive button to represent: (1) the token type that describes whether tokens belong to either player or are empty, and (2) the coordinates of the token on the game board, because the original design made no mention of reusable UI elements.
+    - Much like `BoardWidget`, the inclusion of `CellButton` allows for more reusable code in the game's implementation.
 
 ## Class changes made during implementation
 

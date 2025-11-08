@@ -78,7 +78,9 @@ However, Windows still requires you to execute the virtual environment deactivat
 
 From the project root, run the following command to install all the dependencies required to run the game:
 
-`pip install -r requirements.txt`
+```sh
+pip install -r requirements.txt
+```
 
 **Notes:**
 
@@ -94,7 +96,63 @@ From the project root, run the following command to install all the dependencies
 
 ### Running the Game
 
-To run the game, open a terminal in this folder, **/paraduxical/**, and run the following: `python src`
+Before running the game, refer to the [Setup](#setup) section described prior for creating and activating Python virtual environments, and installing dependencies in them.
+
+First, you must have already successfully created and activated a Python virtual environment.
+To make sure that you are inside an activated Python virtual environment, you should see a similar command prompt like the following:
+
+```sh
+(.venv) ajawad@linux-01:~/CIS3260/team-project/m2/paraduxical$
+```
+
+Notes about the prompt:
+- The most important part of this prompt is the `(.venv)` prefix to the rest of the prompt: `ajawad@linux-01:~/CIS3260/team-project/m2/paraduxical$`.
+- The `(.venv)` prefix indicates that you are inside a Python virtual environment, if you were following the instructions in [Setup](#setup) correctly.
+- This is a very good sign that you are ready to start playing the game.
+- The rest of the prompt: `ajawad@linux-01:~/CIS3260/team-project/m2/paraduxical$` is not important because you will likely have a different username, hostname, and working directory.
+- If you do not have `(.venv)` as a prefix in your prompt, then you must refer to the steps described in the [Setup](#setup) section documented earlier to correctly create and activate a Python virtual environment.
+
+Second, you must verify that you have installed all dependencies that the project requires in your Python virtual environment. To do so, run the following command:
+
+```sh
+pip freeze
+```
+
+Notes about the `pip freeze` command:
+- This command will get `pip` (i.e., the Python package manager) to list all the installed packages in the current Python virtual environment.
+- This step is important because it will tell you whether you have all the required packages for the project installed.
+- Without any of or all the required packages for the project, you will be unable to run the game.
+- Python will likely throw an exception about missing packages in this case, and so you must solve the missing dependencies problem first.
+
+You should see the following output from the `pip freeze` command if you followed the [Setup](#setup) steps correctly:
+```txt
+aiohappyeyeballs==2.6.1
+aiohttp==3.13.2
+aiohttp-jinja2==1.6
+aiosignal==1.4.0
+attrs==25.4.0
+click==8.3.0
+frozenlist==1.8.0
+idna==3.11
+jinja2==3.1.6
+linkify-it-py==2.0.3
+markdown-it-py==4.0.0
+markupsafe==3.0.3
+mdit-py-plugins==0.5.0
+mdurl==0.1.2
+msgpack==1.1.2
+multidict==6.7.0
+platformdirs==4.5.0
+propcache==0.4.1
+pygments==2.19.2
+rich==14.2.0
+textual==6.5.0
+textual-dev==1.8.0
+textual-serve==1.1.3
+typing-extensions==4.15.0
+uc-micro-py==1.0.3
+yarl==1.22.0
+```
 
 ## Demo
 
