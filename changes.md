@@ -29,6 +29,9 @@ The precise fixes for the "View" part of MVC in the original design document wit
     - The original design did not make mention of UI widgets that can be reused by different parts of the views, which makes reusing UI elements across distinct views much harder. So, it was necessary to implement widgets to add reusability to our implementation of the game.
   - Added `CellButton` class to provide a reusable and interactive button to represent: (1) the token type that describes whether tokens belong to either player or are empty, and (2) the coordinates of the token on the game board, because the original design made no mention of reusable UI elements.
     - Much like `BoardWidget`, the inclusion of `CellButton` allows for more reusable code in the game's implementation.
+  - Added `LoadScreen` view to provide a dedicated view for loading a game from a save file to comply with the MVC architecture, since the original design made no mention of the "View" in the MVC architecture.
+  - Added `SaveScreen` view to allocate a distinct view for saving a game to a file to comply with the MVC architecture because the original design made no mention of the "View" in the MVC architecture.
+  - Added `WinScreen` view to give a singular view for displaying the winning player to comply with the MVC architecture as the original design did not make use of the "View" in the MVC architecture.
 
 ## Class changes made during implementation
 
