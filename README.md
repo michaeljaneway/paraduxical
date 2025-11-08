@@ -1,5 +1,7 @@
 # Paraduxical
 
+![header](./readme_images/header.png)
+
 ## Table of Contents
 
 - [Game Summary](#game-summary)
@@ -17,7 +19,11 @@
 
 ## Game Summary
 
-    Summary here
+Paraduxical is an implementation of the board game Paradux, made by Team 2 in CIS*3260 @ UOG.
+
+The game is played on a hexagonal board, and each turn a player selects one of their own tokens and an adjacent token belonging to the opposing player and either swaps their positions, or shifts them in an open direction.
+
+The objective is to be the first player to line up FOUR of your tokens in a row, horizontally or diagonally.
 
 ## Installation Instructions
 
@@ -92,7 +98,7 @@ To run the game, open a terminal in this folder, **/paraduxical/**, and run the 
 
 ## Demo
 
-    Sequence of screenshots/GIF Here
+![demo](./readme_images/demo.gif)
 
 ## Contacts
 
@@ -108,4 +114,4 @@ To run the game, open a terminal in this folder, **/paraduxical/**, and run the 
 
 ## License
 
-    This project uses the [MIT](https://mit-license.org/) license.
+This project uses the [MIT](https://mit-license.org/) license.

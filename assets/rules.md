@@ -10,7 +10,7 @@
 │ OBJECTIVE                                                                   │
 │                                                                             │
 │  Be the first player to line up FOUR of your tokens in a row —              │
-│  horizontally, vertically, or diagonally.                                   │
+│  horizontally or diagonally.                                                │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 
