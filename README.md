@@ -106,6 +106,7 @@ To make sure that you are inside an activated Python virtual environment, you sh
 ```
 
 Notes about the prompt:
+
 - The most important part of this prompt is the `(.venv)` prefix to the rest of the prompt: `ajawad@linux-01:~/CIS3260/team-project/m2/paraduxical$`.
 - The `(.venv)` prefix indicates that you are inside a Python virtual environment, if you were following the instructions in [Setup](#setup) correctly.
 - This is a very good sign that you are ready to start playing the game.
@@ -119,12 +120,14 @@ pip freeze
 ```
 
 Notes about the `pip freeze` command:
+
 - This command will get `pip` (i.e., the Python package manager) to list all the installed packages in the current Python virtual environment.
 - This step is important because it will tell you whether you have all the required packages for the project installed.
 - Without any of or all the required packages for the project, you will be unable to run the game.
 - Python will likely throw an exception about missing packages in this case, and so you must solve the missing dependencies problem first.
 
 You should see the following output from the `pip freeze` command if you followed the [Setup](#setup) steps correctly:
+
 ```txt
 aiohappyeyeballs==2.6.1
 aiohttp==3.13.2
@@ -156,7 +159,13 @@ yarl==1.22.0
 
 ## Demo
 
+### Game Demo
+
 ![demo](./readme_images/demo.gif)
+
+### SOCS Server Install Video
+
+![socs_demo](./readme_images/socs_demo.gif)
 
 ## Contacts
 
