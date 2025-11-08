@@ -103,3 +103,7 @@ The `Coordinate` class (from pages 8 and 12) changes are described here:
   - Removed `equals()` and `isAdjacent()` methods from the original `Coordinate` class because we did not need them for move validation that happens in the `Game` class later.
     - Instead, we implemented the `distance()` and `neighbour()` methods in the `Coordinate` class to provide more useful information about the relationships between the tokens' positions on the 3D hexagonal game board.
       - These methods are used extensively by the `Game` class to validate where tokens are on the board, which is why they were implemented instead of the original `equals()` and `isAdjacent()` methods.
+
+The `Session` class (from pages 8 and 12) changes are described here:
+  - Moved all the `Session` class's game loading and saving functionality into the `Game` class because the `Session` class is redundant when the `Game` class already correctly has the responsibility of saving and loading games.
+    - Further, implementing the `Session` class as it is adds unnecessary complexity and redundancy because it obfuscates one of the `Game` class's core responsibilities: saving and loading games.
