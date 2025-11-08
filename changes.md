@@ -59,6 +59,7 @@ The `Board` class (from pages 8 and 11 of the original design document) changes 
     - Added a `radius` class member to the `Board` class to allow us to build the 3D cube hexagonal grid described earlier that we used to simplify game board management as the game progressed.
   - Added `get_dir_edge()`, `get_dir_lines()`, `get_edge_coords()`, and `get_token_lines()` methods in the `Board` class to implement missing functionality for the original `Board` class to be useful in our implementation.
     - The original `Board` class did not make mention of how it would: (1) receive and handle directions from the user's input, and (2) manage the edges of the board and lines of tokens provided to it from other classes, so these methods were added and implemented.
+  - Added a `Tile` data class in `Board.py` to make it easier to map token types with their coordinates, since the previous design had a difficult token grid to impelemnt.
 
 The `Game` class (from pages 8-9, inclusive, of the original design document) changes and rationale behind them are here:
   - Removed `players` instance variable list because using a list data structure for managing only 2 players at any time is redundant and unnecessary, and expanded the `TokenType` enumerator to track which tokens belong to which player instead.
@@ -77,3 +78,15 @@ The `Game` class (from pages 8-9, inclusive, of the original design document) ch
     - Having the execution of the move within the `Move` class violates the single responsibility principle (SRP) since the `Move` class should not be executing moves; the game should be the only executor of a game move in the full implementation.
   - Moved `endGame()` method from the `Game` class to the `GameController` class because ending an active game is a controller responsibility -- and not a model responsibility -- to comply with the MVC architecture.
     - In this case, the `GameController` simply deletes the active game by setting a reference to an instance of the `Game` class to nothing, so it makes separating and decoupling the view classes from the model classes for deleting games much easier.
+
+The `Move` class (from pages 8 and 9 of the original design document) changes are here:
+  - Moved `execute()` method from the `Move` class to the `Game` class.
+    - For justification, see the `Game` class changelog in the [Class changes made during implementation](#class-changes-made-during-implementation) section.
+
+The `Token` class (from pages 8 and 11 of the original design document) changes are here:
+  - Split the original `Token` class into the: (1) `TokenType` enumerator class, (2) `TokenLine` class, and (3) `Coordinate` class, to make implementation possible and to comply with SRP and encapsulate lines of winning tokens possible.
+    - The previous design had `Token` position accessing and mutating methods, which violated SRP because tokens do not need to know about how they are moved across the board to function.
+      - We expanded the `Coordinate` class to include: (1) information about coordinates for tokens, and (2) methods to access and mutate token coordinates, to decouple token position information from the actual token properties, which are stored in the `TokenType` enumerator.
+    - The `TokenType` enumerator provides all the information necessary for a token's basic elements to be understood by the `TokenLine` and `Board` classes.
+    - The previous design also did not provide any correct ways to group and encapsulate lines of winning tokens on a grid, so we implemented the `TokenLine` class to provide this functionality.
+      - We need this functionality to be able to determine winners of the game during a game session.
