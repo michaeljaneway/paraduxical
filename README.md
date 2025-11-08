@@ -14,6 +14,8 @@
   - [Requirements](#requirements)
   - [Running the Game](#running-the-game)
 - [Demo](#demo)
+  - [Game Demo](#game-demo)
+  - [SOCS Server Install Video](#socs-server-install-video)
 - [Contacts](#contacts)
 - [License](#license)
 
@@ -109,9 +111,9 @@ Notes about the prompt:
 
 - The most important part of this prompt is the `(.venv)` prefix to the rest of the prompt: `ajawad@linux-01:~/CIS3260/team-project/m2/paraduxical$`.
 - The `(.venv)` prefix indicates that you are inside a Python virtual environment, if you were following the instructions in [Setup](#setup) correctly.
-- This is a very good sign that you are ready to start playing the game.
+- This is a good sign that you are ready to ensure that you have all the required dependencies in your virtual environment to play the game.
 - The rest of the prompt: `ajawad@linux-01:~/CIS3260/team-project/m2/paraduxical$` is not important because you will likely have a different username, hostname, and working directory.
-- If you do not have `(.venv)` as a prefix in your prompt, then you must refer to the steps described in the [Setup](#setup) section documented earlier to correctly create and activate a Python virtual environment.
+- If you do not have `(.venv)` as a prefix in your prompt, then you must refer to the steps described in the [Setup](#setup) section to correctly create and activate a Python virtual environment.
 
 Second, you must verify that you have installed all dependencies that the project requires in your Python virtual environment. To do so, run the following command:
 
@@ -124,7 +126,7 @@ Notes about the `pip freeze` command:
 - This command will get `pip` (i.e., the Python package manager) to list all the installed packages in the current Python virtual environment.
 - This step is important because it will tell you whether you have all the required packages for the project installed.
 - Without any of or all the required packages for the project, you will be unable to run the game.
-- Python will likely throw an exception about missing packages in this case, and so you must solve the missing dependencies problem first.
+  - Python will likely throw an exception about missing packages in this case, and so you must solve the missing dependencies problem first.
 
 You should see the following output from the `pip freeze` command if you followed the [Setup](#setup) steps correctly:
 
@@ -156,6 +158,26 @@ typing-extensions==4.15.0
 uc-micro-py==1.0.3
 yarl==1.22.0
 ```
+
+Notes about the output of the `pip freeze` command:
+- The output of the `pip freeze` command will list all the installed packages in the current Python environment.
+- Since you should be inside a Python virtual environment, you will see all the installed packages within the currently activated Python virtual environment.
+- You must ensure that you have all the packages listed in the sample output of the `pip freeze` command.
+  - The precise version numbers for each package may differ in your case, so different version numbers for the packages should be okay so long as they are not major version changes.
+- If there are discrepancies between the output of your `pip freeze` command and the one listed above, you may: (1) be in the wrong Python virtual environment, or (2) have not installed all the required dependencies of the project according to the [Setup](#setup) section in your virtual environment.
+  - If this is the case, you need to review the instructions in the [Setup](#setup) section again, and follow them closely.
+
+Once you have verified that the packages necessary to run the project have been installed, you can run the game application via the following simple command:
+```sh
+python src
+```
+
+You should now be within the game application, and you should see a user interface like so:
+
+![Paradux Welcome View](./assets/doc-img/readme-img/paradux_welcome_view.png)
+
+After you see a similar view to the above screen (the color scheme may differ depending on the computer you are using, which is fine), you are now ready to play the game however many times you want.
+This step now concludes the game running section.
 
 ## Demo
 
