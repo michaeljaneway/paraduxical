@@ -3,7 +3,7 @@ from textual.app import App
 from textual.events import Mount
 
 from GameController import GameController
-from view.screens.MainMenuScreen import MainMenuScreen
+from view.screens import MainMenuScreen
 
 
 class ParaduxApp(App[None]):

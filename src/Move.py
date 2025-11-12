@@ -1,8 +1,7 @@
 from attr import dataclass
 
 from Coordinate import Coordinate
-from enums.Direction import Direction
-from enums.MoveType import MoveType
+from enums import Direction, MoveType
 
 
 @dataclass

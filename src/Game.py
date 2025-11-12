@@ -2,10 +2,7 @@ import pickle
 
 from Board import Board
 from Coordinate import Coordinate
-from enums.BoardLayout import BoardLayout
-from enums.Direction import Direction
-from enums.MoveType import MoveType
-from enums.TokenType import TokenType
+from enums import BoardLayout, Direction, MoveType, TokenType
 from Move import Move
 from TokenLine import TokenLine
 

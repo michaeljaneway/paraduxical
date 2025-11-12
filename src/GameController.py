@@ -2,8 +2,7 @@ import os
 
 from Board import Tile
 from Coordinate import Coordinate
-from enums.BoardLayout import BoardLayout
-from enums.TokenType import TokenType
+from enums import BoardLayout, TokenType
 from Game import Game
 from Move import Move
 from TokenLine import TokenLine

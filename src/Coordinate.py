@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import ClassVar
 
-from enums.Direction import Direction
+from enums import Direction
 
 
 @dataclass(frozen=True)

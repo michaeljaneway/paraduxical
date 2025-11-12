@@ -4,7 +4,7 @@ from textual.containers import Container, VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Digits, Footer, Header, Label, ListItem, ListView, Markdown
 
-from enums.BoardLayout import BoardLayout
+from enums import BoardLayout
 from GameController import GameController
 from view import screens
 from view.widgets.BoardWidget import BoardWidget
@@ -12,7 +12,7 @@ from view.widgets.BoardWidget import BoardWidget
 
 class WinScreen(Screen[BoardLayout]):
     """Shows the winner of the active game"""
-    
+
     AUTO_FOCUS = "#menu_list"
 
     def __init__(self, controller: GameController, **kwargs) -> None:

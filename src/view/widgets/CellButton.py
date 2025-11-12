@@ -1,7 +1,7 @@
 from textual.widgets import Button
 
 from Coordinate import Coordinate
-from enums.TokenType import TokenType
+from enums import TokenType
 
 
 class CellButton(Button):

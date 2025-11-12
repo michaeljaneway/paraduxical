@@ -3,8 +3,8 @@ import copy
 from attr import dataclass
 
 from Coordinate import Coordinate
-from enums.Direction import Direction
-from enums.TokenType import TokenType
+from enums import Direction
+from enums import TokenType
 from TokenLine import TokenLine
 
 
