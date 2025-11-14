@@ -1,11 +1,11 @@
-from attr import dataclass
+from pydantic.dataclasses import dataclass
 
-from Coordinate import Coordinate
-from enums import Direction, MoveType
+from shared.Coordinate import Coordinate
+from shared.enums import Direction, MoveType
 
 
 @dataclass
-class Move:
+class Move():
     """A single board move"""
 
     move_type: MoveType

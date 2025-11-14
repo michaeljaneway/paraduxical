@@ -1,5 +1,4 @@
-from view.ParaduxApp import ParaduxApp
+import uvicorn
 
 if __name__ == "__main__":
-    app = ParaduxApp()
-    app.run()
+    uvicorn.run('backend.GameController:app', reload=True)

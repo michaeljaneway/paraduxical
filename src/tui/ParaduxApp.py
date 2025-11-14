@@ -2,7 +2,7 @@ from textual import on
 from textual.app import App
 from textual.events import Mount
 
-from GameController import GameController
+from src.server.GameController import GameController
 from view.screens import MainMenuScreen
 
 

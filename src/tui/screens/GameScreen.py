@@ -3,7 +3,7 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import Footer, Header, Markdown
 
-from GameController import GameController
+from src.server.GameController import GameController
 from view import screens
 from view.widgets.BoardWidget import BoardWidget
 from view.widgets.CellButton import CellButton

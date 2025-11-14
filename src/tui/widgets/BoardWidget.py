@@ -7,7 +7,7 @@ from textual.widgets import Label, ListItem, ListView, Markdown
 
 from Coordinate import Coordinate
 from enums import Direction, MoveType, TokenType
-from GameController import GameController
+from src.server.GameController import GameController
 from Move import Move
 from view.widgets.CellButton import CellButton
 

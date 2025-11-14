@@ -4,7 +4,7 @@ from textual.containers import VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
-from GameController import GameController
+from src.server.GameController import GameController
 from view import screens
 
 

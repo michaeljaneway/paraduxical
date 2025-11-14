@@ -1,14 +1,15 @@
 import os
 
-from Board import Tile
-from Coordinate import Coordinate
-from enums import BoardLayout, TokenType
-from Game import Game
-from Move import Move
-from TokenLine import TokenLine
+from backend.Board import Tile
+from backend.Game import Game
+
+from shared.Coordinate import Coordinate
+from shared.enums import BoardLayout, TokenType
+from shared.Move import Move
+from shared.TokenLine import TokenLine
 
 
-class GameController:
+class GameService:
     """Acts as an 'API endpoint' for the View to interact with the Game model"""
 
     def __init__(self) -> None:

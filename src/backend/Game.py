@@ -1,10 +1,10 @@
 import pickle
 
-from Board import Board
-from Coordinate import Coordinate
-from enums import BoardLayout, Direction, MoveType, TokenType
-from Move import Move
-from TokenLine import TokenLine
+from backend.Board import Board
+from shared.Coordinate import Coordinate
+from shared.enums import BoardLayout, Direction, MoveType, TokenType
+from shared.Move import Move
+from shared.TokenLine import TokenLine
 
 
 class Game:

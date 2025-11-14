@@ -1,7 +1,7 @@
-from dataclasses import dataclass
+from pydantic.dataclasses import dataclass
 from typing import ClassVar
 
-from enums import Direction
+from shared.enums import Direction
 
 
 @dataclass(frozen=True)

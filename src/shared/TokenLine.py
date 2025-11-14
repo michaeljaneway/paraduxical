@@ -1,5 +1,5 @@
-from Coordinate import Coordinate
-from enums import TokenType
+from shared.Coordinate import Coordinate
+from shared.enums import TokenType
 
 
 class TokenLine:

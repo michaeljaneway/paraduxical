@@ -2,10 +2,9 @@ import copy
 
 from attr import dataclass
 
-from Coordinate import Coordinate
-from enums import Direction
-from enums import TokenType
-from TokenLine import TokenLine
+from shared.Coordinate import Coordinate
+from shared.enums import Direction, TokenType
+from shared.TokenLine import TokenLine
 
 
 @dataclass

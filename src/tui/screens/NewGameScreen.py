@@ -7,7 +7,7 @@ from textual.screen import Screen
 from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
 from enums import BoardLayout
-from GameController import GameController
+from src.server.GameController import GameController
 from view import screens
 
 
