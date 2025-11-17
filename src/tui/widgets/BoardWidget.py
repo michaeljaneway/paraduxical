@@ -5,8 +5,8 @@ from textual.message import Message
 from textual.widget import Widget
 from textual.widgets import Label, ListItem, ListView, Markdown
 
-from Coordinate import Coordinate
-from enums import Direction, MoveType, TokenType
+from shared.Coordinate import Coordinate
+from shared.enums import Direction, MoveType, TokenType
 from src.server.GameController import GameController
 from Move import Move
 from view.widgets.CellButton import CellButton
@@ -81,7 +81,6 @@ class BoardWidget(Widget):
     def set_header_md(self, text: str) -> None:
         """Updates the instructional markdown header"""
         self.header_markdown.update(text)
-        
 
     """Moving"""
 
