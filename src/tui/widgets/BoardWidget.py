@@ -5,11 +5,11 @@ from textual.message import Message
 from textual.widget import Widget
 from textual.widgets import Label, ListItem, ListView, Markdown
 
+from GameClientController import GameClientController
 from shared.Coordinate import Coordinate
 from shared.enums import Direction, MoveType, TokenType
-from src.server.GameController import GameController
-from Move import Move
-from view.widgets.CellButton import CellButton
+from shared.Move import Move
+from tui.widgets.CellButton import CellButton
 
 
 class BoardWidget(Widget):
@@ -20,7 +20,7 @@ class BoardWidget(Widget):
             self.move: Move = move
             super().__init__()
 
-    def __init__(self, controller: GameController, **kwargs) -> None:
+    def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
         self.styles.height = "auto"
 

@@ -4,7 +4,7 @@ from tkinter import ttk
 from gui.MainMenuFrame import MainMenuFrame
 
 
-class ParaduxWindow(tk.Tk):
+class ParaduxGui(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Paraduxical")

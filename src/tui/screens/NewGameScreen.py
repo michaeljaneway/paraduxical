@@ -6,9 +6,9 @@ from textual.containers import VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
-from enums import BoardLayout
-from src.server.GameController import GameController
-from view import screens
+from GameClientController import GameClientController
+from shared.enums import BoardLayout
+from tui import screens
 
 
 class NewGameScreen(Screen[BoardLayout]):
@@ -17,7 +17,7 @@ class NewGameScreen(Screen[BoardLayout]):
     AUTO_FOCUS = "#menu_list"
     BINDINGS = [("escape", "back", "Back to Main Menu")]
 
-    def __init__(self, controller: GameController, **kwargs) -> None:
+    def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller
 

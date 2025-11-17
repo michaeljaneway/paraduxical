@@ -1,11 +1,12 @@
+from dataclasses import astuple
 from typing import Annotated
+
 from fastapi import Body, FastAPI
 
 from backend.GameService import GameService
+from shared.Coordinate import Coordinate
 from shared.enums import BoardLayout
 from shared.Move import Move
-from shared.Coordinate import Coordinate
-
 
 app = FastAPI()
 service = GameService()
@@ -13,8 +14,8 @@ service = GameService()
 """Game Initialization & Destruction"""
 
 
-@app.post("/new_game")
-def new_game(board_layout: Annotated[BoardLayout, Body(embed=True)]):
+@app.post("/create_game")
+def create_game(board_layout: Annotated[BoardLayout, Body(embed=True)]):
     service.create_game(board_layout)
 
 
@@ -36,7 +37,7 @@ def get_save_games():
     return service.get_save_games()
 
 
-@app.post("/save_game")
+@app.post("/load_game")
 def load_game(save_name: Annotated[str, Body(embed=True)]):
     service.load_game(save_name)
 
@@ -74,7 +75,9 @@ def get_board_array():
 
 @app.get("/board_dict")
 def get_board_dict():
-    return service.get_board_dict()
+    board = service.get_board_dict()
+    frozen_board = [(astuple(item[0]), item[1].value) for item in board.items()]
+    return frozen_board
 
 
 @app.get("/winning_lines")

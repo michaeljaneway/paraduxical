@@ -6,8 +6,8 @@ from textual.containers import VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
-from src.server.GameController import GameController
-from view import screens
+from GameClientController import GameClientController
+from tui import screens
 
 
 class MainMenuScreen(Screen[None]):
@@ -15,7 +15,7 @@ class MainMenuScreen(Screen[None]):
 
     AUTO_FOCUS = "#menu_list"
 
-    def __init__(self, controller: GameController, **kwargs) -> None:
+    def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller
 

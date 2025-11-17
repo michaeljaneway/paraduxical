@@ -1,10 +1,10 @@
-from view.screens.GameScreen import GameScreen
-from view.screens.LoadScreen import LoadScreen
-from view.screens.MainMenuScreen import MainMenuScreen
-from view.screens.NewGameScreen import NewGameScreen
-from view.screens.RulesScreen import RulesScreen
-from view.screens.SaveScreen import SaveScreen
-from view.screens.WinScreen import WinScreen
+from tui.screens.GameScreen import GameScreen
+from tui.screens.LoadScreen import LoadScreen
+from tui.screens.MainMenuScreen import MainMenuScreen
+from tui.screens.NewGameScreen import NewGameScreen
+from tui.screens.RulesScreen import RulesScreen
+from tui.screens.SaveScreen import SaveScreen
+from tui.screens.WinScreen import WinScreen
 
 __all__ = [
     "MainMenuScreen",

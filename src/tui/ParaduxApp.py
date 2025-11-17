@@ -2,11 +2,11 @@ from textual import on
 from textual.app import App
 from textual.events import Mount
 
-from src.server.GameController import GameController
-from view.screens import MainMenuScreen
+from GameClientController import GameClientController
+from tui.screens.MainMenuScreen import MainMenuScreen
 
 
-class ParaduxApp(App[None]):
+class ParaduxTui(App[None]):
     """Application for the Paraduxical game program"""
     
     TITLE = "Paraduxical"
@@ -15,7 +15,7 @@ class ParaduxApp(App[None]):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._controller = GameController()
+        self._controller = GameClientController()
 
     """Callbacks"""
 

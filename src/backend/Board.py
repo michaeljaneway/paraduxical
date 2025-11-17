@@ -99,8 +99,6 @@ class Board:
         valid_lines: list[TokenLine] = []
         active_line = TokenLine(self[coord], [coord])
 
-        print(dir.name, coord)
-
         while True:
             coord = active_line.coords[-1].neighbor(dir)
             token_type = self[coord]

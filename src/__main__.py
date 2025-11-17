@@ -1,9 +1,9 @@
 import sys
+
 import uvicorn
 
-from gui.ParaduxWindow import ParaduxWindow
-
-from multiprocessing import Manager, Process
+from gui.ParaduxWindow import ParaduxGui
+from tui.ParaduxApp import ParaduxTui
 
 if __name__ == "__main__":
     # Get the mode from the cmd arguments if one was selected
@@ -14,9 +14,10 @@ if __name__ == "__main__":
     # Execute the application respective to the mode
     match mode:
         case "gui":
-            gui_app = ParaduxWindow()
+            gui_app = ParaduxGui()
             gui_app.mainloop()
         case "tui":
-            raise NotImplementedError()
+            tui_app = ParaduxTui()
+            tui_app.run()
         case "server" | _:
             uvicorn.run("backend.GameController:app", reload=True)

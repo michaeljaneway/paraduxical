@@ -4,8 +4,8 @@ from textual.containers import VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Footer, Header, Input, Label, ListItem, ListView, Markdown
 
-from src.server.GameController import GameController
-from view import screens
+from GameClientController import GameClientController
+from tui import screens
 
 
 class SaveScreen(Screen[None]):
@@ -13,7 +13,7 @@ class SaveScreen(Screen[None]):
 
     BINDINGS = [("escape", "back", "Back to Game")]
 
-    def __init__(self, controller: GameController, **kwargs) -> None:
+    def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller
         self.existing_saves = self._controller.get_save_games()

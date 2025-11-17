@@ -1,13 +1,14 @@
+from shared.enums import BoardLayout
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import Container, VerticalScroll
 from textual.screen import Screen
-from textual.widgets import Digits, Footer, Header, Label, ListItem, ListView, Markdown
+from textual.widgets import (Digits, Footer, Header, Label, ListItem, ListView,
+                             Markdown)
+from tui import screens
+from tui.widgets.BoardWidget import BoardWidget
 
-from enums import BoardLayout
-from src.server.GameController import GameController
-from view import screens
-from view.widgets.BoardWidget import BoardWidget
+from GameClientController import GameClientController
 
 
 class WinScreen(Screen[BoardLayout]):
@@ -15,7 +16,7 @@ class WinScreen(Screen[BoardLayout]):
 
     AUTO_FOCUS = "#menu_list"
 
-    def __init__(self, controller: GameController, **kwargs) -> None:
+    def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller
 

@@ -2,9 +2,9 @@ import os
 
 from backend.Board import Tile
 from backend.Game import Game
-
 from shared.Coordinate import Coordinate
 from shared.enums import BoardLayout, TokenType
+from shared.enums.Direction import Direction
 from shared.Move import Move
 from shared.TokenLine import TokenLine
 
@@ -52,7 +52,7 @@ class GameService:
             raise Exception("No game is active")
         self._game.play_move(move)
 
-    def get_valid_shift_directions(self, c1: Coordinate, c2: Coordinate):
+    def get_valid_shift_directions(self, c1: Coordinate, c2: Coordinate) -> list[Direction]:
         """Returns a list of valid directions which a pair of coordinates can move in on the active game board"""
         if not self._game:
             raise Exception("No game is active")

@@ -3,10 +3,10 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import Footer, Header, Markdown
 
-from src.server.GameController import GameController
-from view import screens
-from view.widgets.BoardWidget import BoardWidget
-from view.widgets.CellButton import CellButton
+from GameClientController import GameClientController
+from tui import screens
+from tui.widgets.BoardWidget import BoardWidget
+from tui.widgets.CellButton import CellButton
 
 
 class GameScreen(Screen[None]):
@@ -17,7 +17,7 @@ class GameScreen(Screen[None]):
         ("s", "save", "Save Game"),
     ]
 
-    def __init__(self, controller: GameController, **kwargs) -> None:
+    def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
 
         self._controller = controller
