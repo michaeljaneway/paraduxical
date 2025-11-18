@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class Direction(Enum):
+class Direction(IntEnum):
     """Valid directions leading from a tile on a Paradux board"""
 
     NoDirection = -1
@@ -24,3 +24,6 @@ class Direction(Enum):
 
     NW = 5
     """North West"""
+
+    def is_valid_direction(self) -> bool:
+        return self in (Direction.NE, Direction.E, Direction.SE, Direction.SW, Direction.W, Direction.NW)

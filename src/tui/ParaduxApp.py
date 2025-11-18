@@ -1,3 +1,6 @@
+import asyncio
+
+import websockets
 from textual import on
 from textual.app import App
 from textual.events import Mount
@@ -8,14 +11,14 @@ from tui.screens.MainMenuScreen import MainMenuScreen
 
 class ParaduxTui(App[None]):
     """Application for the Paraduxical game program"""
-    
+
     TITLE = "Paraduxical"
     BINDINGS = [("q", "quit_app", "Quit")]
     CSS_PATH = "styles.tcss"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._controller = GameClientController()
+        self._controller = GameClientController(self.on_message)
 
     """Callbacks"""
 
@@ -25,7 +28,10 @@ class ParaduxTui(App[None]):
         self.push_screen(MainMenuScreen(self._controller))
 
     """Actions"""
-    
+
     def action_quit_app(self) -> None:
         """Action that quits the app."""
         self.exit()
+
+    def on_message(self, message) -> None:
+        self.notify(message)

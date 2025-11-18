@@ -25,21 +25,114 @@ class Game:
         self.board = Board(radius=3)
         self.board.load_from_list(self.layout_map[self.layout])
 
-        self.current_player = TokenType.P1
         self.move_history: list[Move] = []
 
-    """Movement"""
+        self.current_player = TokenType.P1
+        self._reset_movement()
 
-    def play_move(self, move: Move) -> None:
-        """Plays the given move"""
+    def _reset_movement(self):
+        self.selected_coords: list[Coordinate] = []
+        self.move_type: MoveType = MoveType.NULL
+        self.move_direction: Direction = Direction.NoDirection
 
-        # Confirm move is valid
-        try:
-            self.validate_move(move)
-        except Exception as e:
-            raise e
+    """Movement Selection"""
+
+    def set_move_type(self, move_type: MoveType) -> None:
+        if move_type.is_valid_movetype():
+            self.move_type = move_type
+
+    def get_move_type(self) -> MoveType:
+        return self.move_type
+
+    """Coordinate Selection"""
+
+    def deselect_coords(self) -> None:
+        self.selected_coords = []
+
+    def select_coord(self, c: Coordinate) -> None:
+        """Selects a coordinate"""
+        if c in self.get_selectable_coords():
+            self.selected_coords.append(c)
+
+    def get_selected_coords(self) -> list[Coordinate]:
+        return self.selected_coords
+
+    def get_selectable_coords(self) -> list[Coordinate]:
+        """Returns a list of all coordinates which can be selected by the player"""
+        if len(self.get_winning_lines()) > 0:
+            # If the game is won, no pieces are selectable
+            return []
+        
+        elif len(self.selected_coords) == 0:
+            # If no piece is selected, all player cells are selectable
+            return [cell.coord for cell in self.board.get_1d_cell_list() if cell.token.is_player_token()]
+
+        elif len(self.selected_coords) == 1:
+            # If one piece is selected, only allow selection of adjacent opposing tokens
+            board_dict = self.board.get_board_dict()
+
+            c1 = self.selected_coords[0]
+            print(c1)
+            c1_token = board_dict[c1]
+            selectable_coords = []
+
+            for dir in [Direction.NE, Direction.E, Direction.SE, Direction.SW, Direction.W, Direction.NW]:
+                neighbor_coord = c1.neighbor(dir)
+                neighbor_token = board_dict.get(neighbor_coord)
+                if not neighbor_token or c1_token == neighbor_token or neighbor_token not in [TokenType.P1, TokenType.P2]:
+                    continue
+                selectable_coords.append(neighbor_coord)
+            
+            return selectable_coords
+
+        # If two pieces are selected, no more cells are selectable
+        return []
+
+    """Direction Execution"""
+
+    def get_valid_shift_directions(self) -> list[Direction]:
+        """Returns a list of valid directions for a shift move given two coordinates on the game board"""
+        if len(self.selected_coords) != 2:
+            return []
+
+        valid_directions: list[Direction] = []
+        c1 = self.selected_coords[0]
+        c2 = self.selected_coords[1]
+
+        for dir in [Direction.NE, Direction.E, Direction.SE, Direction.SW, Direction.W, Direction.NW]:
+            c1_valid = self.board[c1.neighbor(dir)] == TokenType.MT or c1.neighbor(dir) == c2
+            c2_valid = self.board[c2.neighbor(dir)] == TokenType.MT or c2.neighbor(dir) == c1
+            if c1_valid and c2_valid:
+                valid_directions.append(dir)
+
+        return valid_directions
+
+    def set_shift_direction(self, dir: Direction) -> None:
+        if dir in self.get_valid_shift_directions():
+            self.move_direction = dir
+
+    def get_shift_direction(self) -> Direction:
+        return self.move_direction
+
+    """Movement Execution"""
+
+    def is_move_playable(self) -> bool:
+        """Returns True if the actively selected move is valid and playable, False otherwise"""
+        if (
+            len(self.selected_coords) != 2
+            or not self.move_type.is_valid_movetype()
+            or (self.move_type == MoveType.SHIFT and self.move_direction == Direction.NoDirection)
+        ):
+            return False
+        return True
+
+    def play_move(self) -> None:
+        """Plays the current move (if valid)"""
+        if not self.is_move_playable():
+            return
 
         # Execute move
+        move = Move(self.move_type, self.selected_coords[0], self.selected_coords[1], self.move_direction)
         match move.move_type:
             case MoveType.SWAP:
                 c1_token = self.board[move.c1]
@@ -59,50 +152,9 @@ class Game:
 
         self.move_history.append(move)
         self.current_player = TokenType.P1 if self.current_player == TokenType.P2 else TokenType.P2
+        self._reset_movement()
 
-    def validate_move(self, move: Move) -> None:
-        """Raises an exception with a descriptive message for any issue invalidating the given move"""
-
-        # Coordinates must be adjacent
-        if not (move.c1.distance(move.c2) == 1):
-            raise Exception("Tokens 1 & 2 must be opposite ")
-
-        # Get token types
-        c1_token = self.board[move.c1]
-        c2_token = self.board[move.c2]
-
-        # Both tokens must be a player token
-        p_token_types = [TokenType.P1, TokenType.P2]
-        if not (c1_token in p_token_types):
-            raise Exception("Token 1 is not a valid piece")
-        if not (c2_token in p_token_types):
-            raise Exception("Token 2 is not a valid piece")
-
-        # Tokens must belong to different players
-        if not (c1_token != c2_token):
-            raise Exception("Tokens 1 & 2 must belong to opposite players")
-
-        # If the move type is SWAP, we now know this is a valid move
-        if move.move_type == MoveType.SWAP:
-            return
-
-        # Ensure no pieces are in the way for the SHIFT move, unless it is the other piece involved in the move
-        if not move.direction in self.valid_shift_directions(move.c1, move.c2):
-            raise Exception("Tokens are blocked from shifting")
-
-    def valid_shift_directions(self, c1: Coordinate, c2: Coordinate) -> list[Direction]:
-        """Returns a list of valid directions for a shift move given two coordinates on the game board"""
-        valid_dir: list[Direction] = []
-
-        for dir in [Direction.NE, Direction.E, Direction.SE, Direction.SW, Direction.W, Direction.NW]:
-            c1_valid = self.board[c1.neighbor(dir)] == TokenType.MT or c1.neighbor(dir) == c2
-            c2_valid = self.board[c2.neighbor(dir)] == TokenType.MT or c2.neighbor(dir) == c1
-            if c1_valid and c2_valid:
-                valid_dir.append(dir)
-
-        return valid_dir
-
-    """Game State"""
+    """Win Conditions"""
 
     def get_winning_lines(self) -> list[TokenLine]:
         """Returns all lines which meet the requirements to win"""

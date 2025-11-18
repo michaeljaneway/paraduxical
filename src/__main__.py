@@ -20,4 +20,4 @@ if __name__ == "__main__":
             tui_app = ParaduxTui()
             tui_app.run()
         case "server" | _:
-            uvicorn.run("backend.GameController:app", reload=True)
+            uvicorn.run("backend.GameServerController:app", reload=False)

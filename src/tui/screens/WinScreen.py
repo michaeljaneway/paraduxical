@@ -6,7 +6,7 @@ from textual.screen import Screen
 from textual.widgets import (Digits, Footer, Header, Label, ListItem, ListView,
                              Markdown)
 from tui import screens
-from tui.widgets.BoardWidget import BoardWidget
+from tui.widgets.GameWidget import GameWidget
 
 from GameClientController import GameClientController
 
@@ -39,7 +39,7 @@ class WinScreen(Screen[BoardLayout]):
                     yield Digits(f"1 + 2")
                 yield Markdown(f"# Its a Tie!")
 
-            yield BoardWidget(self._controller)
+            yield GameWidget(self._controller)
 
             with ListView(id="menu_list"):
                 yield ListItem(Label("Back to Main Menu"), id="back")

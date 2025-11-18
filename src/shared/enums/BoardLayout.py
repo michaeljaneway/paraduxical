@@ -1,11 +1,11 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class BoardLayout(Enum):
+class BoardLayout(IntEnum):
     """Starting Paradux board layouts"""
 
-    HORZ = 0
+    HORZ = 1
     """The center two pieces are placed horizontally across from each other"""
 
-    DIAG = 1
+    DIAG = 2
     """The center two pieces are placed diagonally across from each other"""

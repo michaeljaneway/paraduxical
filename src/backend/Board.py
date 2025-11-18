@@ -8,7 +8,7 @@ from shared.TokenLine import TokenLine
 
 
 @dataclass
-class Tile:
+class Cell:
     """A coordinate with an associated token type"""
 
     coord: Coordinate
@@ -29,7 +29,7 @@ class Board:
         row_strings: list[str] = []
 
         # Convert rows to strings
-        rows = self.get_2d_coord_list()
+        rows = self.get_2d_cell_list()
         for row in rows:
             row_str = " ".join([str(self[tile.coord].value) for tile in row])
             row_strings.append(row_str)
@@ -55,7 +55,7 @@ class Board:
 
     def load_from_list(self, token_list: list[TokenType]) -> None:
         """Allow loading the board from an array of token types. Loads as Left->Right, Top->Bottom"""
-        coords_1d = self.get_1d_coord_list()
+        coords_1d = self.get_1d_cell_list()
 
         if len(coords_1d) != len(token_list):
             raise Exception(f"Incorrect size of token list ({len(token_list)}), should be {len(coords_1d)}")
@@ -63,25 +63,25 @@ class Board:
         for i, tile in enumerate(coords_1d):
             self[tile.coord] = token_list[i]
 
-    def get_1d_coord_list(self) -> list[Tile]:
-        """Returns a 1D array containing the spaces in the board from Left->Right, Top->Bottom"""
-        coord_list_1d: list[Tile] = []
-        coord_list_2d = self.get_2d_coord_list()
+    def get_1d_cell_list(self) -> list[Cell]:
+        """Returns a 1D array of cells Left->Right, Top->Bottom"""
+        coord_list_1d: list[Cell] = []
+        coord_list_2d = self.get_2d_cell_list()
 
         for row in coord_list_2d:
             coord_list_1d.extend(row)
         return coord_list_1d
 
-    def get_2d_coord_list(self) -> list[list[Tile]]:
-        """Returns a 2D array containing spaces Left->Right as rows, Top->Bottom"""
-        coord_list: list[list[Tile]] = []
+    def get_2d_cell_list(self) -> list[list[Cell]]:
+        """Returns a 2D array of cells Left->Right as rows, Top->Bottom"""
+        coord_list: list[list[Cell]] = []
         for r in range(-self._radius, self._radius + 1):
             coord_list.append([])
             for s in range(self._radius, -self._radius - 1, -1):
                 for q in range(-self._radius, self._radius + 1):
                     if q + r + s == 0:
                         i_coord = Coordinate(q, r, s)
-                        coord_list[-1].append(Tile(i_coord, self._board_map[i_coord]))
+                        coord_list[-1].append(Cell(i_coord, self._board_map[i_coord]))
         return coord_list
 
     def get_board_dict(self) -> dict[Coordinate, TokenType]:

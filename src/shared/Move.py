@@ -4,7 +4,7 @@ from shared.Coordinate import Coordinate
 from shared.enums import Direction, MoveType
 
 
-@dataclass
+@dataclass(frozen=True)
 class Move():
     """A single board move"""
 
