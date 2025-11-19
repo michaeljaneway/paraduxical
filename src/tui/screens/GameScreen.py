@@ -4,9 +4,10 @@ from textual.screen import Screen
 from textual.widgets import Footer, Header, Markdown
 
 from GameClientController import GameClientController
+from shared.enums.EventType import GameEvent
 from tui import screens
-from tui.widgets.GameWidget import GameWidget
 from tui.widgets.CellButton import CellButton
+from tui.widgets.GameWidget import GameWidget
 
 
 class GameScreen(Screen[None]):
@@ -23,6 +24,8 @@ class GameScreen(Screen[None]):
         self._controller = controller
         self._board_widget = GameWidget(self._controller)
         self.active_player = self._controller.get_active_player()
+
+        self._controller.bind_callback(GameEvent.GameCleared, self.action_back)
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -41,8 +44,8 @@ class GameScreen(Screen[None]):
 
     def action_back(self) -> None:
         """Returns to the Main Menu screen"""
-        self.app.switch_screen(screens.MainMenuScreen(self._controller))
+        self.app.pop_screen()
 
     def action_save(self) -> None:
         """Brings the player to the save game screen"""
-        self.app.switch_screen(screens.SaveScreen(self._controller))
+        self.app.push_screen(screens.SaveScreen(self._controller))

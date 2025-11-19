@@ -1,24 +1,40 @@
 import asyncio
 import threading
 from dataclasses import asdict
-from typing import Callable
+from typing import Any, Callable
 
 import requests
 import websockets
 
 from backend.Board import Cell
 from shared.Coordinate import Coordinate
-from shared.enums import BoardLayout, Direction, TokenType
+from shared.enums import BoardLayout, Direction, GameEvent, TokenType
 from shared.enums.MoveType import MoveType
 from shared.TokenLine import TokenLine
 
 
+class Callback:
+    def __init__(self, callable: Callable, args: tuple[Any, ...]) -> None:
+        self.callable = callable
+        self.args = args
+
+    def __call__(self) -> Any:
+        try:
+            self.callable(*self.args)
+        except:
+            pass
+
+
 class GameClientController:
     def __init__(self, message_callback: Callable[[str], None]) -> None:
-        self._message_callback = message_callback
+        self._err_callback = message_callback
         self._port = "8000"
         self._http_api = f"http://127.0.0.1:{self._port}"
         self._ws_api = f"ws://127.0.0.1:{self._port}/ws"
+        self._event_callbacks: dict[GameEvent, list[Callback]] = {}
+        self.callback_wrapper: Callable[[Callable], Any] | None = None
+        self.should_websocket_be_active: bool = True
+
         self.start_websocket()
 
     """Game Initialization & Destruction"""
@@ -146,24 +162,44 @@ class GameClientController:
         r = requests.post(f"{self._http_api}/load_game", json=body)
         r.raise_for_status()
 
-    """WebSocket"""
+    """WebSocket Initialization"""
 
     def start_websocket(self):
-        t = threading.Thread(target=self.begin_ws_connection, daemon=True)
-        t.start()
+        self.ws_thread = threading.Thread(target=lambda: asyncio.run(self.run_websocket()), daemon=True)
+        self.ws_thread.start()
 
-    def begin_ws_connection(self):
-        asyncio.run(self.connect_websocket())
-
-    async def connect_websocket(self):
+    async def run_websocket(self):
         async with websockets.connect(self._ws_api) as ws:
-            while True:
+            while self.should_websocket_be_active:
                 try:
                     event = await ws.recv()
-                    self._message_callback(f"Received: {event}")
+                    if not event in GameEvent._value2member_map_:
+                        continue
+                    self._execute_callbacks(GameEvent(event))
                 except websockets.exceptions.ConnectionClosedOK:
-                    self._message_callback(f"Connection closed normally")
+                    self._err_callback(f"Connection closed normally")
                     break
                 except websockets.exceptions.ConnectionClosedError as e:
-                    self._message_callback(f"Connection closed with an error: {e}")
+                    self._err_callback(f"Connection closed with an error: {e}")
                     break
+
+    """Websocket Callbacks"""
+
+    def add_callback_wrapper(self, cb_wrapper: Callable[[Callable], Any]):
+        self.callback_wrapper = cb_wrapper
+
+    def bind_callback(self, event: GameEvent, callable: Callable, *args):
+        if not event in self._event_callbacks:
+            self._event_callbacks[event] = []
+
+        cb = Callback(callable, args)
+        self._event_callbacks[event].append(cb)
+
+    def _execute_callbacks(self, event: GameEvent):
+        if not event in self._event_callbacks:
+            return
+        for callback in self._event_callbacks[event]:
+            if self.callback_wrapper:
+                self.callback_wrapper(callback)
+            else:
+                callback()

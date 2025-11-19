@@ -1,5 +1,6 @@
 from textual import on
 from textual.app import ComposeResult
+from textual.reactive import reactive
 from textual.widget import Widget
 from textual.widgets import Label, ListItem, ListView
 
@@ -16,12 +17,13 @@ class MoveTypeListItem(ListItem):
 
 
 class MovementListWidget(Widget):
+    move_type: reactive[MoveType] = reactive(MoveType.NULL)
+
     def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
 
         self._controller = controller
-
-        self.move_type: MoveType = self._controller.get_move_type()
+        self.move_type = self._controller.get_move_type()
 
         self.styles.height = "auto"
         self.display = self.move_type == MoveType.NULL

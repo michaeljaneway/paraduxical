@@ -1,31 +1,31 @@
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, VerticalGroup
+from textual.reactive import reactive
 from textual.widget import Widget
 
+from backend.Board import Cell
 from GameClientController import GameClientController
 from shared.Coordinate import Coordinate
-from shared.enums import Direction, MoveType
+from shared.enums import GameEvent, TokenType
 from tui import screens
 from tui.widgets.CellButton import CellButton
 
 
 class BoardWidget(Widget):
+    board_2d: reactive[list[list[Cell]]] = reactive([], recompose=True)
+    board_dict: reactive[dict[Coordinate, TokenType]] = reactive({}, recompose=True)
+    selected_coords: reactive[list[Coordinate]] = reactive([], recompose=True)
+    selectable_coords: reactive[list[Coordinate]] = reactive([], recompose=True)
+
     def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
-
         self._controller = controller
-
-        self.board_2d = self._controller.get_board_array()
-        self.board_dict = self._controller.get_board_dict()
-        self.selected_coords = self._controller.get_selected_coords()
-        self.selectable_coords = self._controller.get_selectable_coords()
-
-        self.move_type: MoveType = self._controller.get_move_type()
-        self.move_direction: Direction = self._controller.get_shift_direction()
-
-        self.cell_buttons: dict[Coordinate, CellButton] = {}
         self.styles.height = "auto"
+        self.cell_buttons: dict[Coordinate, CellButton] = {}
+
+        self.app.call_after_refresh(self.update_game_state)
+        self._controller.bind_callback(GameEvent.GameCleared, self.update_game_state)
 
     def compose(self) -> ComposeResult:
         ### Cell Generation
@@ -54,6 +54,12 @@ class BoardWidget(Widget):
                 self.cell_buttons[coord].select()
 
     """Callbacks"""
+
+    def update_game_state(self):
+        self.board_2d = self._controller.get_board_array()
+        self.board_dict = self._controller.get_board_dict()
+        self.selected_coords = self._controller.get_selected_coords()
+        self.selectable_coords = self._controller.get_selectable_coords()
 
     @on(CellButton.Pressed)
     def on_cell_pressed(self, event: CellButton.Pressed) -> None:

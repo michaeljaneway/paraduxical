@@ -39,12 +39,11 @@ class LoadScreen(Screen[None]):
             return
 
         self._controller.load_game(event.item.save_name)
-        self.app.switch_screen(screens.GameScreen(self._controller))
 
     """Actions"""
 
     def action_back(self) -> None:
-        self.app.switch_screen(screens.MainMenuScreen(self._controller))
+        self.app.pop_screen()
 
 
 class SaveGameListItem(ListItem):

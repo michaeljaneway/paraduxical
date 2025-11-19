@@ -8,6 +8,7 @@ from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
 from shared.enums import BoardLayout
+from shared.enums.EventType import GameEvent
 from tui import screens
 
 
@@ -20,6 +21,7 @@ class NewGameScreen(Screen[BoardLayout]):
     def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller
+        self._controller.bind_callback(GameEvent.GameCreated, self.on_game_start)
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -44,9 +46,11 @@ class NewGameScreen(Screen[BoardLayout]):
     def action_horizontal_selected(self) -> None:
         self.create_game(BoardLayout.HORZ)
 
-    def action_back(self) -> None:
-        self.app.switch_screen(screens.MainMenuScreen(self._controller))
-
     def create_game(self, board_type: BoardLayout) -> None:
         self._controller.create_game(board_type)
+
+    def on_game_start(self):
         self.app.switch_screen(screens.GameScreen(self._controller))
+
+    def action_back(self) -> None:
+        self.app.switch_screen(screens.MainMenuScreen(self._controller))

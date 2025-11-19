@@ -7,12 +7,11 @@ from textual.screen import Screen
 from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
-from tui import screens
 
 
 class RulesScreen(Screen[None]):
     """Displays Paradux rules to the user"""
-    
+
     BINDINGS = [("escape", "back", "Back to Main Menu")]
 
     def __init__(self, controller: GameClientController, **kwargs) -> None:
@@ -35,4 +34,4 @@ class RulesScreen(Screen[None]):
 
     @on(ListView.Selected, item="#back")
     def action_back(self) -> None:
-        self.app.switch_screen(screens.MainMenuScreen(self._controller))
+        self.app.pop_screen()

@@ -1,4 +1,3 @@
-from textual import on
 from textual.app import ComposeResult
 from textual.widget import Widget
 

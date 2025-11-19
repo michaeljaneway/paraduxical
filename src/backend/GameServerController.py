@@ -3,15 +3,16 @@ import os
 from dataclasses import astuple
 from typing import Annotated
 
-from fastapi import Body, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import (Body, FastAPI, HTTPException, WebSocket,
+                     WebSocketDisconnect)
 
 from backend.Game import Game
 from shared.Coordinate import Coordinate
-from shared.enums import BoardLayout, Direction, MoveType, EventType
+from shared.enums import BoardLayout, Direction, GameEvent, MoveType
 
 app = FastAPI()
 _game: Game | None = None
-_event_queue: asyncio.Queue[EventType] = asyncio.Queue()
+_event_queue: asyncio.Queue[GameEvent] = asyncio.Queue()
 
 """Game Initialization & Destruction"""
 
@@ -21,7 +22,7 @@ def create_game(board_layout: Annotated[BoardLayout, Body(embed=True)]):
     """Create a new game"""
     global _game
     _game = Game(board_layout)
-    _event_queue.put_nowait(EventType.GameCreated)
+    _event_queue.put_nowait(GameEvent.GameCreated)
 
 
 @app.delete("/game")
@@ -29,7 +30,7 @@ def clear_game():
     """Delete the active game"""
     global _game
     _game = None
-    _event_queue.put_nowait(EventType.GameCleared)
+    _event_queue.put_nowait(GameEvent.GameCleared)
 
 
 """Movement Selection"""
@@ -39,6 +40,7 @@ def clear_game():
 def set_move_type(move_type: Annotated[MoveType, Body(embed=True)]):
     if not _game:
         raise HTTPException(status_code=400, detail="No game is active")
+    _event_queue.put_nowait(GameEvent.GameStateUpdated)
     _game.set_move_type(move_type)
 
 
@@ -56,6 +58,7 @@ def get_move_type():
 def deselect_coords():
     if not _game:
         raise HTTPException(status_code=400, detail="No game is active")
+    _event_queue.put_nowait(GameEvent.GameStateUpdated)
     _game.deselect_coords()
 
 
@@ -63,6 +66,7 @@ def deselect_coords():
 def select_coord(c: Coordinate):
     if not _game:
         raise HTTPException(status_code=400, detail="No game is active")
+    _event_queue.put_nowait(GameEvent.GameStateUpdated)
     _game.select_coord(c)
 
 
@@ -87,6 +91,7 @@ def get_selectable_coords():
 def set_shift_direction(direction: Annotated[Direction, Body(embed=True)]):
     if not _game:
         raise HTTPException(status_code=400, detail="No game is active")
+    _event_queue.put_nowait(GameEvent.GameStateUpdated)
     return _game.set_shift_direction(direction)
 
 
@@ -122,9 +127,10 @@ def play_move():
     if not _game:
         raise HTTPException(status_code=400, detail="No game is active")
     _game.play_move()
+    _event_queue.put_nowait(GameEvent.GameStateUpdated)
 
 
-"""Game State"""
+"""Getting Game State"""
 
 
 @app.get("/is_game_active")
@@ -194,6 +200,7 @@ def load_game(save_name: Annotated[str, Body(embed=True)]):
     """Load a game save from the saves folder as the new active game"""
     global _game
     _game = Game.load_from_file(f"saves/{save_name}")
+    _event_queue.put_nowait(GameEvent.GameCreated)
 
 
 """WebSocket"""
@@ -201,21 +208,24 @@ def load_game(save_name: Annotated[str, Body(embed=True)]):
 
 class ConnectionManager:
     def __init__(self):
-        self.active_connections: list[WebSocket] = []
+        self.active_connections: set[WebSocket] = set()
 
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
-        self.active_connections.append(websocket)
+        self.active_connections.add(websocket)
 
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
+    def disconnect(self, ws: WebSocket):
+        self.active_connections.discard(ws)
 
-    async def send_indv_message(self, message: str, websocket: WebSocket):
-        await websocket.send_text(message)
+    async def send_indv_message(self, message: str, ws: WebSocket):
+        await ws.send_text(message)
 
     async def broadcast(self, message: str):
         for connection in self.active_connections:
-            await connection.send_text(message)
+            try:
+                await connection.send_text(message)
+            except Exception as e:
+                print(f"Error broadcasting message: {e.__str__()}")
 
 
 _ws_manager = ConnectionManager()
@@ -224,11 +234,20 @@ _ws_manager = ConnectionManager()
 @app.websocket("/ws")
 async def websocket_endpoint(ws: WebSocket):
     await _ws_manager.connect(ws)
-    await _ws_manager.send_indv_message(f"Connection Started", ws)
-
     try:
+        # While the websocket is active:
         while True:
-            event = await _event_queue.get()
-            await _ws_manager.broadcast(event.value)
+            # Check for events to broadcast
+            try:
+                event = await asyncio.wait_for(_event_queue.get(), timeout=0.05)
+                await _ws_manager.broadcast(event.value)
+
+            # If no events found, ping the websocket
+            except asyncio.TimeoutError:
+                await ws.send_text("ping")
+
     except WebSocketDisconnect:
+        print(f"Client disconnected: {ws.client}")
+    finally:
         _ws_manager.disconnect(ws)
+        print(f"Active clients: {len(_ws_manager.active_connections)}")
