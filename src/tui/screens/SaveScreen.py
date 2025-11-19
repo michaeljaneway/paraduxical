@@ -5,7 +5,6 @@ from textual.screen import Screen
 from textual.widgets import Footer, Header, Input, Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
-from tui import screens
 
 
 class SaveScreen(Screen[None]):
@@ -43,8 +42,8 @@ class SaveScreen(Screen[None]):
             return
 
         self._controller.save_game(save_name)
-        self.app.switch_screen(screens.GameScreen(self._controller))
+        self.app.pop_screen()
 
     @on(ListView.Selected, item="#cancel")
     def action_back(self):
-        self.app.switch_screen(screens.GameScreen(self._controller))
+        self.app.pop_screen()

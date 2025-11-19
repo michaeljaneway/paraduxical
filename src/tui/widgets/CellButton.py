@@ -26,7 +26,6 @@ class CellButton(Button):
 
     def select(self) -> None:
         """Outlines the cell to show it has been selected"""
-        self.disabled = True
         self.styles.border = ("outer", "white")
 
     def deselect(self) -> None:

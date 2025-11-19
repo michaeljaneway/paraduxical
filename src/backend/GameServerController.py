@@ -54,20 +54,20 @@ def get_move_type():
 """Coordinate Selection"""
 
 
-@app.delete("/coordinates")
-def deselect_coords():
+@app.post("/deselect_coordinate")
+def deselect_coords(c: Coordinate):
     if not _game:
         raise HTTPException(status_code=400, detail="No game is active")
+    _game.deselect_coord(c)
     _event_queue.put_nowait(GameEvent.GameStateUpdated)
-    _game.deselect_coords()
 
 
 @app.post("/select_coordinate")
 def select_coord(c: Coordinate):
     if not _game:
         raise HTTPException(status_code=400, detail="No game is active")
-    _event_queue.put_nowait(GameEvent.GameStateUpdated)
     _game.select_coord(c)
+    _event_queue.put_nowait(GameEvent.GameStateUpdated)
 
 
 @app.get("/coordinates")

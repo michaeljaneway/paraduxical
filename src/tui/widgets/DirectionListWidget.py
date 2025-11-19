@@ -47,7 +47,7 @@ class DirectionListWidget(Widget):
 
             if len(valid_directions) == 0:
                 self.notify("The selected pieces have no valid direction which they can move in, please select again", severity="warning")
-                self._controller.deselect_coords()
+                self._controller.deselect_coord()
 
     """Callbacks"""
 

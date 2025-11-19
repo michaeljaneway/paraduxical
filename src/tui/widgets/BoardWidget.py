@@ -25,10 +25,11 @@ class BoardWidget(Widget):
         self.cell_buttons: dict[Coordinate, CellButton] = {}
 
         self.app.call_after_refresh(self.update_game_state)
-        self._controller.bind_callback(GameEvent.GameCleared, self.update_game_state)
+        self._controller.bind_callback(GameEvent.GameStateUpdated, self.update_game_state)
 
     def compose(self) -> ComposeResult:
         ### Cell Generation
+        self.notify("Recompose")
         board_group: VerticalGroup = VerticalGroup()
         board_group.styles.margin = (1, 1)
 
@@ -39,7 +40,7 @@ class BoardWidget(Widget):
                         cell_button = CellButton(tile.coord, tile.token, classes="board_cell")
                         self.cell_buttons[tile.coord] = cell_button
 
-                        if not tile.coord in self.selectable_coords:
+                        if not tile.coord in self.selectable_coords + self.selected_coords:
                             cell_button.disabled = True
 
                         if tile.coord in self.selected_coords:
@@ -65,5 +66,9 @@ class BoardWidget(Widget):
     def on_cell_pressed(self, event: CellButton.Pressed) -> None:
         if not isinstance(event.button, CellButton):
             return
-        self._controller.select_coord(event.button.coord)
-        self.app.switch_screen(screens.GameScreen(self._controller))
+
+        c = event.button.coord
+        if c in self.selected_coords:
+            self._controller.deselect_coord(event.button.coord)
+        else:
+            self._controller.select_coord(event.button.coord)

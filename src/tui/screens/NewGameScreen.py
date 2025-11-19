@@ -50,7 +50,8 @@ class NewGameScreen(Screen[BoardLayout]):
         self._controller.create_game(board_type)
 
     def on_game_start(self):
-        self.app.switch_screen(screens.GameScreen(self._controller))
+        self.app.pop_screen
+        self.app.push_screen(screens.GameScreen(self._controller))
 
     def action_back(self) -> None:
-        self.app.switch_screen(screens.MainMenuScreen(self._controller))
+        self.app.pop_screen()

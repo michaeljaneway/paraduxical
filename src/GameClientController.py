@@ -62,8 +62,12 @@ class GameClientController:
 
     """Coordinate Selection"""
 
-    def deselect_coords(self):
-        r = requests.delete(f"{self._http_api}/coordinates")
+    def deselect_coord(self, c: Coordinate):
+        r = requests.post(f"{self._http_api}/deselect_coordinate", json=asdict(c))
+        r.raise_for_status()
+
+    def select_coord(self, c: Coordinate):
+        r = requests.post(f"{self._http_api}/select_coordinate", json=asdict(c))
         r.raise_for_status()
 
     def get_selected_coords(self) -> list[Coordinate]:
@@ -77,10 +81,6 @@ class GameClientController:
         r.raise_for_status()
         coords_json: list[dict] = r.json()
         return [Coordinate(**coord) for coord in coords_json]
-
-    def select_coord(self, c: Coordinate):
-        r = requests.post(f"{self._http_api}/select_coordinate", json=asdict(c))
-        r.raise_for_status()
 
     """Direction Selection"""
 

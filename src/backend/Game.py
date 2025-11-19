@@ -46,8 +46,8 @@ class Game:
 
     """Coordinate Selection"""
 
-    def deselect_coords(self) -> None:
-        self.selected_coords = []
+    def deselect_coord(self, c: Coordinate) -> None:
+        self.selected_coords.remove(c)
 
     def select_coord(self, c: Coordinate) -> None:
         """Selects a coordinate"""
@@ -72,7 +72,6 @@ class Game:
             board_dict = self.board.get_board_dict()
 
             c1 = self.selected_coords[0]
-            print(c1)
             c1_token = board_dict[c1]
             selectable_coords = []
 
