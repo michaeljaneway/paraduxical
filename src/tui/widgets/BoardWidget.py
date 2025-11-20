@@ -8,7 +8,6 @@ from backend.Board import Cell
 from GameClientController import GameClientController
 from shared.Coordinate import Coordinate
 from shared.enums import GameEvent, TokenType
-from tui import screens
 from tui.widgets.CellButton import CellButton
 
 
@@ -24,12 +23,11 @@ class BoardWidget(Widget):
         self.styles.height = "auto"
         self.cell_buttons: dict[Coordinate, CellButton] = {}
 
-        self.app.call_after_refresh(self.update_game_state)
-        self._controller.bind_callback(GameEvent.GameStateUpdated, self.update_game_state)
+        self.app.call_after_refresh(self.on_game_state_updated)
+        self._controller.bind_callback(GameEvent.GameStateUpdated, self.on_game_state_updated)
 
     def compose(self) -> ComposeResult:
-        ### Cell Generation
-        self.notify("Recompose")
+        # Cell Generation
         board_group: VerticalGroup = VerticalGroup()
         board_group.styles.margin = (1, 1)
 
@@ -40,9 +38,11 @@ class BoardWidget(Widget):
                         cell_button = CellButton(tile.coord, tile.token, classes="board_cell")
                         self.cell_buttons[tile.coord] = cell_button
 
+                        # Disable non-selectable cells
                         if not tile.coord in self.selectable_coords + self.selected_coords:
                             cell_button.disabled = True
 
+                        # Select actively selected cells
                         if tile.coord in self.selected_coords:
                             cell_button.select()
 
@@ -56,7 +56,7 @@ class BoardWidget(Widget):
 
     """Callbacks"""
 
-    def update_game_state(self):
+    def on_game_state_updated(self):
         self.board_2d = self._controller.get_board_array()
         self.board_dict = self._controller.get_board_dict()
         self.selected_coords = self._controller.get_selected_coords()

@@ -8,7 +8,7 @@ from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
 from shared.enums import BoardLayout
-from shared.enums.EventType import GameEvent
+from shared.enums.GameEvent import GameEvent
 from tui import screens
 
 
@@ -50,7 +50,7 @@ class NewGameScreen(Screen[BoardLayout]):
         self._controller.create_game(board_type)
 
     def on_game_start(self):
-        self.app.pop_screen
+        self.app.pop_screen()
         self.app.push_screen(screens.GameScreen(self._controller))
 
     def action_back(self) -> None:

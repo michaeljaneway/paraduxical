@@ -1,16 +1,16 @@
-from enum import IntEnum
+from enum import  StrEnum
 
 
-class MoveType(IntEnum):
+class MoveType(StrEnum):
     """Movement types that can be made in Paradux"""
 
-    NULL = 0
+    NULL = "Null"
     """Empty MoveType"""
 
-    SWAP = 1
+    SWAP = "Swap"
     """Swaps two adjacent tokens of opposite color"""
 
-    SHIFT = 2
+    SHIFT = "Shift"
     """Shift two adjacent tokens in a single direction"""
 
     def is_valid_movetype(self):

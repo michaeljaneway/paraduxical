@@ -38,8 +38,7 @@ class Game:
     """Movement Selection"""
 
     def set_move_type(self, move_type: MoveType) -> None:
-        if move_type.is_valid_movetype():
-            self.move_type = move_type
+        self.move_type = move_type
 
     def get_move_type(self) -> MoveType:
         return self.move_type
@@ -62,7 +61,7 @@ class Game:
         if len(self.get_winning_lines()) > 0:
             # If the game is won, no pieces are selectable
             return []
-        
+
         elif len(self.selected_coords) == 0:
             # If no piece is selected, all player cells are selectable
             return [cell.coord for cell in self.board.get_1d_cell_list() if cell.token.is_player_token()]
@@ -81,7 +80,7 @@ class Game:
                 if not neighbor_token or c1_token == neighbor_token or neighbor_token not in [TokenType.P1, TokenType.P2]:
                     continue
                 selectable_coords.append(neighbor_coord)
-            
+
             return selectable_coords
 
         # If two pieces are selected, no more cells are selectable
@@ -107,7 +106,7 @@ class Game:
         return valid_directions
 
     def set_shift_direction(self, dir: Direction) -> None:
-        if dir in self.get_valid_shift_directions():
+        if dir in self.get_valid_shift_directions() + [Direction.NoDirection]:
             self.move_direction = dir
 
     def get_shift_direction(self) -> Direction:

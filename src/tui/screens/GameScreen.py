@@ -1,10 +1,10 @@
-from textual import on
 from textual.app import ComposeResult
+from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import Footer, Header, Markdown
 
 from GameClientController import GameClientController
-from shared.enums.EventType import GameEvent
+from shared.enums import GameEvent, TokenType
 from tui import screens
 from tui.widgets.CellButton import CellButton
 from tui.widgets.GameWidget import GameWidget
@@ -18,13 +18,14 @@ class GameScreen(Screen[None]):
         ("s", "save", "Save Game"),
     ]
 
+    active_player: reactive[TokenType] = reactive(TokenType.P1, recompose=True)
+
     def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
-
         self._controller = controller
-        self._board_widget = GameWidget(self._controller)
-        self.active_player = self._controller.get_active_player()
 
+        self.app.call_after_refresh(self.on_game_state_updated)
+        self._controller.bind_callback(GameEvent.GameStateUpdated, self.on_game_state_updated)
         self._controller.bind_callback(GameEvent.GameCleared, self.action_back)
 
     def compose(self) -> ComposeResult:
@@ -36,7 +37,7 @@ class GameScreen(Screen[None]):
         yield self.header_markdown
 
         # Board
-        yield self._board_widget
+        yield GameWidget(self._controller)
 
         yield Footer()
 
@@ -49,3 +50,8 @@ class GameScreen(Screen[None]):
     def action_save(self) -> None:
         """Brings the player to the save game screen"""
         self.app.push_screen(screens.SaveScreen(self._controller))
+
+    """Callbacks"""
+
+    def on_game_state_updated(self):
+        self.active_player = self._controller.get_active_player()

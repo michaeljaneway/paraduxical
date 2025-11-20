@@ -4,7 +4,7 @@ from textual.events import Mount
 
 import tui.screens as screens
 from GameClientController import GameClientController
-from shared.enums.EventType import GameEvent
+from shared.enums.GameEvent import GameEvent
 
 
 class ParaduxTui(App[None]):
@@ -18,6 +18,8 @@ class ParaduxTui(App[None]):
         super().__init__(**kwargs)
         self._controller = GameClientController(self.on_err)
         self._controller.callback_wrapper = self.call_from_thread
+        
+        self._controller.bind_callback(GameEvent.GameSaved, self.notify, "The active game was saved")
 
     """Callbacks"""
 

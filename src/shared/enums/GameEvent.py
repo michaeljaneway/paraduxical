@@ -6,6 +6,8 @@ class GameEvent(StrEnum):
 
     GameCreated = "GameCreated"
 
+    GameSaved = "GameSaved"
+    
     GameCleared = "GameCleared"
 
     GameStateUpdated = "GameStateUpdated"

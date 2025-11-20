@@ -10,7 +10,7 @@ from textual.events import Mount
 from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
-from shared.enums.EventType import GameEvent
+from shared.enums.GameEvent import GameEvent
 from tui import screens
 
 

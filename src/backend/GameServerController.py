@@ -3,8 +3,7 @@ import os
 from dataclasses import astuple
 from typing import Annotated
 
-from fastapi import (Body, FastAPI, HTTPException, WebSocket,
-                     WebSocketDisconnect)
+from fastapi import Body, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 
 from backend.Game import Game
 from shared.Coordinate import Coordinate
@@ -40,8 +39,8 @@ def clear_game():
 def set_move_type(move_type: Annotated[MoveType, Body(embed=True)]):
     if not _game:
         raise HTTPException(status_code=400, detail="No game is active")
-    _event_queue.put_nowait(GameEvent.GameStateUpdated)
     _game.set_move_type(move_type)
+    _event_queue.put_nowait(GameEvent.GameStateUpdated)
 
 
 @app.get("/move_type")
@@ -100,7 +99,7 @@ def get_shift_direction():
     """Returns a list of valid directions which a pair of coordinates can move in on the active game board"""
     if not _game:
         raise HTTPException(status_code=400, detail="No game is active")
-    return _game.get_valid_shift_directions()
+    return _game.get_shift_direction()
 
 
 @app.get("/valid_shift_directions")
@@ -186,6 +185,7 @@ def save_game(save_name: Annotated[str, Body(embed=True)]):
 
     os.makedirs("saves", exist_ok=True)
     _game.save_to_file(f"saves/{save_name}")
+    _event_queue.put_nowait(GameEvent.GameSaved)
 
 
 @app.get("/save_games")

@@ -53,7 +53,7 @@ class GameClientController:
     def get_move_type(self) -> MoveType:
         r = requests.get(f"{self._http_api}/move_type")
         r.raise_for_status()
-        return r.json()
+        return MoveType(r.json())
 
     def set_move_type(self, move_type: MoveType):
         body = {"move_type": move_type}
@@ -87,17 +87,19 @@ class GameClientController:
     def get_shift_direction(self) -> Direction:
         r = requests.get(f"{self._http_api}/shift_direction")
         r.raise_for_status()
-        return r.json()
+        return Direction(r.json())
 
     def set_shift_direction(self, direction: Direction):
         body = {"direction": direction}
-        r = requests.post(f"{self._http_api}/save_game", json=body)
+        r = requests.post(f"{self._http_api}/shift_direction", json=body)
         r.raise_for_status()
 
     def get_valid_shift_directions(self) -> list[Direction]:
         r = requests.get(f"{self._http_api}/valid_shift_directions")
         r.raise_for_status()
-        return r.json()
+
+        dir_list = r.json()
+        return [Direction(d) for d in dir_list]
 
     """Movement Execution"""
 
@@ -106,7 +108,7 @@ class GameClientController:
         r.raise_for_status()
 
     def is_move_playable(self) -> bool:
-        r = requests.post(f"{self._http_api}/is_move_playable")
+        r = requests.get(f"{self._http_api}/is_move_playable")
         r.raise_for_status()
         return r.json()
 
