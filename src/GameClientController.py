@@ -8,8 +8,7 @@ import websockets
 
 from backend.Board import Cell
 from shared.Coordinate import Coordinate
-from shared.enums import BoardLayout, Direction, GameEvent, TokenType
-from shared.enums.MoveType import MoveType
+from shared.enums import BoardLayout, Direction, GameEvent, MoveType, TokenType
 from shared.TokenLine import TokenLine
 
 
@@ -34,6 +33,7 @@ class GameClientController:
         self._event_callbacks: dict[GameEvent, list[Callback]] = {}
         self.callback_wrapper: Callable[[Callable], Any] | None = None
         self.should_websocket_be_active: bool = True
+        self.event_handler: Callable[[GameEvent], None] | None = None
 
         self.start_websocket()
 
@@ -178,6 +178,7 @@ class GameClientController:
                     if not event in GameEvent._value2member_map_:
                         continue
                     self._execute_callbacks(GameEvent(event))
+                    self._generate_event(GameEvent(event))
                 except websockets.exceptions.ConnectionClosedOK:
                     self._err_callback(f"Connection closed normally")
                     break
@@ -201,7 +202,18 @@ class GameClientController:
         if not event in self._event_callbacks:
             return
         for callback in self._event_callbacks[event]:
+            self._err_callback(callback.__str__())
             if self.callback_wrapper:
                 self.callback_wrapper(callback)
             else:
                 callback()
+
+    """Websocket Event Generation"""
+
+    def set_event_handler(self, handler: Callable[[GameEvent], None]):
+        self.event_handler = handler
+
+    def _generate_event(self, event: GameEvent):
+        if not self.event_handler:
+            return
+        self.event_handler(event)
