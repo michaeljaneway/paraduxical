@@ -32,8 +32,13 @@ class GameClientController:
         self._ws_api = f"ws://127.0.0.1:{self._port}/ws"
         self._event_callbacks: dict[GameEvent, list[Callback]] = {}
         self.callback_wrapper: Callable[[Callable], Any] | None = None
+        self.event_generator: Callable[[GameEvent], None] | None = None
+        
+        # When set to false, will end the websocket thread
         self.should_websocket_be_active: bool = True
-        self.event_handler: Callable[[GameEvent], None] | None = None
+
+        # The model proxy
+        self.model_proxy = GameModelProxy(self)
 
         self.start_websocket()
 
@@ -202,7 +207,6 @@ class GameClientController:
         if not event in self._event_callbacks:
             return
         for callback in self._event_callbacks[event]:
-            self._err_callback(callback.__str__())
             if self.callback_wrapper:
                 self.callback_wrapper(callback)
             else:
@@ -210,10 +214,41 @@ class GameClientController:
 
     """Websocket Event Generation"""
 
-    def set_event_handler(self, handler: Callable[[GameEvent], None]):
-        self.event_handler = handler
+    def set_event_handler(self, event_generator: Callable[[GameEvent], None]):
+        self.event_generator = event_generator
 
     def _generate_event(self, event: GameEvent):
-        if not self.event_handler:
+        if not self.event_generator:
             return
-        self.event_handler(event)
+        
+        self.model_proxy.refresh_all_data()
+        self.event_generator(event)
+
+
+class GameModelProxy:
+    def __init__(self, controller: GameClientController) -> None:
+        self._controller = controller
+        self.refresh_all_data()
+
+    def refresh_all_data(self):
+        # Game State
+        self.is_game_active: bool = self._controller.is_game_active()
+        self.game_saves: list[str] = self._controller.get_save_games()
+        
+        if not self.is_game_active:
+            return
+        
+        self.active_player: TokenType = self._controller.get_active_player()
+        
+        # Board
+        self.board_2d: list[list[Cell]] = self._controller.get_board_array()
+        self.board_dict: dict[Coordinate, TokenType] = self._controller.get_board_dict()
+        self.winning_lines: list[TokenLine] = self._controller.get_winning_lines()
+
+        # Moving
+        self.is_move_playable: bool = self._controller.is_move_playable()
+        self.move_type: MoveType = self._controller.get_move_type()
+        self.direction: Direction = self._controller.get_shift_direction()
+        self.valid_shift_directions: list[Direction] = self._controller.get_valid_shift_directions()
+        self.selected_coords: list[Coordinate] = self._controller.get_selected_coords()
+        self.selectable_coords: list[Coordinate] = self._controller.get_selectable_coords()

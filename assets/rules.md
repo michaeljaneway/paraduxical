@@ -1,64 +1,37 @@
-```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                                                                             │
-│                      P A R A D U X   R U L E S                              │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+# PARADUX RULES
 
+## OBJECTIVE
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ OBJECTIVE                                                                   │
-│                                                                             │
-│  Be the first player to line up FOUR of your tokens in a row —              │
-│  horizontally or diagonally.                                                │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+Be the first player to line up FOUR of your tokens in a row — horizontally or diagonally.
 
+## SETUP
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ SETUP                                                                       │
-│                                                                             │
-│  • Tokens are placed around the perimeter of the board.                     │
-│  • Remaining tokens go in the center.                                       │
-│  • Program (or players) decides who goes first.                             │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+- Tokens are placed around the perimeter of the board.
+- Remaining tokens go in the center.
+- Program (or players) decides who goes first.
 
+## GAMEPLAY
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ GAMEPLAY                                                                    │
-│                                                                             │
-│  1. On your turn:                                                           │
-│     • Select one of your tokens and one adjoining opponent token.           │
-│     • Move BOTH tokens together one space in any direction                  │
-│       (horizontal, vertical, or diagonal).                                  │
-│     • Both tokens must be able to move freely.                              │
-│                                                                             │
-│  2. OR swap the positions of both tokens (this counts as your move).        │
-│                                                                             │
-│  CONSTRAINTS:                                                               │
-│  • You CANNOT move a single token by itself.                                │
-│  • You CANNOT move two tokens of the same color.                            │
-│  • You CANNOT make a move that reverses the previous turn.                  │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+1. On your turn:
 
+    - Select one of your tokens and one adjoining opponent token.
+    - Move BOTH tokens together one space in any direction (horizontal, vertical, or diagonal).
+    - Both tokens must be able to move freely.
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ WINNING                                                                     │
-│                                                                             │
-│  The game continues with players alternating turns until one player         │
-│  successfully lines up FOUR tokens vertically, horizontally, or             │
-│  diagonally — thereby winning the game.                                     │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
+2. OR swap the positions of both tokens (this counts as your move).
 
+## CONSTRAINTS
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ EQUIPMENT                                                                   │
-│                                                                             │
-│  • Hexagonal Board                                                          │
-│  • Two sets of 10 tokens (different colors)                                 │
-│                                                                             │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+- You CANNOT move a single token by itself.
+- You CANNOT move two tokens of the same color.
+- You CANNOT make a move that reverses the previous turn.
+
+## WINNING
+
+The game continues with players alternating turns until one player successfully
+lines up FOUR tokens vertically, horizontally, or diagonally — thereby winning the game.
+
+## EQUIPMENT
+
+- Hexagonal Board
+- Two sets of 10 tokens (different colors)

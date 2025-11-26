@@ -27,3 +27,7 @@ class Direction(IntEnum):
 
     def is_valid_direction(self) -> bool:
         return self in (Direction.NE, Direction.E, Direction.SE, Direction.SW, Direction.W, Direction.NW)
+
+    @staticmethod
+    def get_valid_directions() -> list["Direction"]:
+        return [Direction.NE, Direction.E, Direction.SE, Direction.SW, Direction.W, Direction.NW]

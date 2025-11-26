@@ -33,11 +33,11 @@ class MainMenuScreen(Screen[None]):
         yield Header(show_clock=True)
 
         # Load rules from markdown file
-        rules_path = Path("./assets/mainmenu.md")
-        rules_content = rules_path.read_text("utf-8")
+        main_menu_md_path = Path("./assets/mainmenu.md")
+        main_menu_md = main_menu_md_path.read_text("utf-8")
 
         with VerticalScroll(classes="container middle"):
-            yield Markdown(rules_content)
+            yield Markdown(main_menu_md)
 
             with ListView(id="menu_list"):
                 if self.is_game_active:
