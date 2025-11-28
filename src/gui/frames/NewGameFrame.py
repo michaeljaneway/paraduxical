@@ -29,7 +29,7 @@ class NewGameFrame(BaseFrame):
 
         # Create Menu Options
         menu_options: list[MenuOption] = [
-            MenuOption("/ Diagonal Layout /", partial(self._controller.create_game, BoardLayout.DIAG)),
+            MenuOption("/ Diagonal Layout /", lambda: self._controller.create_game(BoardLayout.DIAG)),
             MenuOption("- Horizontal Layout -", partial(self._controller.create_game, BoardLayout.HORZ)),
             # MenuOption("Return to Main Menu", lambda: self.switch_frame(MainMenuFrame(self.master, self._controller))),
         ]
