@@ -15,11 +15,12 @@ class NewGameFrame(BaseFrame):
         from gui.frames.MainMenuFrame import MainMenuFrame
 
         # Bind callbacks
-        event_callbacks: list[EventCallback] = [
-            EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(GameFrame(self.master, self._controller))),
-            EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: print("Hello"))
-        ]
-        self.bind_event_callbacks(event_callbacks)
+        self.bind_event_callbacks(
+            [
+                EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(GameFrame(self.master, self._controller))),
+                EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: print("Hello")),
+            ]
+        )
 
         # Show instructions to the user
         instruction_str = f"Please select a board layout option"
