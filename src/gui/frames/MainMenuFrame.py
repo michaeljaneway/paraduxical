@@ -33,7 +33,7 @@ class MainMenuFrame(BaseFrame):
         menu_options: list[MenuOption] = [
             MenuOption("Resume Game", self._on_resume_game, is_enabled_lambda=lambda: self._model.is_game_active),
             MenuOption("Clear Active Game", self._on_clear_game, is_enabled_lambda=lambda: self._model.is_game_active),
-            MenuOption("Start New Game", self._on_start_new_game),
+            MenuOption("Start New Game", lambda: self.switch_frame(NewGameFrame(self.master, self._controller))),
             MenuOption("Load Save Game", self._on_load_game),
             MenuOption("View Rules", self._on_view_rules),
             MenuOption("Exit Game", self._on_quit),
@@ -54,8 +54,8 @@ class MainMenuFrame(BaseFrame):
     def _on_clear_game(self):
         self._controller.clear_game()
 
-    def _on_start_new_game(self):
-        self.switch_frame(NewGameFrame(self.master, self._controller))
+    # def _on_start_new_game(self):
+        
 
     def _on_load_game(self):
         self.switch_frame(LoadGameFrame(self.master, self._controller))
