@@ -25,9 +25,9 @@ class Callback:
 
 
 class GameClientController:
-    def __init__(self, message_callback: Callable[[str], None]) -> None:
+    def __init__(self, message_callback: Callable[[str], None], port: int = 8000) -> None:
         self._err_callback = message_callback
-        self._port = "8000"
+        self._port = str(port)
         self._http_api = f"http://127.0.0.1:{self._port}"
         self._ws_api = f"ws://127.0.0.1:{self._port}/ws"
         self._event_callbacks: dict[GameEvent, list[Callback]] = {}
