@@ -12,13 +12,13 @@ Be the first player to line up FOUR of your tokens in a row — horizontally or 
 
 ## GAMEPLAY
 
-1. On your turn:
+On your turn:
 
     - Select one of your tokens and one adjoining opponent token.
     - Move BOTH tokens together one space in any direction (horizontal, vertical, or diagonal).
     - Both tokens must be able to move freely.
 
-2. OR swap the positions of both tokens (this counts as your move).
+OR swap the positions of both tokens (this counts as your move).
 
 ## CONSTRAINTS
 

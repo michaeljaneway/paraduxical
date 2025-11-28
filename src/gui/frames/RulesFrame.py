@@ -18,11 +18,13 @@ class RulesFrame(BaseFrame):
         # Load rules from markdown file
         rules_md = Path("./assets/rules.md").read_text("utf-8")
         rules_html = '<p style="color: white">' + markdown.markdown(rules_md) + "</p>"
+        
+        print(rules_html)
 
         # Rules
         self.md_text = tkhtmlview.HTMLScrolledText(self, html=rules_html, background=None)
         self.md_text.configure(bd=0, width=100)
-        self.md_text.grid(sticky="n")
+        self.md_text.grid(sticky="nsew")
 
         # Create menu
         menu_options: list[MenuOption] = [
