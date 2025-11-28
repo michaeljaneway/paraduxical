@@ -29,7 +29,8 @@ class GameFrame(BaseFrame):
 
         # Movement Selection
         self.movement_widget = MovementSelectionWidget(self, self._controller)
-        self.movement_widget.grid(row=2, column=0, pady=20)
+        self.movement_widget.configure(borderwidth=5, highlightbackground="gray")
+        self.movement_widget.grid(row=1, column=1, pady=20)
 
     def refresh(self):
         self.player_turn_label.configure(text=f"Player {self._model.active_player.value}, it's your turn!")

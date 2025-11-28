@@ -1,4 +1,5 @@
 from tkinter import Misc, ttk
+import tkinter as tk
 from typing import Callable
 
 from GameClientController import GameClientController
@@ -11,14 +12,14 @@ class EventCallback:
         self.funcid = funcid
 
 
-class BaseFrame(ttk.Frame):
+class BaseFrame(tk.Frame):
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, **kwargs)
         self._controller = controller
         self._model = self._controller.model_proxy
         self._event_callbacks: list[EventCallback]
 
-    def switch_frame(self, frame: ttk.Frame):
+    def switch_frame(self, frame: tk.Frame):
         self.unbind_event_callbacks()
         self.destroy()
         frame.grid()

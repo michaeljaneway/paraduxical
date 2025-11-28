@@ -36,25 +36,20 @@ class MovementSelectionWidget(BaseFrame):
             MenuOption(
                 "Swap Tokens",
                 partial(self._controller.set_move_type, MoveType.SWAP),
-                is_visible_lambda=lambda: not self._model.move_type.is_valid_movetype(),
+                is_enabled_lambda=lambda: self._model.move_type != MoveType.SWAP,
             ),
             MenuOption(
                 "Shift Tokens",
                 partial(self._controller.set_move_type, MoveType.SHIFT),
-                is_visible_lambda=lambda: not self._model.move_type.is_valid_movetype(),
-            ),
-            MenuOption(
-                "Clear Move Type",
-                partial(self._controller.set_move_type, MoveType.NULL),
-                is_visible_lambda=lambda: self._model.move_type.is_valid_movetype(),
+                is_enabled_lambda=lambda: self._model.move_type != MoveType.SHIFT,
             ),
         ]
         self.move_type_menu = MenuWidget(self, movetype_options)
-        self.move_type_menu.grid(row=0, column=1)
+        self.move_type_menu.grid(row=1, column=0)
 
         # Direction Menu
         self.direction_menu = DirectionSelectionWidget(self, self._controller)
-        self.direction_menu.grid(row=0, column=2)
+        self.direction_menu.grid(row=2, column=0)
 
         self.refresh_options()
 

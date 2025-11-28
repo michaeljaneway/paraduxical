@@ -23,30 +23,45 @@ class BoardWidget(BaseFrame):
         }
 
         self.bind_event_callbacks([EventCallback(f"<<{GameEvent.GameStateUpdated}>>", lambda _: self.refresh_board())])
-        self.refresh_board()
 
-    def refresh_board(self):
-        for widget in self.winfo_children():
-            widget.destroy()
-
+        # Build Board
+        self.board_dict: dict[Coordinate, tk.Button] = {}
         for row_i, row in enumerate(self._model.board_2d):
             row_frame = ttk.Frame(self)
             row_frame.grid(column=0, row=row_i)
 
+            # Create buttons
             for tile_i, tile in enumerate(row):
-                # Create button
-                cell_button = tk.Button(row_frame, image=self.blank_image, command=partial(self._on_cell_pressed, tile.coord))
-                cell_button.config(state="disabled", relief="flat", width=30, height=30, **self.button_styles[tile.token])
+                self.board_dict[tile.coord] = tk.Button(row_frame, image=self.blank_image, command=partial(self._on_cell_pressed, tile.coord))
+                self.board_dict[tile.coord].grid(column=tile_i, row=0, padx=3, pady=3, sticky="nsew")
 
-                # Enable selectable cells
-                if tile.coord in self._model.selectable_coords + self._model.selected_coords:
-                    cell_button.config(state="active", relief="raised")
+        self.refresh_board()
 
-                # Select actively selected cells
-                if tile.coord in self._model.selected_coords:
-                    cell_button.config(relief="groove")
+    def refresh_board(self):
+        # Update individual cells
+        for cell_coord, cell_token in self._model.board_dict.items():
+            cell_button = self.board_dict[cell_coord]
+            cell_button.config(state="disabled", relief="flat", width=30, height=30, **self.button_styles[cell_token])
 
-                cell_button.grid(column=tile_i, row=0, padx=3, pady=3, sticky="nsew")
+            # Enable selectable cells
+            if cell_coord in self._model.selectable_coords + self._model.selected_coords:
+                cell_button.config(state="active", relief="raised")
+
+            # Select actively selected cells
+            if cell_coord in self._model.selected_coords:
+                cell_button.config(relief="groove")
+
+        # We're done if there's winning lines
+        if not self._model.winning_lines:
+            return
+
+        # Disable all cell buttons if there's winning lines
+        for button in self.board_dict.values():
+            button.configure(state="disabled")
+
+        # for line in self._model.winning_lines:
+        #     for coord in line.coords:
+        #         cell_button = 
 
     def _on_cell_pressed(self, coord: Coordinate):
         if coord in self._model.selected_coords:

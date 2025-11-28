@@ -27,8 +27,8 @@ class MainMenuFrame(BaseFrame):
 
         # Create menu
         menu_options: list[MenuOption] = [
-            MenuOption("Resume Game", self._on_resume_game, is_visible_lambda=lambda: self._model.is_game_active),
-            MenuOption("Clear Active Game", self._on_clear_game, is_visible_lambda=lambda: self._model.is_game_active),
+            MenuOption("Resume Game", self._on_resume_game, is_enabled_lambda=lambda: self._model.is_game_active),
+            MenuOption("Clear Active Game", self._on_clear_game, is_enabled_lambda=lambda: self._model.is_game_active),
             MenuOption("Start New Game", self._on_start_new_game),
             MenuOption("Load Save Game", self._on_load_game),
             MenuOption("View Rules", self._on_view_rules),
