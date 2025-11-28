@@ -3,7 +3,6 @@ from functools import partial
 from tkinter import Misc, ttk
 from typing import Any
 
-from backend.Board import Cell
 from GameClientController import GameClientController
 from gui.frames.BaseFrame import BaseFrame, EventCallback
 from shared.Coordinate import Coordinate
@@ -16,10 +15,16 @@ class BoardWidget(BaseFrame):
         super().__init__(root, controller, **kwargs)
         self.blank_image = tk.PhotoImage()
 
-        self.button_styles: dict[TokenType, dict[str, Any]] = {
-            TokenType.MT: {"bg": "gray", "activebackground": "gray"},
+        self.active_button_styles: dict[TokenType, dict[str, Any]] = {
+            TokenType.MT: {"bg": "gray16", "activebackground": "gray"},
             TokenType.P1: {"bg": "red", "activebackground": "red"},
             TokenType.P2: {"bg": "blue", "activebackground": "blue"},
+        }
+
+        self.disabled_button_styles: dict[TokenType, dict[str, Any]] = {
+            TokenType.MT: {"bg": "gray16", "activebackground": "gray"},
+            TokenType.P1: {"bg": "red4", "activebackground": "red"},
+            TokenType.P2: {"bg": "medium blue", "activebackground": "blue"},
         }
 
         self.bind_event_callbacks([EventCallback(f"<<{GameEvent.GameStateUpdated}>>", lambda _: self.refresh_board())])
@@ -33,6 +38,7 @@ class BoardWidget(BaseFrame):
             # Create buttons
             for tile_i, tile in enumerate(row):
                 self.board_dict[tile.coord] = tk.Button(row_frame, image=self.blank_image, command=partial(self._on_cell_pressed, tile.coord))
+                self.board_dict[tile.coord].configure(width=30, height=30)
                 self.board_dict[tile.coord].grid(column=tile_i, row=0, padx=3, pady=3, sticky="nsew")
 
         self.refresh_board()
@@ -41,11 +47,11 @@ class BoardWidget(BaseFrame):
         # Update individual cells
         for cell_coord, cell_token in self._model.board_dict.items():
             cell_button = self.board_dict[cell_coord]
-            cell_button.config(state="disabled", relief="flat", width=30, height=30, **self.button_styles[cell_token])
+            cell_button.config(state="disabled", relief="flat", **self.disabled_button_styles[cell_token])
 
             # Enable selectable cells
             if cell_coord in self._model.selectable_coords + self._model.selected_coords:
-                cell_button.config(state="active", relief="raised")
+                cell_button.config(state="active", relief="raised", **self.active_button_styles[cell_token])
 
             # Select actively selected cells
             if cell_coord in self._model.selected_coords:
@@ -56,12 +62,14 @@ class BoardWidget(BaseFrame):
             return
 
         # Disable all cell buttons if there's winning lines
-        for button in self.board_dict.values():
-            button.configure(state="disabled")
+        for cell_coord, cell_token in self._model.board_dict.items():
+            cell_button = self.board_dict[cell_coord]
+            cell_button.configure(state="disabled", **self.disabled_button_styles[cell_token])
 
-        # for line in self._model.winning_lines:
-        #     for coord in line.coords:
-        #         cell_button = 
+        # Highlight winning lines
+        for line in self._model.winning_lines:
+            for coord in line.coords:
+                self.board_dict[coord].configure(**self.active_button_styles[line.token_type], relief="groove")
 
     def _on_cell_pressed(self, coord: Coordinate):
         if coord in self._model.selected_coords:

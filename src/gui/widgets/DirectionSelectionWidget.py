@@ -4,10 +4,8 @@ from tkinter import Misc, ttk
 
 from GameClientController import GameClientController
 from gui.frames.BaseFrame import BaseFrame, EventCallback
-from gui.widgets.MenuWidget import MenuOption, MenuWidget
 from shared.enums.Direction import Direction
 from shared.enums.GameEvent import GameEvent
-from shared.enums.MoveType import MoveType
 
 
 class DirectionSelectionWidget(BaseFrame):

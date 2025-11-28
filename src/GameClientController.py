@@ -33,7 +33,7 @@ class GameClientController:
         self._event_callbacks: dict[GameEvent, list[Callback]] = {}
         self.callback_wrapper: Callable[[Callable], Any] | None = None
         self.event_generator: Callable[[GameEvent], None] | None = None
-        
+
         # When set to false, will end the websocket thread
         self.should_websocket_be_active: bool = True
 
@@ -150,7 +150,14 @@ class GameClientController:
     def get_winning_lines(self) -> list[TokenLine]:
         r = requests.get(f"{self._http_api}/winning_lines")
         r.raise_for_status()
-        return r.json()
+
+        lines_json = r.json()
+        lines: list[TokenLine] = []
+
+        for line in lines_json:
+            lines.append(TokenLine(TokenType(line["token_type"]), [Coordinate(coord["q"], coord["r"], coord["s"]) for coord in line["coords"]]))
+
+        return lines
 
     """Game Saving & Loading"""
 
@@ -220,7 +227,7 @@ class GameClientController:
     def _generate_event(self, event: GameEvent):
         if not self.event_generator:
             return
-        
+
         self.model_proxy.refresh_all_data()
         self.event_generator(event)
 
@@ -234,12 +241,12 @@ class GameModelProxy:
         # Game State
         self.is_game_active: bool = self._controller.is_game_active()
         self.game_saves: list[str] = self._controller.get_save_games()
-        
+
         if not self.is_game_active:
             return
-        
+
         self.active_player: TokenType = self._controller.get_active_player()
-        
+
         # Board
         self.board_2d: list[list[Cell]] = self._controller.get_board_array()
         self.board_dict: dict[Coordinate, TokenType] = self._controller.get_board_dict()

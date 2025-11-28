@@ -1,3 +1,4 @@
+from functools import partial
 from tkinter import Event, Misc, ttk
 
 from GameClientController import GameClientController
@@ -13,7 +14,9 @@ class NewGameFrame(BaseFrame):
         super().__init__(root, controller, **kwargs)
 
         # Bind callbacks
-        event_callbacks: list[EventCallback] = [EventCallback(f"<<{GameEvent.GameCreated}>>", self._on_game_created)]
+        event_callbacks: list[EventCallback] = [
+            EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(GameFrame(self.master, self._controller)))
+        ]
         self.bind_event_callbacks(event_callbacks)
 
         # Show instructions to the user
@@ -23,14 +26,8 @@ class NewGameFrame(BaseFrame):
 
         # Create Menu Options
         menu_options: list[MenuOption] = [
-            MenuOption("/ Diagonal Layout /", lambda: self._on_select_layout(BoardLayout.DIAG)),
-            MenuOption("- Horizontal Layout -", lambda: self._on_select_layout(BoardLayout.HORZ)),
+            MenuOption("/ Diagonal Layout /", partial(self._controller.create_game, BoardLayout.DIAG)),
+            MenuOption("- Horizontal Layout -", partial(self._controller.create_game, BoardLayout.HORZ)),
         ]
         self.menu_widget = MenuWidget(self, menu_options)
         self.menu_widget.grid()
-
-    def _on_select_layout(self, layout: BoardLayout):
-        self._controller.create_game(layout)
-
-    def _on_game_created(self, event: Event):
-        self.switch_frame(GameFrame(self.master, self._controller))
