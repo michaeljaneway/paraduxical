@@ -20,6 +20,10 @@ class MainMenuFrame(BaseFrame):
             EventCallback(f"<<{GameEvent.GameCleared}>>", lambda _: self._on_game_active_change()),
         ]
         self.bind_event_callbacks(event_callbacks)
+        
+        self.master.columnconfigure(0, weight=1) 
+        self.master.rowconfigure(0, weight=1)
+        
 
         # Title
         self.title_label = ttk.Label(self, text=f"Paraduxical", font=("Arial", 52))
@@ -35,7 +39,7 @@ class MainMenuFrame(BaseFrame):
             MenuOption("Exit Game", self._on_quit),
         ]
         self.menu_widget = MenuWidget(self, menu_options)
-        self.menu_widget.grid()
+        self.menu_widget.grid(row=1, column=0, sticky="nsew")
 
     """Event Callbacks"""
 

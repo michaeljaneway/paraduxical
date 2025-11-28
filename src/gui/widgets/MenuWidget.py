@@ -1,3 +1,4 @@
+import tkinter as tk
 from tkinter import Misc, ttk
 from typing import Callable
 
@@ -24,7 +25,7 @@ class MenuOption:
         return self._is_enabled_lambda()
 
 
-class MenuWidget(ttk.Frame):
+class MenuWidget(tk.Frame):
     def __init__(self, root: Misc, menu_options: list[MenuOption], **kwargs) -> None:
         super().__init__(root, **kwargs)
         self.menu_options = menu_options

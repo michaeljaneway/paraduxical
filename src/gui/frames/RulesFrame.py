@@ -18,8 +18,6 @@ class RulesFrame(BaseFrame):
         # Load rules from markdown file
         rules_md = Path("./assets/rules.md").read_text("utf-8")
         rules_html = '<p style="color: white">' + markdown.markdown(rules_md) + "</p>"
-        
-        print(rules_html)
 
         # Rules
         self.md_text = tkhtmlview.HTMLScrolledText(self, html=rules_html, background=None)
