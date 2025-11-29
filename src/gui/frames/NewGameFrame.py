@@ -3,7 +3,7 @@ from tkinter import Misc, ttk
 
 from GameClientController import GameClientController
 from gui.frames.BaseFrame import BaseFrame, EventCallback
-from gui.frames.GameFrame import GameFrame
+from gui.frames.FrameType import FrameType
 from gui.widgets.MenuWidget import MenuOption, MenuWidget
 from shared.enums.BoardLayout import BoardLayout
 from shared.enums.GameEvent import GameEvent
@@ -15,12 +15,11 @@ class NewGameFrame(BaseFrame):
         from gui.frames.MainMenuFrame import MainMenuFrame
 
         # Bind callbacks
-        self.bind_event_callbacks(
-            [
-                EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(GameFrame(self.master, self._controller))),
-                EventCallback(f"<<{GameEvent.GameCreated}>>", partial(print, "Hello")),
-            ]
-        )
+        self._event_callbacks = [
+            EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(FrameType.Game)),
+            EventCallback(f"<<{GameEvent.GameCreated}>>", partial(print, "Hello")),
+        ]
+        self.bind_event_callbacks()
 
         # Show instructions to the user
         instruction_str = f"Please select a board layout option"

@@ -1,8 +1,9 @@
-from tkinter import Misc, ttk
 import tkinter as tk
+from tkinter import Misc
 from typing import Callable
 
 from GameClientController import GameClientController
+from gui.frames.FrameType import FrameType
 
 
 class EventCallback:
@@ -17,19 +18,15 @@ class BaseFrame(tk.Frame):
         super().__init__(root, **kwargs)
         self._controller = controller
         self._model = self._controller.model_proxy
-        self._event_callbacks: list[EventCallback]
+        self._event_callbacks: list[EventCallback] = []
 
-    def switch_frame(self, frame: tk.Frame):
-        self.unbind_event_callbacks()
-        self.destroy()
-        frame.grid()
+    def switch_frame(self, frame: FrameType):
+        self.winfo_toplevel().switch_frame(frame)  # type: ignore
 
     """Event Callbacks"""
 
-    def bind_event_callbacks(self, event_callbacks: list[EventCallback]):
-        """Bind a list of event callbacks"""
-        
-        self._event_callbacks = event_callbacks
+    def bind_event_callbacks(self):
+        """Bind event callbacks"""
         for ec in self._event_callbacks:
             ec.funcid = self.winfo_toplevel().bind(ec.event, ec.callback, True)
             print("\nBaseFrame BINDING")

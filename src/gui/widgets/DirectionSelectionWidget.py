@@ -15,10 +15,10 @@ class DirectionSelectionWidget(BaseFrame):
         self.dir_buttons: dict[Direction, tk.Button] = {}
 
         # Setup callbacks
-        event_callbacks = [
+        self._event_callbacks = [
             EventCallback(f"<<{GameEvent.GameStateUpdated}>>", lambda _: self.refresh_options()),
         ]
-        self.bind_event_callbacks(event_callbacks)
+        self.bind_event_callbacks()
 
         self.instruction_label = ttk.Label(self, text=f"Select a direction")
         self.instruction_label.grid(row=0, column=0, pady=5)

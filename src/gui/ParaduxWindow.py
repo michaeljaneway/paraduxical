@@ -1,7 +1,13 @@
 import tkinter as tk
 
 from GameClientController import GameClientController
+from gui.frames.BaseFrame import BaseFrame
+from gui.frames.FrameType import FrameType
+from gui.frames.GameFrame import GameFrame
+from gui.frames.LoadGameFrame import LoadGameFrame
 from gui.frames.MainMenuFrame import MainMenuFrame
+from gui.frames.NewGameFrame import NewGameFrame
+from gui.frames.RulesFrame import RulesFrame
 from shared.enums.GameEvent import GameEvent
 
 
@@ -25,16 +31,16 @@ class ParaduxGui(tk.Tk):
         self._controller.set_event_handler(self.event_generator)
 
         # Instantiate the Main Menu frame
-        main_menu = MainMenuFrame(self, self._controller)
-        main_menu.grid()
-        
+        self.active_frame: BaseFrame | None = None
+        self.switch_frame(FrameType.MainMenu)
+
     def event_generator(self, event: GameEvent):
         print("BINDCHECK", self.bind())
         self.event_generate(f"<<{event}>>")
 
     def on_err(self, message: str):
         print(message)
-        
+
     def unbind(self, sequence: str, funcid: str | None = None) -> None:
         print("CRAZY DEBUG UNBIND: ", sequence, funcid)
         return super().unbind(sequence, funcid)
@@ -46,3 +52,22 @@ class ParaduxGui(tk.Tk):
     def unbind_class(self, className: str, sequence: str) -> None:
         print("CRAZY UNBIND CLASS", className, sequence)
         return super().unbind_class(className, sequence)
+
+    def switch_frame(self, frame: FrameType):
+        if self.active_frame:
+            self.active_frame.unbind_event_callbacks()
+            self.active_frame.destroy()
+
+        match frame:
+            case FrameType.LoadGame:
+                self.active_frame = LoadGameFrame(self, self._controller)
+            case FrameType.Rules:
+                self.active_frame = RulesFrame(self, self._controller)
+            case FrameType.Game:
+                self.active_frame = GameFrame(self, self._controller)
+            case FrameType.NewGame:
+                self.active_frame = NewGameFrame(self, self._controller)
+            case FrameType.MainMenu | _:
+                self.active_frame = MainMenuFrame(self, self._controller)
+
+        self.active_frame.grid()

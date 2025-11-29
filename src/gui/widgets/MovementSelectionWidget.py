@@ -14,11 +14,10 @@ class MovementSelectionWidget(BaseFrame):
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, controller, **kwargs)
 
-        self.bind_event_callbacks(
-            [
-                EventCallback(f"<<{GameEvent.GameStateUpdated}>>", lambda _: self.refresh_options()),
-            ]
-        )
+        self._event_callbacks = [
+            EventCallback(f"<<{GameEvent.GameStateUpdated}>>", lambda _: self.refresh_options()),
+        ]
+        self.bind_event_callbacks()
 
         # Play move Menu
         play_move_options: list[MenuOption] = [

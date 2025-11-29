@@ -3,7 +3,7 @@ from tkinter import Misc
 
 from GameClientController import GameClientController
 from gui.frames.BaseFrame import BaseFrame, EventCallback
-from gui.frames.GameFrame import GameFrame
+from gui.frames.FrameType import FrameType
 from gui.widgets.MenuWidget import MenuOption, MenuWidget
 from shared.enums.GameEvent import GameEvent
 
@@ -12,22 +12,18 @@ class LoadGameFrame(BaseFrame):
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, controller, **kwargs)
 
-        # Bind callbacks
-        event_callbacks: list[EventCallback] = [
+        self._event_callbacks = [
             EventCallback(f"<<{GameEvent.GameSaved}>>", self.refresh),
-            EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(GameFrame(self.master, self._controller))),
+            EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(FrameType.Game)),
         ]
-        self.bind_event_callbacks(event_callbacks)
-
+        self.bind_event_callbacks()
         self.refresh()
 
     def refresh(self):
-        from gui.frames.MainMenuFrame import MainMenuFrame
-
         for widget in self.winfo_children():
             widget.destroy()
 
         menu_options: list[MenuOption] = [MenuOption(f"{save}", partial(self._controller.load_game, save)) for save in self._model.game_saves]
-        menu_options.append(MenuOption("Return to Main Menu", lambda: self.switch_frame(MainMenuFrame(self.master, self._controller))))
+        menu_options.append(MenuOption("Return to Main Menu", lambda: self.switch_frame(FrameType.MainMenu)))
         self.menu_widget = MenuWidget(self, menu_options)
         self.menu_widget.grid()

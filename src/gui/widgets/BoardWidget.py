@@ -27,7 +27,8 @@ class BoardWidget(BaseFrame):
             TokenType.P2: {"bg": "medium blue", "activebackground": "blue"},
         }
 
-        self.bind_event_callbacks([EventCallback(f"<<{GameEvent.GameStateUpdated}>>", lambda _: self.refresh_board())])
+        self._event_callbacks = [EventCallback(f"<<{GameEvent.GameStateUpdated}>>", lambda _: self.refresh_board())]
+        self.bind_event_callbacks()
 
         # Build Board
         self.board_dict: dict[Coordinate, tk.Button] = {}
