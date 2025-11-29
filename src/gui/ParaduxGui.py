@@ -19,8 +19,6 @@ class ParaduxGui(tk.Tk):
         # Set window metadata
         self.title("Paraduxical")
         self.geometry("800x600+100+50")
-        # self.rowconfigure(0, weight=1)
-        # self.columnconfigure(0, weight=1)
 
         # Load ttk theme
         # https://github.com/rdbende/Sun-Valley-ttk-theme

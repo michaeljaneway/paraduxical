@@ -2,8 +2,8 @@ import sys
 
 import uvicorn
 
-from gui.ParaduxWindow import ParaduxGui
-from tui.ParaduxApp import ParaduxTui
+from gui.ParaduxGui import ParaduxGui
+from tui.ParaduxTui import ParaduxTui
 
 if __name__ == "__main__":
     # Get the mode from the cmd arguments if one was selected
