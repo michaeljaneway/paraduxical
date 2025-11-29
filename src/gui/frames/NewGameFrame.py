@@ -17,7 +17,7 @@ class NewGameFrame(BaseFrame):
         # Bind callbacks
         self.bind_event_callbacks(
             [
-                # EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(GameFrame(self.master, self._controller))),
+                EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(GameFrame(self.master, self._controller))),
                 EventCallback(f"<<{GameEvent.GameCreated}>>", partial(print, "Hello")),
             ]
         )

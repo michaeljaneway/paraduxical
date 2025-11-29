@@ -31,7 +31,7 @@ class BaseFrame(tk.Frame):
         
         self._event_callbacks = event_callbacks
         for ec in self._event_callbacks:
-            ec.funcid = self.winfo_toplevel().bind(ec.event, ec.callback, "+")
+            ec.funcid = self.winfo_toplevel().bind(ec.event, ec.callback, True)
             print("\nBaseFrame BINDING")
             print("\tEvent: ", ec.event)
             print("\tCallback: ", ec.callback)
