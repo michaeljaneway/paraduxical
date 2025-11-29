@@ -34,3 +34,7 @@ class ParaduxGui(tk.Tk):
 
     def on_err(self, message: str):
         print(message)
+        
+    def unbind(self, sequence: str, funcid: str | None = None) -> None:
+        print("CRAZY DEBUG UNBIND: ", sequence, funcid)
+        return super().unbind(sequence, funcid)
