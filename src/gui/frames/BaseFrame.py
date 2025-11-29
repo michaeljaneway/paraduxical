@@ -28,6 +28,8 @@ class BaseFrame(tk.Frame):
 
     def bind_event_callbacks(self, event_callbacks: list[EventCallback]):
         """Bind a list of event callbacks"""
+        print("Toplevel", self.winfo_toplevel())
+
         self._event_callbacks = event_callbacks
         for ec in self._event_callbacks:
             print("BINDING", ec.event, ec.callback)

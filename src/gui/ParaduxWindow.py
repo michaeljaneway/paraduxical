@@ -24,12 +24,12 @@ class ParaduxGui(tk.Tk):
         self._controller = GameClientController(self.on_err)
         self._controller.set_event_handler(self.event_generator)
 
-
         # Instantiate the Main Menu frame
         main_menu = MainMenuFrame(self, self._controller)
         main_menu.grid()
 
     def event_generator(self, event: GameEvent):
+        print("BINDCHECK", self.bind())
         self.event_generate(f"<<{event}>>")
 
     def on_err(self, message: str):
