@@ -8,6 +8,7 @@ from gui.frames.LoadGameFrame import LoadGameFrame
 from gui.frames.MainMenuFrame import MainMenuFrame
 from gui.frames.NewGameFrame import NewGameFrame
 from gui.frames.RulesFrame import RulesFrame
+from gui.frames.SaveGameFrame import SaveGameFrame
 from shared.enums.GameEvent import GameEvent
 
 
@@ -46,14 +47,16 @@ class ParaduxGui(tk.Tk):
             self.active_frame.destroy()
 
         match frame:
-            case FrameType.LoadGame:
-                self.active_frame = LoadGameFrame(self, self._controller)
             case FrameType.Rules:
                 self.active_frame = RulesFrame(self, self._controller)
-            case FrameType.Game:
-                self.active_frame = GameFrame(self, self._controller)
+            case FrameType.SaveGame:
+                self.active_frame = SaveGameFrame(self, self._controller)
+            case FrameType.LoadGame:
+                self.active_frame = LoadGameFrame(self, self._controller)
             case FrameType.NewGame:
                 self.active_frame = NewGameFrame(self, self._controller)
+            case FrameType.Game:
+                self.active_frame = GameFrame(self, self._controller)
             case FrameType.MainMenu | _:
                 self.active_frame = MainMenuFrame(self, self._controller)
 

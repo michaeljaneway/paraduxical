@@ -5,4 +5,5 @@ class FrameType(IntEnum):
     Game = auto()
     NewGame = auto()
     LoadGame = auto()
+    SaveGame = auto()
     Rules = auto()

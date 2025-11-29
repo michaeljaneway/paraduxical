@@ -36,7 +36,13 @@ class GameFrame(BaseFrame):
         self.movement_widget.grid(row=2, column=0)
 
         # Return to main menu button
-        self.exit_menu = MenuWidget(info_frame, [MenuOption("Return to Main Menu", lambda: self.switch_frame(FrameType.MainMenu))])
+        self.exit_menu = MenuWidget(
+            info_frame,
+            [
+                MenuOption("Save Game", lambda: self.switch_frame(FrameType.SaveGame)),
+                MenuOption("Return to Main Menu", lambda: self.switch_frame(FrameType.MainMenu)),
+            ],
+        )
         self.exit_menu.grid(row=3, column=0)
 
         """Board"""
