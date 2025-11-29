@@ -35,23 +35,10 @@ class ParaduxGui(tk.Tk):
         self.switch_frame(FrameType.MainMenu)
 
     def event_generator(self, event: GameEvent):
-        print("BINDCHECK", self.bind())
         self.event_generate(f"<<{event}>>")
 
     def on_err(self, message: str):
         print(message)
-
-    def unbind(self, sequence: str, funcid: str | None = None) -> None:
-        print("CRAZY DEBUG UNBIND: ", sequence, funcid)
-        return super().unbind(sequence, funcid)
-
-    def unbind_all(self, sequence: str) -> None:
-        print("CRAZY UNBIND ALL", sequence)
-        return super().unbind_all(sequence)
-
-    def unbind_class(self, className: str, sequence: str) -> None:
-        print("CRAZY UNBIND CLASS", className, sequence)
-        return super().unbind_class(className, sequence)
 
     def switch_frame(self, frame: FrameType):
         if self.active_frame:

@@ -12,12 +12,10 @@ from shared.enums.GameEvent import GameEvent
 class NewGameFrame(BaseFrame):
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, controller, **kwargs)
-        from gui.frames.MainMenuFrame import MainMenuFrame
 
         # Bind callbacks
         self._event_callbacks = [
             EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(FrameType.Game)),
-            EventCallback(f"<<{GameEvent.GameCreated}>>", partial(print, "Hello")),
         ]
         self.bind_event_callbacks()
 
@@ -30,7 +28,7 @@ class NewGameFrame(BaseFrame):
         menu_options: list[MenuOption] = [
             MenuOption("/ Diagonal Layout /", partial(self._controller.create_game, BoardLayout.DIAG)),
             MenuOption("- Horizontal Layout -", partial(self._controller.create_game, BoardLayout.HORZ)),
-            # MenuOption("Return to Main Menu", lambda: self.switch_frame(MainMenuFrame(self.master, self._controller))),
+            MenuOption("Return to Main Menu", lambda: self.switch_frame(FrameType.MainMenu)),
         ]
         self.menu_widget = MenuWidget(self, menu_options)
         self.menu_widget.grid()

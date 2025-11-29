@@ -229,8 +229,6 @@ class GameClientController:
         if not self.event_generator:
             return
 
-        print("GENERATED EVENT", event.name, ":", event.value)
-
         self.model_proxy.refresh_all_data()
         self.event_generator(event)
 
