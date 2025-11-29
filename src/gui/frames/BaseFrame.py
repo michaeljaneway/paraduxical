@@ -28,16 +28,21 @@ class BaseFrame(tk.Frame):
 
     def bind_event_callbacks(self, event_callbacks: list[EventCallback]):
         """Bind a list of event callbacks"""
-        print("Toplevel", self.winfo_toplevel())
-
+        
         self._event_callbacks = event_callbacks
         for ec in self._event_callbacks:
-            print("BINDING", ec.event, ec.callback)
             ec.funcid = self.winfo_toplevel().bind(ec.event, ec.callback, "+")
+            print("\nBaseFrame BINDING")
+            print("\tEvent: ", ec.event)
+            print("\tCallback: ", ec.callback)
+            print("\tFuncId:", ec.funcid)
 
     def unbind_event_callbacks(self):
         """Unbind all callbacks and clear the event callbacks list"""
         for ec in self._event_callbacks:
-            print("UNBINDING", ec.event, ec.callback, ec.funcid)
+            print("\nBaseFrame UNBINDING")
+            print("\tEvent: ", ec.event)
+            print("\tCallback: ", ec.callback)
+            print("\tFuncId:", ec.funcid)
             self.winfo_toplevel().unbind(ec.event, ec.funcid)
         self._event_callbacks = []

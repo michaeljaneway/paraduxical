@@ -20,10 +20,9 @@ class MainMenuFrame(BaseFrame):
             EventCallback(f"<<{GameEvent.GameCleared}>>", lambda _: self._on_game_active_change()),
         ]
         self.bind_event_callbacks(event_callbacks)
-        
-        self.master.columnconfigure(0, weight=1) 
+
+        self.master.columnconfigure(0, weight=1)
         self.master.rowconfigure(0, weight=1)
-        
 
         # Title
         self.title_label = ttk.Label(self, text=f"Paraduxical", font=("Arial", 52))
@@ -55,7 +54,6 @@ class MainMenuFrame(BaseFrame):
         self._controller.clear_game()
 
     # def _on_start_new_game(self):
-        
 
     def _on_load_game(self):
         self.switch_frame(LoadGameFrame(self.master, self._controller))
