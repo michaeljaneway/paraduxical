@@ -7,6 +7,7 @@ from textual.screen import Screen
 from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
+from tui import screens
 
 
 class RulesScreen(Screen[None]):
@@ -34,4 +35,4 @@ class RulesScreen(Screen[None]):
 
     @on(ListView.Selected, item="#back")
     def action_back(self) -> None:
-        self.app.pop_screen()
+        self.app.switch_screen(screens.MainMenuScreen(self._controller))

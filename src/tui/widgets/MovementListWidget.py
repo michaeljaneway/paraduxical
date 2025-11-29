@@ -6,6 +6,7 @@ from textual.widgets import Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
 from shared.enums import GameEvent, MoveType
+from tui.events.TuiGameEvents import TuiGameEvents
 
 
 class MovementListWidget(Widget):
@@ -15,9 +16,7 @@ class MovementListWidget(Widget):
         super().__init__(**kwargs)
         self._controller = controller
         self.styles.height = "auto"
-
-        self.app.call_after_refresh(self.on_game_state_updated)
-        self._controller.bind_callback(GameEvent.GameStateUpdated, self.on_game_state_updated)
+        self.app.call_after_refresh(self._on_game_state_updated)
 
     def compose(self) -> ComposeResult:
         # Instructions
@@ -38,10 +37,13 @@ class MovementListWidget(Widget):
             else:
                 yield MoveTypeListItem(Label("Clear Movement Type"), move_type=MoveType.NULL)
 
-    """Callbacks"""
+    """Game State Callbacks"""
 
-    def on_game_state_updated(self):
-        self.move_type = self._controller.get_move_type()
+    @on(TuiGameEvents.GameStateUpdated)
+    def _on_game_state_updated(self):
+        self.move_type = self._controller.model.move_type
+
+    """Menu Selection Callbacks"""
 
     @on(ListView.Selected)
     def on_list_item_sel(self, event: ListView.Selected) -> None:

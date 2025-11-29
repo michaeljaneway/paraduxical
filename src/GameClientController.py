@@ -1,7 +1,6 @@
 import asyncio
 import threading
 from dataclasses import asdict
-import time
 from typing import Any, Callable
 
 import requests
@@ -13,34 +12,22 @@ from shared.enums import BoardLayout, Direction, GameEvent, MoveType, TokenType
 from shared.TokenLine import TokenLine
 
 
-class Callback:
-    def __init__(self, callable: Callable, args: tuple[Any, ...]) -> None:
-        self.callable = callable
-        self.args = args
-
-    def __call__(self) -> Any:
-        try:
-            self.callable(*self.args)
-        except:
-            pass
-
-
 class GameClientController:
-    def __init__(self, message_callback: Callable[[str], None], port: int = 8000) -> None:
-        self._err_callback = message_callback
+    def __init__(self, port: int = 8000) -> None:
+        # Connection information
         self._port = str(port)
         self._http_api = f"http://127.0.0.1:{self._port}"
         self._ws_api = f"ws://127.0.0.1:{self._port}/ws"
-        self._event_callbacks: dict[GameEvent, list[Callback]] = {}
-        self.callback_wrapper: Callable[[Callable], Any] | None = None
-        self.event_generator: Callable[[GameEvent], None] | None = None
+
+        # Event handling
+        self._event_generator: Callable[[GameEvent], None] | None = None
+        self._error_callback: Callable[[str], None] | None = None
 
         # When set to false, will end the websocket thread
         self.should_websocket_be_active: bool = True
 
-        # The model proxy
-        self.model_proxy = GameModelProxy(self)
-
+        # The pseudo-viewmodel
+        self.model = GameModelProxy(self)
         self.start_websocket()
 
     """Game Initialization & Destruction"""
@@ -190,50 +177,35 @@ class GameClientController:
                     event = await ws.recv()
                     if not event in GameEvent._value2member_map_:
                         continue
-                    self._execute_callbacks(GameEvent(event))
                     self._generate_event(GameEvent(event))
                 except websockets.exceptions.ConnectionClosedOK:
-                    self._err_callback(f"Connection closed normally")
+                    if self._error_callback:
+                        self._error_callback(f"Connection closed normally")
                     break
                 except websockets.exceptions.ConnectionClosedError as e:
-                    self._err_callback(f"Connection closed with an error: {e}")
+                    if self._error_callback:
+                        self._error_callback(f"Connection closed with an error: {e}")
                     break
-
-    """Websocket Callbacks"""
-
-    def add_callback_wrapper(self, cb_wrapper: Callable[[Callable], Any]):
-        self.callback_wrapper = cb_wrapper
-
-    def bind_callback(self, event: GameEvent, callable: Callable, *args):
-        if not event in self._event_callbacks:
-            self._event_callbacks[event] = []
-
-        cb = Callback(callable, args)
-        self._event_callbacks[event].append(cb)
-
-    def _execute_callbacks(self, event: GameEvent):
-        if not event in self._event_callbacks:
-            return
-        for callback in self._event_callbacks[event]:
-            if self.callback_wrapper:
-                self.callback_wrapper(callback)
-            else:
-                callback()
 
     """Websocket Event Generation"""
 
     def set_event_handler(self, event_generator: Callable[[GameEvent], None]):
-        self.event_generator = event_generator
+        self._event_generator = event_generator
+
+    def set_error_callback(self, error_callback: Callable[[str], None]):
+        self._error_callback = error_callback
 
     def _generate_event(self, event: GameEvent):
-        if not self.event_generator:
+        if not self._event_generator:
             return
 
-        self.model_proxy.refresh_all_data()
-        self.event_generator(event)
+        self.model.refresh_all_data()
+        self._event_generator(event)
 
 
 class GameModelProxy:
+    """A pseudo-viewmodel to prevent excessive API calls"""
+
     def __init__(self, controller: GameClientController) -> None:
         self._controller = controller
         self.refresh_all_data()

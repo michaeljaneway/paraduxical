@@ -13,6 +13,8 @@ from shared.enums.GameEvent import GameEvent
 
 
 class ParaduxGui(tk.Tk):
+    """GUI top level app"""
+
     def __init__(self):
         super().__init__()
 
@@ -26,20 +28,21 @@ class ParaduxGui(tk.Tk):
         self.call("set_theme", "dark")
 
         # Instantiate FastApi controller + event handling
-        self._controller = GameClientController(self.on_err)
+        self._controller = GameClientController()
         self._controller.set_event_handler(self.event_generator)
+        self._controller.set_error_callback(lambda message: print(message))
 
         # Instantiate the Main Menu frame
         self.active_frame: BaseFrame | None = None
         self.switch_frame(FrameType.MainMenu)
 
     def event_generator(self, event: GameEvent):
+        """Propogates the given GameEvent to all widgets"""
         self.event_generate(f"<<{event}>>")
 
-    def on_err(self, message: str):
-        print(message)
-
     def switch_frame(self, frame: FrameType):
+        """Switches the active window frame"""
+
         if self.active_frame:
             self.active_frame.unbind_event_callbacks()
             self.active_frame.destroy()

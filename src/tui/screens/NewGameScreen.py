@@ -10,6 +10,7 @@ from GameClientController import GameClientController
 from shared.enums import BoardLayout
 from shared.enums.GameEvent import GameEvent
 from tui import screens
+from tui.events.TuiGameEvents import TuiGameEvents
 
 
 class NewGameScreen(Screen[BoardLayout]):
@@ -21,12 +22,11 @@ class NewGameScreen(Screen[BoardLayout]):
     def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller
-        self._controller.bind_callback(GameEvent.GameCreated, self.on_game_start)
 
     def compose(self) -> ComposeResult:
         yield Header()
 
-        # Load rules from markdown file
+        # Load newgame info from markdown
         rules_path = Path("./assets/newgame.md")
         rules_content = rules_path.read_text("utf-8")
 
@@ -38,20 +38,26 @@ class NewGameScreen(Screen[BoardLayout]):
 
         yield Footer()
 
-    @on(ListView.Selected, item="#diag")
-    def action_diagonal_selected(self) -> None:
-        self.create_game(BoardLayout.DIAG)
-
-    @on(ListView.Selected, item="#horz")
-    def action_horizontal_selected(self) -> None:
-        self.create_game(BoardLayout.HORZ)
-
     def create_game(self, board_type: BoardLayout) -> None:
         self._controller.create_game(board_type)
 
-    def on_game_start(self):
-        self.app.pop_screen()
-        self.app.push_screen(screens.GameScreen(self._controller))
+    """Game State Callbacks"""
 
-    def action_back(self) -> None:
-        self.app.pop_screen()
+    @on(TuiGameEvents.GameCreated)
+    def on_game_created(self):
+        self.app.switch_screen(screens.GameScreen(self._controller))
+
+    """Menu Callbacks"""
+
+    @on(ListView.Selected, item="#diag")
+    def _on_diagonal_selected(self) -> None:
+        self.create_game(BoardLayout.DIAG)
+
+    @on(ListView.Selected, item="#horz")
+    def _on_horizontal_selected(self) -> None:
+        self.create_game(BoardLayout.HORZ)
+
+    """Keybindings Callbacks"""
+
+    def action_back(self):
+        self.app.switch_screen(screens.MainMenuScreen(self._controller))

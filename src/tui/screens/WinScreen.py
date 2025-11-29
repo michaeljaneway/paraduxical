@@ -1,14 +1,13 @@
-from shared.enums import BoardLayout
 from textual import on
 from textual.app import ComposeResult
 from textual.containers import Container, VerticalScroll
 from textual.screen import Screen
-from textual.widgets import (Digits, Footer, Header, Label, ListItem, ListView,
-                             Markdown)
-from tui import screens
-from tui.widgets.GameWidget import GameWidget
+from textual.widgets import Digits, Footer, Header, Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
+from shared.enums import BoardLayout
+from tui import screens
+from tui.widgets.GameWidget import GameWidget
 
 
 class WinScreen(Screen[BoardLayout]):

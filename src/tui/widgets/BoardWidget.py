@@ -7,7 +7,8 @@ from textual.widget import Widget
 from backend.Board import Cell
 from GameClientController import GameClientController
 from shared.Coordinate import Coordinate
-from shared.enums import GameEvent, TokenType
+from shared.enums import TokenType
+from tui.events.TuiGameEvents import TuiGameEvents
 from tui.widgets.CellButton import CellButton
 
 
@@ -22,9 +23,7 @@ class BoardWidget(Widget):
         self._controller = controller
         self.styles.height = "auto"
         self.cell_buttons: dict[Coordinate, CellButton] = {}
-
         self.app.call_after_refresh(self.on_game_state_updated)
-        self._controller.bind_callback(GameEvent.GameStateUpdated, self.on_game_state_updated)
 
     def compose(self) -> ComposeResult:
         # Cell Generation
@@ -54,13 +53,16 @@ class BoardWidget(Widget):
             for coord in win_line.coords:
                 self.cell_buttons[coord].select()
 
-    """Callbacks"""
+    """Game State Callbacks"""
 
+    @on(TuiGameEvents.GameStateUpdated)
     def on_game_state_updated(self):
-        self.board_2d = self._controller.get_board_array()
-        self.board_dict = self._controller.get_board_dict()
-        self.selected_coords = self._controller.get_selected_coords()
-        self.selectable_coords = self._controller.get_selectable_coords()
+        self.board_2d = self._controller.model.board_2d
+        self.board_dict = self._controller.model.board_dict
+        self.selected_coords = self._controller.model.selected_coords
+        self.selectable_coords = self._controller.model.selectable_coords
+
+    """Button Callbacks"""
 
     @on(CellButton.Pressed)
     def on_cell_pressed(self, event: CellButton.Pressed) -> None:

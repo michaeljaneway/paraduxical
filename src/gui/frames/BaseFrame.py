@@ -17,7 +17,7 @@ class BaseFrame(tk.Frame):
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, **kwargs)
         self._controller = controller
-        self._model = self._controller.model_proxy
+        self._model = self._controller.model
         self._event_callbacks: list[EventCallback] = []
 
     def switch_frame(self, frame: FrameType):
