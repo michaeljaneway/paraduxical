@@ -20,19 +20,10 @@ class ParaduxTui(App[None]):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._controller = GameClientController()
-        self._controller.callback_wrapper = self.call_from_thread
         self._controller.set_error_callback(lambda message: self.notify(message, severity="error"))
         self._controller.set_event_handler(lambda event: self.app.call_from_thread(self.generate_event, event))
 
-        # Global callback
-        self._controller.bind_callback(GameEvent.GameSaved, self.notify, "The active game was saved")
-
-    """Callbacks"""
-
-    @on(Mount)
-    def mount_home_screen(self) -> None:
-        """On mounting the app, immediately switch to the MainMenu screen"""
-        self.push_screen(screens.MainMenuScreen(self._controller))
+    """Event handling"""
 
     def generate_event(self, event: GameEvent):
         """Posts the given game event to all nodes"""
@@ -56,7 +47,14 @@ class ParaduxTui(App[None]):
         for child in mp.children:
             self._propogate_message_down(child, message)
 
-    """Actions"""
+    """Callbacks"""
+
+    @on(Mount)
+    def mount_home_screen(self) -> None:
+        """On mounting the app, immediately switch to the MainMenu screen"""
+        self.push_screen(screens.MainMenuScreen(self._controller))
+
+    """Keybindings Actions"""
 
     def action_quit_app(self) -> None:
         """Quits the app"""
