@@ -17,7 +17,7 @@ class NewGameFrame(BaseFrame):
         # Bind callbacks
         self.bind_event_callbacks(
             [
-                EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(GameFrame(self.master, self._controller))),
+                # EventCallback(f"<<{GameEvent.GameCreated}>>", lambda _: self.switch_frame(GameFrame(self.master, self._controller))),
                 EventCallback(f"<<{GameEvent.GameCreated}>>", partial(print, "Hello")),
             ]
         )
@@ -31,7 +31,7 @@ class NewGameFrame(BaseFrame):
         menu_options: list[MenuOption] = [
             MenuOption("/ Diagonal Layout /", partial(self._controller.create_game, BoardLayout.DIAG)),
             MenuOption("- Horizontal Layout -", partial(self._controller.create_game, BoardLayout.HORZ)),
-            MenuOption("Return to Main Menu", lambda: self.switch_frame(MainMenuFrame(self.master, self._controller))),
+            # MenuOption("Return to Main Menu", lambda: self.switch_frame(MainMenuFrame(self.master, self._controller))),
         ]
         self.menu_widget = MenuWidget(self, menu_options)
         self.menu_widget.grid()
