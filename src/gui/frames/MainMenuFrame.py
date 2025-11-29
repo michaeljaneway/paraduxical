@@ -35,7 +35,7 @@ class MainMenuFrame(BaseFrame):
             MenuOption("Exit Game", self._on_quit),
         ]
         self.menu_widget = MenuWidget(self, menu_options)
-        self.menu_widget.grid(row=1, column=0, sticky="nsew")
+        self.menu_widget.grid(row=1, column=0)
 
     """Event Callbacks"""
 

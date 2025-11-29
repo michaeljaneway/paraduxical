@@ -33,7 +33,7 @@ class DirectionSelectionWidget(BaseFrame):
                 self.dir_buttons[dir] = tk.Button(
                     row_frame, image=self.blank_image, compound="center", command=partial(self._controller.set_shift_direction, dir)
                 )
-                self.dir_buttons[dir].config(state="disabled", relief="flat", width=20, height=20, bg="black", fg="white")
+                self.dir_buttons[dir].config(state="disabled", relief="flat", width=20, height=20, activebackground="black", bg="black", fg="white")
 
                 if dir.is_valid_direction():
                     self.dir_buttons[dir].configure(text=dir.name)
@@ -50,6 +50,7 @@ class DirectionSelectionWidget(BaseFrame):
             else:
                 self.dir_buttons[dir].configure(state="disabled")
 
+            # Highlight active selection
             if dir == self._model.direction and dir.is_valid_direction():
                 self.dir_buttons[dir].configure(bg="red")
             else:

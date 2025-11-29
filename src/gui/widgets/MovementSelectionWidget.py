@@ -1,11 +1,10 @@
 from functools import partial
-from tkinter import Misc, Widget
+from tkinter import Misc, Widget, ttk
 
 from GameClientController import GameClientController
 from gui.frames.BaseFrame import BaseFrame, EventCallback
 from gui.widgets.DirectionSelectionWidget import DirectionSelectionWidget
 from gui.widgets.MenuWidget import MenuOption, MenuWidget
-from shared.enums.Direction import Direction
 from shared.enums.GameEvent import GameEvent
 from shared.enums.MoveType import MoveType
 
@@ -24,13 +23,16 @@ class MovementSelectionWidget(BaseFrame):
             MenuOption(
                 "Play Move",
                 self._controller.play_move,
-                is_visible_lambda=lambda: self._model.is_move_playable,
+                is_enabled_lambda=lambda: self._model.is_move_playable,
             ),
         ]
         self.play_move_menu = MenuWidget(self, play_move_options)
         self.play_move_menu.grid(row=0, column=0)
 
-        # MoveType Menu
+        # Movement Type Selection
+        self.movetype_label = ttk.Label(self, text=f"Select a move type")
+        self.movetype_label.grid(row=1, column=0, pady=5)
+
         movetype_options: list[MenuOption] = [
             MenuOption(
                 "Swap Tokens",
@@ -44,23 +46,14 @@ class MovementSelectionWidget(BaseFrame):
             ),
         ]
         self.move_type_menu = MenuWidget(self, movetype_options)
-        self.move_type_menu.grid(row=1, column=0)
+        self.move_type_menu.grid(row=2, column=0)
 
         # Direction Menu
         self.direction_menu = DirectionSelectionWidget(self, self._controller)
-        self.direction_menu.grid(row=2, column=0)
+        self.direction_menu.grid(row=3, column=0)
 
         self.refresh_options()
 
     def refresh_options(self):
         self.move_type_menu.refresh_menu()
         self.play_move_menu.refresh_menu()
-
-        self.grid_toggle(self.direction_menu, self._model.move_type == MoveType.SHIFT)
-        self.grid_toggle(self.play_move_menu, self._model.is_move_playable)
-
-    def grid_toggle(self, widget: Widget, is_visible: bool):
-        if is_visible:
-            widget.grid()
-        else:
-            widget.grid_remove()

@@ -16,15 +16,15 @@ class BoardWidget(BaseFrame):
         self.blank_image = tk.PhotoImage()
 
         self.active_button_styles: dict[TokenType, dict[str, Any]] = {
-            TokenType.MT: {"bg": "gray16", "activebackground": "gray"},
-            TokenType.P1: {"bg": "red", "activebackground": "red"},
-            TokenType.P2: {"bg": "blue", "activebackground": "blue"},
+            TokenType.MT: {"bg": "gray16", "activebackground": "gray16"},
+            TokenType.P1: {"bg": "firebrick3", "activebackground": "firebrick3"},
+            TokenType.P2: {"bg": "RoyalBlue3", "activebackground": "RoyalBlue3"},
         }
 
         self.disabled_button_styles: dict[TokenType, dict[str, Any]] = {
-            TokenType.MT: {"bg": "gray16", "activebackground": "gray"},
-            TokenType.P1: {"bg": "red4", "activebackground": "red"},
-            TokenType.P2: {"bg": "medium blue", "activebackground": "blue"},
+            TokenType.MT: {"bg": "gray16", "activebackground": "gray16"},
+            TokenType.P1: {"bg": "firebrick4", "activebackground": "firebrick4"},
+            TokenType.P2: {"bg": "navy", "activebackground": "navy"},
         }
 
         self._event_callbacks = [EventCallback(f"<<{GameEvent.GameStateUpdated}>>", lambda _: self.refresh_board())]
@@ -39,7 +39,7 @@ class BoardWidget(BaseFrame):
             # Create buttons
             for tile_i, tile in enumerate(row):
                 self.board_dict[tile.coord] = tk.Button(row_frame, image=self.blank_image, command=partial(self._on_cell_pressed, tile.coord))
-                self.board_dict[tile.coord].configure(width=30, height=30)
+                self.board_dict[tile.coord].configure(width=40, height=40)
                 self.board_dict[tile.coord].grid(column=tile_i, row=0, padx=3, pady=3, sticky="nsew")
 
         self.refresh_board()

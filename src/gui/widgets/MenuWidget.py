@@ -30,10 +30,11 @@ class MenuWidget(tk.Frame):
         super().__init__(root, **kwargs)
         self.menu_options = menu_options
         self.menu_buttons: list[ttk.Button] = []
+        self.columnconfigure(0, weight=1)
 
         for option_index, option in enumerate(self.menu_options):
-            option_button = ttk.Button(self, text=option.label, command=option.callback, style="Accent.TButton")
-            option_button.grid(column=0, row=option_index, padx=20, pady=5, sticky="nsew")
+            option_button = ttk.Button(self, text=option.label, command=option.callback, style="TButton")
+            option_button.grid(column=0, row=option_index, pady=5, sticky="nsew")
             self.menu_buttons.append(option_button)
 
         self.refresh_menu()
