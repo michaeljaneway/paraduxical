@@ -32,11 +32,11 @@ The objective is to be the first player to line up FOUR of your tokens in a row,
 ### Setup
 
 Python uses virtual environments to manage Python project libraries and frameworks, such as those that come from outside the Python standard library.
-Our project/game uses the open-source **textual** terminal user interface (TUI) framework to build its UI.
-As such, **textual** is a dependency that is required by our project to function correctly.
+Our project/game uses the: (1) open-source **textual** terminal user interface (TUI) framework to build its TUI, (2) Python **tkinter** standard library package to build its graphical user interface (GUI), and (3) **FastAPI** to build its web application processing interface (API).
+As such, **textual**, **tkinter**, and **FastAPI** are dependencies that are required by our project to function correctly.
 Since our project uses dependencies, we must abide by Python's rules for managing dependencies.
 
-**textual** is a Python project with its own set of dependencies, and so these dependencies must be installed for our project to function.
+**textual**, **tkinter**, and **FastAPIs** are Python projects with their own set of dependencies, and so these dependencies must be installed for our project to function.
 Dependencies of our dependencies are referred to as **indirect dependencies**, whereas dependencies that are explictly imported by our project are referred to as **direct dependencies**.
 Python is smart in that it is able to find and install all of a project's **indirect dependencies** in-order for the **direct dependencies** of a project to function correctly.
 Thus, virtual environments and **requirements.txt** files are necessary to allow our Python projects to function correctly.
@@ -93,8 +93,12 @@ pip install -r requirements.txt
 
 ### Requirements
 
-- **Python** version 3.9 or higher.
+- **Python** versions 3.11-3.12
+  - These specific versions of Python are selected because **tkinter** has to be locked at version 8.6 for the project to work, which is easily installable with Python versions 3.11 to 3.12.
+    - From our internal testing, using a newer version of Python, like `python3.14`, forces **tkinter** to be upgraded to version 9, which is not going to work with our current project's GUI implementation and usage of **tkinter**.
 - **textual** framework version 6.5 or higher
+- **tkinter** version 8.6
+- **FastAPI** version 0.122.0
 
 ### Running the Game
 
@@ -135,27 +139,46 @@ aiohappyeyeballs==2.6.1
 aiohttp==3.13.2
 aiohttp-jinja2==1.6
 aiosignal==1.4.0
+annotated-doc==0.0.4
+annotated-types==0.7.0
+anyio==4.11.0
 attrs==25.4.0
+certifi==2025.11.12
+charset-normalizer==3.4.4
 click==8.3.0
+fastapi==0.122.0
 frozenlist==1.8.0
+h11==0.16.0
 idna==3.11
 jinja2==3.1.6
 linkify-it-py==2.0.3
+markdown==3.10
 markdown-it-py==4.0.0
 markupsafe==3.0.3
 mdit-py-plugins==0.5.0
 mdurl==0.1.2
 msgpack==1.1.2
 multidict==6.7.0
+pillow==10.4.0
 platformdirs==4.5.0
 propcache==0.4.1
+pydantic==2.12.5
+pydantic-core==2.41.5
 pygments==2.19.2
+requests==2.32.5
 rich==14.2.0
+sniffio==1.3.1
+starlette==0.50.0
 textual==6.5.0
 textual-dev==1.8.0
 textual-serve==1.1.3
+tkhtmlview==0.3.1
 typing-extensions==4.15.0
+typing-inspection==0.4.2
 uc-micro-py==1.0.3
+urllib3==2.5.0
+uvicorn==0.38.0
+websockets==15.0.1
 yarl==1.22.0
 ```
 
@@ -167,27 +190,73 @@ Notes about the output of the `pip freeze` command:
 - If there are discrepancies between the output of your `pip freeze` command and the one listed above, you may: (1) be in the wrong Python virtual environment, or (2) have not installed all the required dependencies of the project according to the [Setup](#setup) section in your virtual environment.
   - If this is the case, you need to review the instructions in the [Setup](#setup) section again, and follow them closely.
 
-Once you have verified that the packages necessary to run the project have been installed, you can run the game application via the following simple command:
+#### Note on tkinter and Python versions
+**tkinter** is an optional Python standard library module, so it may not be installed with your compute environment's Python installation.
+To check that you have **tkinter** installed with your compute environment's Python installation, run the `python -m tkinter` command.
+If the output looks similar to the basic GUI interface captured in the image below, especially if it states that you have version 8.6 of **tkinter** installed, then you are good to go.
+
+![Tkinter Successful Installation View](./readme_images/tkinter_good_gui_view.png)
+
+If you do not have **tkinter** or the right version of it installed, then you will need to install it via your default system package manager.
+On the School of Computer Science (SoCS) GNU/Linux servers, **tkinter** version 8.6 is installed by default to all users, so you need not do anything to get it to install or work. 
+However, if you are on a different GNU/Linux compute environment, you may need to install Python's **tkinter** optional module manually via the system package manager.
+Before you go any further, you must make sure that **tkinter** version 8.6 is installed in your compute environment because the project will not work otherwise.
+
+Once you have verified that the packages necessary to run the project have been installed, you can run the game application via the following 3 simple commands:
+
+First, start the server so that the GUI and TUI can communicate with one another:
 ```sh
-python src
+python paraduxical server
 ```
+Notes on this command:
+  - This command starts the game server on **port 8000** by default, which means that any communication the GUI and TUI clients have with the server happens on that port specifically.
+    - We recommend using the default **port 8000** to make using the command-line interface (CLI) of the project easy and error-free, however you may choose to use your own ports, which we do support.
+  - If you want to use a different port, you can use the same command, but pass the `-p` or `--port` switches with their numerical port numbers to the command, like so: `python paraduxical server -p <port_num>`.
+    - Note that we do not provide in-depth error handling on whether the port you provide is actually open or not, so you need to make sure that the port number you provide actually refers to an open port or not.
+    - If you do decide to use a different port than the default **port 8000**, then you must also make sure that you use the same port number for the **tui** and **gui** client commands that will be discussed later.
+      - Again, we do not provide in-depth error handling to make sure that the port numbers that you provide for the subsequent **tui** and **gui** client commands are actually consistent with what you provided the **server** command with. So, you must make sure that the port number you provided is consistent or the same across the **server**, **tui**, and **gui** commands.
 
-You should now be within the game application, and you should see a user interface like so:
+If this command was successful, you should see a series of `INFO:` server log statements show up, like in the image below:
 
-![Paradux Welcome View](./assets/doc-img/readme-img/paradux_welcome_view.png)
+![Paradux Server Command Success View](./readme_images/server_success.png)
 
-After you see a similar view to the above screen (the color scheme may differ depending on the computer you are using, which is fine), you are now ready to play the game however many times you want.
-This step now concludes the game running section.
+Also, note the following: the **port** is **8000** because we did not specify our own custom port, which we recommend to avoid the complexity of having to make sure your ports for the CLI commands of **tui** and **gui** match the **server** CLI command.
+
+Second, on a seperate shell instance, start the **tui** client so that you can get the **tui** of the game to play it:
+```sh
+python paraduxical tui
+```
+Notes on this command:
+  - This command will start the start the game's **tui** client, and it will use **port 8000** to communicate with the server so that it can stay in-sync with the game's GUI.
+  - If you wish to use your own port for this command, run the following modified command: `python paraduxical tui -p <port_num_from_server_command_earlier>`.
+    - As before, you need to make sure that the port you provide is identical to the one for the `server` command from earlier and your provided port from the `server` command is open or available to use. 
+
+If this command was successful, you should now be within the game application that is running within your terminal window, and you should see a user interface like so:
+
+![Paradux TUI Command Success](./readme_images/tui_command_success.png)
+
+The precise color scheme of your **tui** may be different based on the terminal environment you have, but the overall UI layout and feel should be identical.
+
+Third, on a distinct shell instance, start the **gui** client so that you can play the game from a **gui**:
+```sh
+python paraduxical gui
+```
+Notes on this command:
+  - This command will start a new instance of the game's GUI using Python's **tkinter** library, and it also use **port 8000** to communicate with the server to stay in-sync with the game's TUI.
+  - Should you want to have your GUI communicate with the server on the custom port you chose for the server, you need to run the following command: `python paraduxical gui -p <port_num_from_server_command_earlier>`.
+    - As before, you have to make sure the port you provide to the **gui** command is identical to the one for the **server** command and is open/ready-for-use on your compute environment.
+
+If successful, you should see and be able to use the following GUI of the game application:
+
+![Paradux GUI Command Success](./readme_images/gui_success_view.png)
+
+You are ready to play the game now! See the [Game Demo](#game-demo) section below for a visual demonstration of how this process works, and how to play the game.
 
 ## Demo
 
 ### Game Demo
 
-![demo](./readme_images/demo.gif)
-
-### SOCS Server Install Video
-
-![socs_demo](./readme_images/socs_demo.gif)
+![demo](./readme_images/nomachine_demo.gif)
 
 ## Contacts
 
