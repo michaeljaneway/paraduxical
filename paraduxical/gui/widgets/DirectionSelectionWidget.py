@@ -4,6 +4,7 @@ from tkinter import Misc, ttk
 
 from GameClientController import GameClientController
 from gui.frames.BaseFrame import BaseFrame, EventCallback
+from shared.enums.MoveType import MoveType
 from shared.enums.Direction import Direction
 from shared.enums.GameEvent import GameEvent
 
@@ -16,11 +17,11 @@ class DirectionSelectionWidget(BaseFrame):
 
         # Setup callbacks
         self._event_callbacks = [
-            EventCallback(f"<<{GameEvent.GameStateUpdated}>>", lambda _: self.refresh_options()),
+            EventCallback(f"<<{GameEvent.GameStateUpdated}>>", lambda _: self.refresh()),
         ]
         self.bind_event_callbacks()
 
-        self.instruction_label = ttk.Label(self, text=f"Select a direction")
+        self.instruction_label = ttk.Label(self)
         self.instruction_label.grid(row=0, column=0, pady=5)
 
         # Create directional buttons
@@ -31,7 +32,7 @@ class DirectionSelectionWidget(BaseFrame):
 
             for dir_i, dir in enumerate(row):
                 self.dir_buttons[dir] = tk.Button(
-                    row_frame, image=self.blank_image, compound="center", command=partial(self._controller.set_shift_direction, dir)
+                    row_frame, image=self.blank_image, compound="center", command=partial(self.set_shift_direction, dir)
                 )
                 self.dir_buttons[dir].config(state="disabled", relief="flat", width=20, height=20, activebackground="black", bg="black", fg="white")
 
@@ -40,18 +41,32 @@ class DirectionSelectionWidget(BaseFrame):
 
                 self.dir_buttons[dir].grid(column=dir_i, row=0, padx=3, pady=3, sticky="nsew")
 
-        self.refresh_options()
+        self.refresh()
 
-    def refresh_options(self):
+    def set_shift_direction(self, dir: Direction):
+        """Allow toggling the shift direction to match the token selection"""
+        if self._cache.direction == dir:
+            self._controller.set_shift_direction(Direction.NoDirection)
+        else:
+            self._controller.set_shift_direction(dir)
+
+    def refresh(self):
+        # Update instructional labels
+        if self._cache.direction.is_valid_direction():
+            self.instruction_label.configure(text=f"Selected [{self._cache.direction.name}] move type")
+        else:
+            self.instruction_label.configure(text=f"Select a direction")
+
+        # Update all the direction buttons
         for dir in self.dir_buttons:
             # Set selectability
-            if dir in self._model.valid_shift_directions:
+            if dir in self._cache.valid_shift_directions and self._cache.move_type == MoveType.SHIFT:
                 self.dir_buttons[dir].configure(state="active")
             else:
                 self.dir_buttons[dir].configure(state="disabled")
 
             # Highlight active selection
-            if dir == self._model.direction and dir.is_valid_direction():
-                self.dir_buttons[dir].configure(bg="red")
+            if dir == self._cache.direction and dir.is_valid_direction():
+                self.dir_buttons[dir].configure(activebackground="red", bg="red")
             else:
-                self.dir_buttons[dir].configure(bg="black")
+                self.dir_buttons[dir].configure(activebackground="black", bg="black")

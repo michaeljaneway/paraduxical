@@ -24,11 +24,14 @@ class GameFrame(BaseFrame):
 
         # Info containter
         info_frame = tk.Frame(self)
-        info_frame.grid(row=0, column=0)
+        info_frame.grid(row=0, column=0, padx=20)
 
         # Player's turn
-        self.player_turn_label = ttk.Label(info_frame, text=f"Player {self._model.active_player.value}, it's your turn!", font=("Arial", 15))
+        self.player_turn_label = ttk.Label(info_frame, justify="center", font=("Arial", 15))
         self.player_turn_label.grid(row=0, column=0, pady=20)
+
+        self.instruction_label = ttk.Label(info_frame, justify="center", font=("Arial", 10))
+        self.instruction_label.grid(row=1, column=0, pady=5)
 
         # Movement Selection
         self.movement_widget = MovementSelectionWidget(info_frame, self._controller)
@@ -39,7 +42,7 @@ class GameFrame(BaseFrame):
         self.exit_menu = MenuWidget(
             info_frame,
             [
-                MenuOption("Save Game", lambda: self.switch_frame(FrameType.SaveGame)),
+                MenuOption("Save Game", lambda: self.switch_frame(FrameType.SaveGame), is_visible_lambda=lambda: len(self._cache.winning_lines) == 0),
                 MenuOption("Return to Main Menu", lambda: self.switch_frame(FrameType.MainMenu)),
             ],
         )
@@ -51,15 +54,32 @@ class GameFrame(BaseFrame):
         self.board_widget = BoardWidget(self, self._controller)
         self.board_widget.grid(row=0, column=1)
 
+        self.refresh()
+
     def refresh(self):
+        # Refresh menus
+        self.exit_menu.refresh_menu()
+
+        # Update instructions
+        if self._cache.is_move_playable:
+            self.instruction_label.configure(text="Move can now be played!")
+        elif len(self._cache.selected_coords) == 2:
+            self.instruction_label.configure(text="Select how to move the 2 tokens")
+        else:
+            self.instruction_label.configure(text="Select 2 opposite tokens")
+
         # Inform the players of who's turn it is
-        if not self._model.winning_lines:
-            self.player_turn_label.configure(text=f"Player {self._model.active_player.value}, it's your turn!")
+        if not self._cache.winning_lines:
+            self.player_turn_label.configure(text=f"Player {self._cache.active_player.value}, it's your turn!")
             return
 
+        # Remove movement selection widget as the game is won
+        self.movement_widget.grid_remove()
+        self.instruction_label.grid_remove()
+
         # Inform the players of who won the game
-        winners = set([line.token_type for line in self._model.winning_lines])
+        winners = set([line.token_type for line in self._cache.winning_lines])
         if len(winners) == 1:
-            self.player_turn_label.configure(text=f"Player {self._model.active_player.value}, you have won! Congratulations!")
+            self.player_turn_label.configure(text=f"Player {winners.pop().value}, you have won! Congratulations!")
         else:
             self.player_turn_label.configure(text=f"It's a tie! Congratulations to both players!")

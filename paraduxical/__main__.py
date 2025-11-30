@@ -1,8 +1,8 @@
 import uvicorn
 
 from cli.CommandLineInterface import CommandLineInterface
-from gui.ParaduxWindow import ParaduxGui
-from tui.ParaduxApp import ParaduxTui
+from gui.ParaduxGui import ParaduxGui
+from tui.ParaduxTui import ParaduxTui
 
 if __name__ == "__main__":
     # Setting up our CLI for Paraduxical

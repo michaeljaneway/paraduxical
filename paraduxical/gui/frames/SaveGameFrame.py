@@ -34,7 +34,7 @@ class SaveGameFrame(BaseFrame):
     def save(self):
         save_name = self.save_entry.get()
 
-        if save_name in self._model.game_saves:
+        if save_name in self._cache.game_saves:
             messagebox.showerror(f"The savefile '{save_name}' already exists, please delete it or enter another name")
             return
 

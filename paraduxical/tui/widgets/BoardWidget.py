@@ -6,6 +6,7 @@ from textual.widget import Widget
 
 from backend.Board import Cell
 from GameClientController import GameClientController
+from shared.TokenLine import TokenLine
 from shared.Coordinate import Coordinate
 from shared.enums import TokenType
 from tui.events.TuiGameEvents import TuiGameEvents
@@ -17,6 +18,7 @@ class BoardWidget(Widget):
     board_dict: reactive[dict[Coordinate, TokenType]] = reactive({}, recompose=True)
     selected_coords: reactive[list[Coordinate]] = reactive([], recompose=True)
     selectable_coords: reactive[list[Coordinate]] = reactive([], recompose=True)
+    winning_lines: reactive[list[TokenLine]] = reactive([], recompose=True)
 
     def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -47,9 +49,8 @@ class BoardWidget(Widget):
 
                         yield cell_button
 
-        # Winning Lines
-        self.winners = self._controller.get_winning_lines()
-        for win_line in self.winners:
+        # Highlight Winning Lines
+        for win_line in self.winning_lines:
             for coord in win_line.coords:
                 self.cell_buttons[coord].select()
 
@@ -57,10 +58,11 @@ class BoardWidget(Widget):
 
     @on(TuiGameEvents.GameStateUpdated)
     def on_game_state_updated(self):
-        self.board_2d = self._controller.model.board_2d
-        self.board_dict = self._controller.model.board_dict
-        self.selected_coords = self._controller.model.selected_coords
-        self.selectable_coords = self._controller.model.selectable_coords
+        self.board_2d = self._controller.cache.board_2d
+        self.board_dict = self._controller.cache.board_dict
+        self.selected_coords = self._controller.cache.selected_coords
+        self.selectable_coords = self._controller.cache.selectable_coords
+        self.winning_lines = self._controller.cache.winning_lines
 
     """Button Callbacks"""
 
@@ -69,8 +71,7 @@ class BoardWidget(Widget):
         if not isinstance(event.button, CellButton):
             return
 
-        c = event.button.coord
-        if c in self.selected_coords:
+        if event.button.coord in self.selected_coords:
             self._controller.deselect_coord(event.button.coord)
         else:
             self._controller.select_coord(event.button.coord)

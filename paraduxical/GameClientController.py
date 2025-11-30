@@ -1,11 +1,10 @@
 import asyncio
 import threading
 from dataclasses import asdict
-from typing import Any, Callable
+from typing import Callable
 
 import requests
 import websockets
-
 from backend.Board import Cell
 from shared.Coordinate import Coordinate
 from shared.enums import BoardLayout, Direction, GameEvent, MoveType, TokenType
@@ -27,7 +26,7 @@ class GameClientController:
         self.should_websocket_be_active: bool = True
 
         # The pseudo-viewmodel
-        self.model = GameModelProxy(self)
+        self.cache = GameCache(self)
         self.start_websocket()
 
     """Game Initialization & Destruction"""
@@ -199,12 +198,12 @@ class GameClientController:
         if not self._event_generator:
             return
 
-        self.model.refresh_all_data()
+        self.cache.refresh_all_data()
         self._event_generator(event)
 
 
-class GameModelProxy:
-    """A pseudo-viewmodel to prevent excessive API calls"""
+class GameCache:
+    """A cache of the model, preventing excessive API calls"""
 
     def __init__(self, controller: GameClientController) -> None:
         self._controller = controller

@@ -58,10 +58,10 @@ class DirectionListWidget(Widget):
 
     @on(TuiGameEvents.GameStateUpdated)
     def _on_game_state_updated(self):
-        self.move_type = self._controller.model.move_type
-        self.direction = self._controller.model.direction
-        self.valid_directions = self._controller.model.valid_shift_directions
-        self.selected_piece_count = len(self._controller.model.selected_coords)
+        self.move_type = self._controller.cache.move_type
+        self.direction = self._controller.cache.direction
+        self.valid_directions = self._controller.cache.valid_shift_directions
+        self.selected_piece_count = len(self._controller.cache.selected_coords)
 
     """Menu Selection Callbacks"""
 

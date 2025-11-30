@@ -12,7 +12,7 @@ from tui.widgets.DirectionListWidget import DirectionListWidget
 from tui.widgets.MovementListWidget import MovementListWidget
 
 
-class GameWidget(Widget):
+class MovementSelectionWidget(Widget):
     """A widget for displaying the Game Board and accepting movement input"""
 
     is_move_playable: reactive[bool] = reactive(False, recompose=True)
@@ -24,9 +24,6 @@ class GameWidget(Widget):
         self.app.call_after_refresh(self.on_game_state_updated)
 
     def compose(self) -> ComposeResult:
-        # Hex Board
-        yield BoardWidget(self._controller)
-
         if self.is_move_playable:
             yield Markdown("## A move can now be played!")
 
@@ -45,7 +42,7 @@ class GameWidget(Widget):
 
     @on(TuiGameEvents.GameStateUpdated)
     def on_game_state_updated(self):
-        self.is_move_playable = self._controller.model.is_move_playable
+        self.is_move_playable = self._controller.cache.is_move_playable
 
     """Menu Selection Callbacks"""
 

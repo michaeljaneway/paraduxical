@@ -49,7 +49,7 @@ class MainMenuScreen(Screen[None]):
 
     def update_is_game_active(self):
         """Updates the active game state"""
-        self.is_game_active = self._controller.model.is_game_active
+        self.is_game_active = self._controller.cache.is_game_active
 
     """Game State Callbacks"""
 

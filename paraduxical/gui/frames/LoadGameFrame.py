@@ -23,7 +23,7 @@ class LoadGameFrame(BaseFrame):
         for widget in self.winfo_children():
             widget.destroy()
 
-        menu_options: list[MenuOption] = [MenuOption(f"{save}", partial(self._controller.load_game, save)) for save in self._model.game_saves]
+        menu_options: list[MenuOption] = [MenuOption(f"{save}", partial(self._controller.load_game, save)) for save in self._cache.game_saves]
         menu_options.append(MenuOption("Return to Main Menu", lambda: self.switch_frame(FrameType.MainMenu)))
         self.menu_widget = MenuWidget(self, menu_options)
         self.menu_widget.grid()

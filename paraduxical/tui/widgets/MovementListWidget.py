@@ -41,7 +41,7 @@ class MovementListWidget(Widget):
 
     @on(TuiGameEvents.GameStateUpdated)
     def _on_game_state_updated(self):
-        self.move_type = self._controller.model.move_type
+        self.move_type = self._controller.cache.move_type
 
     """Menu Selection Callbacks"""
 

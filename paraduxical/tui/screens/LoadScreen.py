@@ -40,7 +40,7 @@ class LoadScreen(Screen[None]):
 
     @on(TuiGameEvents.GameSaved)
     def _on_game_saved(self):
-        self.game_saves = self._controller.model.game_saves
+        self.game_saves = self._controller.cache.game_saves
 
     @on(TuiGameEvents.GameCreated)
     def _on_game_created(self):

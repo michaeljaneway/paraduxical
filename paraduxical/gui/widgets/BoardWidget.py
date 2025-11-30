@@ -32,7 +32,7 @@ class BoardWidget(BaseFrame):
 
         # Build Board
         self.board_dict: dict[Coordinate, tk.Button] = {}
-        for row_i, row in enumerate(self._model.board_2d):
+        for row_i, row in enumerate(self._cache.board_2d):
             row_frame = ttk.Frame(self)
             row_frame.grid(column=0, row=row_i)
 
@@ -46,34 +46,34 @@ class BoardWidget(BaseFrame):
 
     def refresh_board(self):
         # Update individual cells
-        for cell_coord, cell_token in self._model.board_dict.items():
+        for cell_coord, cell_token in self._cache.board_dict.items():
             cell_button = self.board_dict[cell_coord]
             cell_button.config(state="disabled", relief="flat", **self.disabled_button_styles[cell_token])
 
             # Enable selectable cells
-            if cell_coord in self._model.selectable_coords + self._model.selected_coords:
+            if cell_coord in self._cache.selectable_coords + self._cache.selected_coords:
                 cell_button.config(state="active", relief="raised", **self.active_button_styles[cell_token])
 
             # Select actively selected cells
-            if cell_coord in self._model.selected_coords:
+            if cell_coord in self._cache.selected_coords:
                 cell_button.config(relief="groove")
 
         # We're done if there's winning lines
-        if not self._model.winning_lines:
+        if not self._cache.winning_lines:
             return
 
         # Disable all cell buttons if there's winning lines
-        for cell_coord, cell_token in self._model.board_dict.items():
+        for cell_coord, cell_token in self._cache.board_dict.items():
             cell_button = self.board_dict[cell_coord]
             cell_button.configure(state="disabled", **self.disabled_button_styles[cell_token])
 
         # Highlight winning lines
-        for line in self._model.winning_lines:
+        for line in self._cache.winning_lines:
             for coord in line.coords:
                 self.board_dict[coord].configure(**self.active_button_styles[line.token_type], relief="groove")
 
     def _on_cell_pressed(self, coord: Coordinate):
-        if coord in self._model.selected_coords:
+        if coord in self._cache.selected_coords:
             self._controller.deselect_coord(coord)
         else:
             self._controller.select_coord(coord)
