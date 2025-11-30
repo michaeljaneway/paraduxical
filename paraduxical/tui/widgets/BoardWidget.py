@@ -14,6 +14,8 @@ from tui.widgets.CellButton import CellButton
 
 
 class BoardWidget(Widget):
+    """Interactable display of the active game's hexagonal board"""
+
     board_2d: reactive[list[list[Cell]]] = reactive([], recompose=True)
     board_dict: reactive[dict[Coordinate, TokenType]] = reactive({}, recompose=True)
     selected_coords: reactive[list[Coordinate]] = reactive([], recompose=True)

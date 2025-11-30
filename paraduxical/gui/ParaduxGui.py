@@ -13,7 +13,7 @@ from shared.enums.GameEvent import GameEvent
 
 
 class ParaduxGui(tk.Tk):
-    """GUI top level app"""
+    """Graphical UI frontend application for the Paraduxical game"""
 
     def __init__(self, port: int):
         super().__init__()
@@ -21,6 +21,10 @@ class ParaduxGui(tk.Tk):
         # Set window metadata
         self.title("Paraduxical")
         self.geometry("800x600+100+50")
+
+        # Turn on centering
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
 
         # Load ttk theme
         # https://github.com/rdbende/Sun-Valley-ttk-theme

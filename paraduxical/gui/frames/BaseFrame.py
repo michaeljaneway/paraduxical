@@ -7,6 +7,7 @@ from gui.frames.FrameType import FrameType
 
 
 class EventCallback:
+    """An event string paired with a callback function"""
     def __init__(self, event: str, callback: Callable, funcid: str = "") -> None:
         self.event = event
         self.callback = callback
@@ -14,6 +15,8 @@ class EventCallback:
 
 
 class BaseFrame(tk.Frame):
+    """The base of all frames and widgets that need access to game state and game event bindings"""
+    
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, **kwargs)
         self._controller = controller

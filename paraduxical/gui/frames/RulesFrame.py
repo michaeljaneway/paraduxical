@@ -11,6 +11,8 @@ from gui.widgets.MenuWidget import MenuOption, MenuWidget
 
 
 class RulesFrame(BaseFrame):
+    """Contains the game rules in a scrollable markdown widget"""
+    
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, controller, **kwargs)
 

@@ -10,6 +10,8 @@ from shared.enums.GameEvent import GameEvent
 
 
 class DirectionSelectionWidget(BaseFrame):
+    """Compass-shaped menu allowing selection of the SHIFT movement direction"""
+
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, controller, **kwargs)
         self.blank_image = tk.PhotoImage()
@@ -53,7 +55,7 @@ class DirectionSelectionWidget(BaseFrame):
     def refresh(self):
         # Update instructional labels
         if self._cache.direction.is_valid_direction():
-            self.instruction_label.configure(text=f"Selected [{self._cache.direction.name}] move type")
+            self.instruction_label.configure(text=f"Selected [{self._cache.direction.name}] as the shift direction")
         else:
             self.instruction_label.configure(text=f"Select a direction")
 

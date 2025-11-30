@@ -10,6 +10,8 @@ from tui.events.TuiGameEvents import TuiGameEvents
 
 
 class MovementListWidget(Widget):
+    """Movement type selection menu"""
+    
     move_type: reactive[MoveType] = reactive(MoveType.NULL, recompose=True)
 
     def __init__(self, controller: GameClientController, **kwargs) -> None:

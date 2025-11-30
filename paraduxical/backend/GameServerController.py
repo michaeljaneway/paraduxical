@@ -13,6 +13,17 @@ app = FastAPI()
 _game: Game | None = None
 _event_queue: asyncio.Queue[GameEvent] = asyncio.Queue()
 
+"""
+GameServerController
+
+The 'backend' side of the controller layer, allows view to interface with model
+
+Could not be implemented as a class due to FastAPI limitations, tried to 
+keep it pseudo-object-oriented
+
+"""
+
+
 """Game Initialization & Destruction"""
 
 
@@ -207,20 +218,26 @@ def load_game(save_name: Annotated[str, Body(embed=True)]):
 
 
 class ConnectionManager:
+    """Manages individual websocket connections, template from FastAPI docs"""
+
     def __init__(self):
         self.active_connections: set[WebSocket] = set()
 
     async def connect(self, websocket: WebSocket):
+        """Accept a websocket connection, adding it to our set of tracked connections"""
         await websocket.accept()
         self.active_connections.add(websocket)
 
     def disconnect(self, ws: WebSocket):
+        """Kill a websocket connection"""
         self.active_connections.discard(ws)
 
     async def send_indv_message(self, message: str, ws: WebSocket):
+        """Send a message to a single websocket client"""
         await ws.send_text(message)
 
     async def broadcast(self, message: str):
+        """Broadcast a message to a all connected websocket client"""
         for connection in self.active_connections:
             try:
                 await connection.send_text(message)

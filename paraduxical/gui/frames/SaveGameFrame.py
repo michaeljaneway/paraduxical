@@ -8,6 +8,8 @@ from shared.enums.GameEvent import GameEvent
 
 
 class SaveGameFrame(BaseFrame):
+    """Frame to allow saving the game"""
+    
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, controller, **kwargs)
 
@@ -16,6 +18,14 @@ class SaveGameFrame(BaseFrame):
             EventCallback(f"<<{GameEvent.GameCleared}>>", lambda _: self.switch_frame(FrameType.MainMenu)),
         ]
         self.bind_event_callbacks()
+
+        # Title
+        self.title_label = ttk.Label(self, text=f"Saving Game", justify="center", font=("Arial", 40))
+        self.title_label.grid(row=0, column=0, pady=10, sticky="nsew")
+
+        # Show instructions to the user
+        self.instruction_label = ttk.Label(self, text=f"Please enter a savefile name:", justify="center")
+        self.instruction_label.grid(row=1, column=0, pady=10)
 
         # Savefile name entry
         self.save_entry = ttk.Entry(self)
@@ -26,7 +36,7 @@ class SaveGameFrame(BaseFrame):
             self,
             [
                 MenuOption("Save", lambda: self.save()),
-                MenuOption("Return to Main Menu", lambda: self.switch_frame(FrameType.MainMenu)),
+                MenuOption("Return without Saving", lambda: self.switch_frame(FrameType.Game)),
             ],
         )
         self.menu_widget.grid()

@@ -10,6 +10,8 @@ from shared.enums.GameEvent import GameEvent
 
 
 class NewGameFrame(BaseFrame):
+    """Frame for initializing a new board with a selected layout"""
+
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, controller, **kwargs)
 
@@ -19,16 +21,29 @@ class NewGameFrame(BaseFrame):
         ]
         self.bind_event_callbacks()
 
-        # Show instructions to the user
-        instruction_str = f"Please select a board layout option"
-        self.instruction_label = ttk.Label(self, text=instruction_str, justify="center")
-        self.instruction_label.grid(row=0, column=0, pady=5)
+        # Title
+        self.title_label = ttk.Label(self, text=f"New Game", justify="center", font=("Arial", 40))
+        self.title_label.grid(row=0, column=0, pady=10, sticky="nsew")
 
-        # Create Menu Options
-        menu_options: list[MenuOption] = [
-            MenuOption("/ Diagonal Layout /", partial(self._controller.create_game, BoardLayout.DIAG)),
-            MenuOption("- Horizontal Layout -", partial(self._controller.create_game, BoardLayout.HORZ)),
-            MenuOption("Return to Main Menu", lambda: self.switch_frame(FrameType.MainMenu)),
-        ]
-        self.menu_widget = MenuWidget(self, menu_options)
-        self.menu_widget.grid()
+        # Show instructions to the user
+        self.instruction_label = ttk.Label(self, text=f"Please select a board layout option:", justify="center")
+        self.instruction_label.grid(row=1, column=0, pady=10)
+
+        # Board layout Options
+        self.layout_menu = MenuWidget(
+            self,
+            [
+                MenuOption("/ Diagonal Layout /", partial(self._controller.create_game, BoardLayout.DIAG)),
+                MenuOption("- Horizontal Layout -", partial(self._controller.create_game, BoardLayout.HORZ)),
+            ],
+        )
+        self.layout_menu.grid(row=2, column=0)
+
+        # Back to main menu
+        self.main_menu_selection = MenuWidget(
+            self,
+            [
+                MenuOption("Return to Main Menu", lambda: self.switch_frame(FrameType.MainMenu)),
+            ],
+        )
+        self.main_menu_selection.grid(row=3, column=0, pady=30)

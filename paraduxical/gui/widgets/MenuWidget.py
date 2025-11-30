@@ -4,6 +4,8 @@ from typing import Callable
 
 
 class MenuOption:
+    """A single MenuWidget entry that can be programatically disabled or hidden"""
+    
     def __init__(
         self,
         label: str,
@@ -26,6 +28,8 @@ class MenuOption:
 
 
 class MenuWidget(tk.Frame):
+    """Selection menu that can programatically hide and disable options"""
+    
     def __init__(self, root: Misc, menu_options: list[MenuOption], button_style="TButton", **kwargs) -> None:
         super().__init__(root, **kwargs)
         self.menu_options = menu_options

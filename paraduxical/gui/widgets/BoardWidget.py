@@ -11,6 +11,8 @@ from shared.enums.TokenType import TokenType
 
 
 class BoardWidget(BaseFrame):
+    """Interactable display of the active game's hexagonal board"""
+
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, controller, **kwargs)
         self.blank_image = tk.PhotoImage()
@@ -73,6 +75,8 @@ class BoardWidget(BaseFrame):
                 self.board_dict[coord].configure(**self.active_button_styles[line.token_type], relief="groove")
 
     def _on_cell_pressed(self, coord: Coordinate):
+        """Toggle selection for the given cell"""
+        
         if coord in self._cache.selected_coords:
             self._controller.deselect_coord(coord)
         else:

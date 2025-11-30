@@ -2,6 +2,8 @@ from textual.message import Message
 
 
 class TuiGameEvents:
+    """Events which can be generated, propogated, and textual DOMNodes can listen for"""
+
     class GameCreated(Message, bubble=False):
         pass
 

@@ -11,6 +11,8 @@ from shared.enums import GameEvent
 
 
 class GameFrame(BaseFrame):
+    """Frame where all gameplay is viewed and executed"""
+
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, controller, **kwargs)
 

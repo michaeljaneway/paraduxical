@@ -9,6 +9,8 @@ from shared.enums.GameEvent import GameEvent
 
 
 class LoadGameFrame(BaseFrame):
+    """Frame where save games can be loaded"""
+    
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, controller, **kwargs)
 

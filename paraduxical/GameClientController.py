@@ -12,6 +12,8 @@ from shared.TokenLine import TokenLine
 
 
 class GameClientController:
+    """The 'frontend' side of the controller layer, allows view to interface with model"""
+
     def __init__(self, port: int) -> None:
         # Connection information
         self._port = str(port)
@@ -166,10 +168,12 @@ class GameClientController:
     """WebSocket Initialization"""
 
     def start_websocket(self):
+        """Starts the thread that will listen to the websocket"""
         self.ws_thread = threading.Thread(target=lambda: asyncio.run(self.run_websocket()), daemon=True)
         self.ws_thread.start()
 
     async def run_websocket(self):
+        """Run in seperate thread, listens to websocket and generates events"""
         async with websockets.connect(self._ws_api) as ws:
             while self.should_websocket_be_active:
                 try:
@@ -189,27 +193,31 @@ class GameClientController:
     """Websocket Event Generation"""
 
     def set_event_handler(self, event_generator: Callable[[GameEvent], None]):
+        """Define the function that the client will accept events with"""
         self._event_generator = event_generator
 
     def set_error_callback(self, error_callback: Callable[[str], None]):
+        """Define the function that the client display error messages with"""
         self._error_callback = error_callback
 
     def _generate_event(self, event: GameEvent):
+        """Propogate event to the client after refreshing the cache"""
         if not self._event_generator:
             return
-
         self.cache.refresh_all_data()
         self._event_generator(event)
 
 
 class GameCache:
-    """A cache of the model, preventing excessive API calls"""
+    """A cache of the game state, preventing excessive API calls"""
 
     def __init__(self, controller: GameClientController) -> None:
         self._controller = controller
         self.refresh_all_data()
 
     def refresh_all_data(self):
+        """Refreshes all data through API calls"""
+
         # Game State
         self.is_game_active: bool = self._controller.is_game_active()
         self.game_saves: list[str] = self._controller.get_save_games()

@@ -10,6 +10,8 @@ from tui.events.TuiGameEvents import TuiGameEvents
 
 
 class DirectionListWidget(Widget):
+    """Direction selection menu for the SHIFT movement type"""
+    
     direction: reactive[Direction] = reactive(Direction.NoDirection, recompose=True)
     valid_directions: reactive[list[Direction]] = reactive([], recompose=True)
     move_type: reactive[MoveType] = reactive(MoveType.NULL, recompose=True)

@@ -11,7 +11,7 @@ from tui.events.TuiGameEvents import TuiGameEvents
 
 
 class ParaduxTui(App[None]):
-    """Application for the Paraduxical game program"""
+    """Terminal UI frontend application for the Paraduxical game"""
 
     TITLE = "Paraduxical"
     BINDINGS = [("q", "quit_app", "Quit")]

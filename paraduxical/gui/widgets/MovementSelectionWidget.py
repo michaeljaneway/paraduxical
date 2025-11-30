@@ -10,6 +10,8 @@ from shared.enums.MoveType import MoveType
 
 
 class MovementSelectionWidget(BaseFrame):
+    """Menu to allow user to input and execute game moves"""
+    
     def __init__(self, root: Misc, controller: GameClientController, **kwargs) -> None:
         super().__init__(root, controller, **kwargs)
 
