@@ -242,7 +242,7 @@ Third, on a distinct shell instance, start the **gui** client so that you can pl
 python paraduxical gui
 ```
 Notes on this command:
-  - This command will start a new instance of the game's GUI using Python's **tkinter** library, and it also use **port 8000** to communicate with the server to stay in-sync with the game's TUI.
+  - This command will start a new instance of the game's GUI using Python's **tkinter** library, and it also uses **port 8000** to communicate with the server to stay in-sync with the game's TUI.
   - Should you want to have your GUI communicate with the server on the custom port you chose for the server, you need to run the following command: `python paraduxical gui -p <port_num_from_server_command_earlier>`.
     - As before, you have to make sure the port you provide to the **gui** command is identical to the one for the **server** command and is open/ready-for-use on your compute environment.
 
