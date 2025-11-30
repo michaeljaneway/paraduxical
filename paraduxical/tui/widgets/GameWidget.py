@@ -6,6 +6,7 @@ from textual.widgets import Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
 from shared.enums.GameEvent import GameEvent
+from tui.events.TuiGameEvents import TuiGameEvents
 from tui.widgets.BoardWidget import BoardWidget
 from tui.widgets.DirectionListWidget import DirectionListWidget
 from tui.widgets.MovementListWidget import MovementListWidget
@@ -20,9 +21,7 @@ class GameWidget(Widget):
         super().__init__(**kwargs)
         self._controller = controller
         self.styles.height = "auto"
-
         self.app.call_after_refresh(self.on_game_state_updated)
-        self._controller.bind_callback(GameEvent.GameStateUpdated, self.on_game_state_updated)
 
     def compose(self) -> ComposeResult:
         # Hex Board
@@ -42,10 +41,13 @@ class GameWidget(Widget):
         # Shift Move Directions
         yield DirectionListWidget(self._controller)
 
-    """Callbacks"""
+    """Game State Callbacks"""
 
+    @on(TuiGameEvents.GameStateUpdated)
     def on_game_state_updated(self):
-        self.is_move_playable = self._controller.is_move_playable()
+        self.is_move_playable = self._controller.model.is_move_playable
+
+    """Menu Selection Callbacks"""
 
     @on(ListView.Selected, item="#play")
     def on_list_item_sel(self) -> None:

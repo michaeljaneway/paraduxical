@@ -7,6 +7,7 @@ from textual.widgets import Footer, Header, Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
 from shared.enums.GameEvent import GameEvent
+from tui.events.TuiGameEvents import TuiGameEvents
 from tui import screens
 
 
@@ -15,15 +16,12 @@ class LoadScreen(Screen[None]):
 
     BINDINGS = [("escape", "back", "Back to Main Menu")]
 
-    save_game_names: reactive[list[str]] = reactive([], recompose=True)
+    game_saves: reactive[list[str]] = reactive([], recompose=True)
 
     def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller
-
-        self.app.call_after_refresh(self.update_save_game_names)
-        self._controller.bind_callback(GameEvent.GameSaved, self.update_save_game_names)
-        self._controller.bind_callback(GameEvent.GameCreated, self.on_game_loaded)
+        self.app.call_after_refresh(self._on_game_saved)
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -33,19 +31,22 @@ class LoadScreen(Screen[None]):
             yield Markdown(f"Select to save game to load from the list below:")
 
             with ListView():
-                for save_name in self.save_game_names:
+                for save_name in self.game_saves:
                     yield SaveGameListItem(Label(save_name), save_name=save_name)
 
         yield Footer()
 
-    """Callbacks"""
+    """Game State Callbacks"""
 
-    def update_save_game_names(self):
-        self.save_game_names = self._controller.get_save_games()
+    @on(TuiGameEvents.GameSaved)
+    def _on_game_saved(self):
+        self.game_saves = self._controller.model.game_saves
 
-    def on_game_loaded(self):
-        self.app.pop_screen()
-        self.app.push_screen(screens.GameScreen(self._controller))
+    @on(TuiGameEvents.GameCreated)
+    def _on_game_created(self):
+        self.app.switch_screen(screens.GameScreen(self._controller))
+
+    """Menu Selection Callbacks"""
 
     @on(ListView.Selected)
     def on_save_selected(self, event: ListView.Selected) -> None:
@@ -53,10 +54,10 @@ class LoadScreen(Screen[None]):
             return
         self._controller.load_game(event.item.save_name)
 
-    """Actions"""
+    """Keybondings Actions"""
 
     def action_back(self) -> None:
-        self.app.pop_screen()
+        self.app.switch_screen(screens.MainMenuScreen(self._controller))
 
 
 class SaveGameListItem(ListItem):

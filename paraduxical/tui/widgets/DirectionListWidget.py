@@ -5,7 +5,8 @@ from textual.widget import Widget
 from textual.widgets import Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
-from shared.enums import Direction, GameEvent, MoveType
+from shared.enums import Direction, MoveType
+from tui.events.TuiGameEvents import TuiGameEvents
 
 
 class DirectionListWidget(Widget):
@@ -18,9 +19,7 @@ class DirectionListWidget(Widget):
         super().__init__(**kwargs)
         self._controller = controller
         self.styles.height = "auto"
-
-        self.app.call_after_refresh(self.on_game_state_updated)
-        self._controller.bind_callback(GameEvent.GameStateUpdated, self.on_game_state_updated)
+        self.app.call_after_refresh(self._on_game_state_updated)
 
     def compose(self) -> ComposeResult:
         self.display = self.move_type == MoveType.SHIFT
@@ -34,7 +33,7 @@ class DirectionListWidget(Widget):
         else:
             md_text = f"## Please select a movement direction"
         yield Markdown(md_text)
-        
+
         if self.selected_piece_count < 2:
             return
 
@@ -46,7 +45,7 @@ class DirectionListWidget(Widget):
             # Give user option to clear their selection
             if self.direction.is_valid_direction():
                 yield DirectionListItem(Label("Clear Shift Direction"), direction=Direction.NoDirection)
-                
+
             # Display all valid movement directions
             else:
                 for dir in self.valid_directions:
@@ -55,13 +54,16 @@ class DirectionListWidget(Widget):
             if len(self.valid_directions) == 0:
                 self.notify("The selected pieces have no valid direction which they can move in, please select again", severity="warning")
 
-    """Callbacks"""
+    """Game State Callbacks"""
 
-    def on_game_state_updated(self):
-        self.move_type = self._controller.get_move_type()
-        self.direction = self._controller.get_shift_direction()
-        self.valid_directions = self._controller.get_valid_shift_directions()
-        self.selected_piece_count = len(self._controller.get_selected_coords())
+    @on(TuiGameEvents.GameStateUpdated)
+    def _on_game_state_updated(self):
+        self.move_type = self._controller.model.move_type
+        self.direction = self._controller.model.direction
+        self.valid_directions = self._controller.model.valid_shift_directions
+        self.selected_piece_count = len(self._controller.model.selected_coords)
+
+    """Menu Selection Callbacks"""
 
     @on(ListView.Selected)
     def on_list_item_sel(self, event: ListView.Selected) -> None:

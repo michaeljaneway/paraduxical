@@ -6,7 +6,8 @@ from textual.screen import Screen
 from textual.widgets import Footer, Header, Input, Label, ListItem, ListView, Markdown
 
 from GameClientController import GameClientController
-from shared.enums import GameEvent
+from tui import screens
+from tui.events.TuiGameEvents import TuiGameEvents
 
 
 class SaveScreen(Screen[None]):
@@ -19,10 +20,7 @@ class SaveScreen(Screen[None]):
     def __init__(self, controller: GameClientController, **kwargs) -> None:
         super().__init__(**kwargs)
         self._controller = controller
-
-        self.app.call_after_refresh(self.update_save_game_names)
-        self._controller.bind_callback(GameEvent.GameSaved, self.update_save_game_names)
-        self._controller.bind_callback(GameEvent.GameCreated, self.on_game_loaded)
+        self.app.call_after_refresh(self._on_game_saved)
 
     def compose(self) -> ComposeResult:
         yield Header()
@@ -38,13 +36,17 @@ class SaveScreen(Screen[None]):
 
         yield Footer()
 
-    """Callbacks"""
+    """Game State Callbacks"""
 
-    def update_save_game_names(self):
+    @on(TuiGameEvents.GameSaved)
+    def _on_game_saved(self):
         self.save_game_names = self._controller.get_save_games()
 
-    def on_game_loaded(self):
-        self.app.pop_screen()
+    @on(TuiGameEvents.GameCreated)
+    def _on_game_created(self):
+        self.app.switch_screen(screens.GameScreen(self._controller))
+
+    """Menu Callbacks"""
 
     @on(Input.Submitted)
     def on_save_name_submitted(self, event: Input.Submitted) -> None:
@@ -55,8 +57,8 @@ class SaveScreen(Screen[None]):
             return
 
         self._controller.save_game(save_name)
-        self.app.pop_screen()
+        self.app.switch_screen(screens.GameScreen(self._controller))
 
     @on(ListView.Selected, item="#cancel")
     def action_back(self):
-        self.app.pop_screen()
+        self.app.switch_screen(screens.GameScreen(self._controller))
