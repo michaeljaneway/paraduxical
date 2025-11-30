@@ -1,13 +1,13 @@
-from tkinter import Misc, ttk
 import tkinter as tk
+from tkinter import Misc, ttk
 
 from GameClientController import GameClientController
 from gui.frames.BaseFrame import BaseFrame, EventCallback
+from gui.frames.FrameType import FrameType
 from gui.widgets.BoardWidget import BoardWidget
 from gui.widgets.MenuWidget import MenuOption, MenuWidget
 from gui.widgets.MovementSelectionWidget import MovementSelectionWidget
 from shared.enums import GameEvent
-from gui.frames.FrameType import FrameType
 
 
 class GameFrame(BaseFrame):
@@ -60,6 +60,6 @@ class GameFrame(BaseFrame):
         # Inform the players of who won the game
         winners = set([line.token_type for line in self._model.winning_lines])
         if len(winners) == 1:
-            self.player_turn_label.configure(text=f"Player {self._model.active_player.value}, you have won! Congradulations!")
+            self.player_turn_label.configure(text=f"Player {self._model.active_player.value}, you have won! Congratulations!")
         else:
-            self.player_turn_label.configure(text=f"It's a tie! Congradulations to both players!")
+            self.player_turn_label.configure(text=f"It's a tie! Congratulations to both players!")
