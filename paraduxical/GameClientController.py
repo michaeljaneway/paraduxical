@@ -13,7 +13,7 @@ from shared.TokenLine import TokenLine
 
 
 class GameClientController:
-    def __init__(self, port: int = 8000) -> None:
+    def __init__(self, port: int) -> None:
         # Connection information
         self._port = str(port)
         self._http_api = f"http://127.0.0.1:{self._port}"
