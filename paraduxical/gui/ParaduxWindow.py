@@ -13,7 +13,7 @@ from shared.enums.GameEvent import GameEvent
 
 
 class ParaduxGui(tk.Tk):
-    def __init__(self):
+    def __init__(self, port: int):
         super().__init__()
 
         # Set window metadata
@@ -26,7 +26,7 @@ class ParaduxGui(tk.Tk):
         self.call("set_theme", "dark")
 
         # Instantiate FastApi controller + event handling
-        self._controller = GameClientController(self.on_err)
+        self._controller = GameClientController(port)
         self._controller.set_event_handler(self.event_generator)
 
         # Instantiate the Main Menu frame

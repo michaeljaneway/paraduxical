@@ -15,10 +15,10 @@ if __name__ == "__main__":
     # Execute the application respective to the mode
     match cli_args_parsed.stack:
         case "gui":
-            gui_app = ParaduxGui()
+            gui_app = ParaduxGui(cli_args_parsed.port)
             gui_app.mainloop()
         case "tui":
-            tui_app = ParaduxTui()
+            tui_app = ParaduxTui(cli_args_parsed.port)
             tui_app.run()
         case "server":
-            uvicorn.run("backend.GameServerController:app", reload=False)
+            uvicorn.run("backend.GameServerController:app", port=cli_args_parsed.port, reload=False)

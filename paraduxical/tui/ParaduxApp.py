@@ -17,9 +17,9 @@ class ParaduxTui(App[None]):
     BINDINGS = [("q", "quit_app", "Quit")]
     CSS_PATH = "styles.tcss"
 
-    def __init__(self, **kwargs):
+    def __init__(self, port: int, **kwargs):
         super().__init__(**kwargs)
-        self._controller = GameClientController()
+        self._controller = GameClientController(port)
         self._controller.set_error_callback(lambda message: self.notify(message, severity="error"))
         self._controller.set_event_handler(lambda event: self.app.call_from_thread(self.generate_event, event))
 
