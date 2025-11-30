@@ -1,23 +1,24 @@
-import sys
-
 import uvicorn
 
+from cli.CommandLineInterface import CommandLineInterface
 from gui.ParaduxWindow import ParaduxGui
 from tui.ParaduxApp import ParaduxTui
 
 if __name__ == "__main__":
-    # Get the mode from the cmd arguments if one was selected
-    mode: str = "server"
-    if len(sys.argv) > 1:
-        mode = sys.argv[1]
+    # Setting up our CLI for Paraduxical
+    cli = CommandLineInterface()
+    cli_args_parser = cli.init_paradux_cli()
+    cli.init_paradux_cli_args(cli_args_parser)
+    cli_args_parsed = cli.parse_paradux_cli_args(cli_args_parser)
+    print(f"`port` as defined by the user is {cli_args_parsed.port}")
 
     # Execute the application respective to the mode
-    match mode:
+    match cli_args_parsed.stack:
         case "gui":
             gui_app = ParaduxGui()
             gui_app.mainloop()
         case "tui":
             tui_app = ParaduxTui()
             tui_app.run()
-        case "server" | _:
+        case "server":
             uvicorn.run("backend.GameServerController:app", reload=False)
