@@ -3,7 +3,8 @@
 ![header](./readme_images/header.png)
 
 ## Table of Contents
-
+- [Demo](#demo)
+  - [Game Demo](#game-demo)
 - [Game Summary](#game-summary)
 - [Installation Instructions](#installation-instructions)
   - [Setup](#setup)
@@ -13,11 +14,14 @@
     - [Installing Dependencies](#installing-dependencies)
   - [Requirements](#requirements)
   - [Running the Game](#running-the-game)
-- [Demo](#demo)
-  - [Game Demo](#game-demo)
-  - [SOCS Server Install Video](#socs-server-install-video)
 - [Contacts](#contacts)
 - [License](#license)
+
+## Demo
+
+### Game Demo
+
+![demo](./readme_images/nomachine_demo.gif)
 
 ## Game Summary
 
@@ -250,13 +254,7 @@ If successful, you should see and be able to use the following GUI of the game a
 
 ![Paradux GUI Command Success](./readme_images/gui_success_view.png)
 
-You are ready to play the game now! See the [Game Demo](#game-demo) section below for a visual demonstration of how this process works, and how to play the game.
-
-## Demo
-
-### Game Demo
-
-![demo](./readme_images/nomachine_demo.gif)
+You are ready to play the game now! See the [Game Demo](#game-demo) section above for a visual demonstration of how this process works, and how to play the game.
 
 ## Contacts
 
